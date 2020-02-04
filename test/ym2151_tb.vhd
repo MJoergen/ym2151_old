@@ -24,7 +24,7 @@ architecture structural of ym2151_tb is
    -- Control the execution of the test.
    signal sim_test_running_s  : std_logic := '1';
 
-   constant C_INPUT_FILENAME  : string := "test/music.bin";
+   constant C_INPUT_FILENAME  : string := "test/test1.bin";
    constant C_OUTPUT_FILENAME : string := "music.wav";
 
 begin
@@ -47,7 +47,7 @@ begin
    -- Generate cpu reset
    proc_rst : process
    begin
-      rst_s <= '1', '0' after 200 ns;
+      rst_s <= '1', '0' after 500 ns;
       wait;
    end process proc_rst;
 
@@ -113,7 +113,8 @@ begin
    begin
 
       -- Wait for reset
-      wait until clk_s  = '1';
+      wait until rst_s = '0';
+      wait until clk_s = '1';
 
       file_open(input_file, C_INPUT_FILENAME, READ_MODE);
 
@@ -123,7 +124,7 @@ begin
          data_v := read_8_bits(input_file); 
 
          if addr_v = X"02" then
-            wait for to_integer(data_v) * 10 us;
+            wait for to_integer(data_v) * 1 us;
          else
             write(addr_v, data_v);
          end if;

@@ -83,6 +83,14 @@ architecture synthesis of ym2151_config is
    signal wr_data_r : std_logic_vector(7 downto 0);
    signal wr_en_r   : std_logic;
 
+   -- Debug
+   constant DEBUG_MODE               : boolean := true; -- TRUE OR FALSE
+
+   attribute mark_debug              : boolean;
+   attribute mark_debug of wr_addr_r : signal is DEBUG_MODE;
+   attribute mark_debug of wr_data_r : signal is DEBUG_MODE;
+   attribute mark_debug of wr_en_r   : signal is DEBUG_MODE;
+
 begin
 
    ----------------------
@@ -116,7 +124,7 @@ begin
       variable device_v : integer;
    begin
       if rising_edge(clk_i) then
-         device_v  := to_integer(wr_data_r(4 downto 0));
+         device_v  := to_integer(wr_addr_r(4 downto 0));
 
          if wr_en_r = '1' then
             case wr_addr_r(7 downto 5) is
@@ -134,7 +142,10 @@ begin
                when "001" => -- 0x20 - 0x3F
                   case wr_addr_r(4 downto 3) is
                      when "01" => -- Key code
-                        devices_o(device_v).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(8+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
 
                      when others => null;
                   end case;

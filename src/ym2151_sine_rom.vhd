@@ -40,7 +40,6 @@ architecture synthesis of ym2151_sine_rom is
          sine_v   := (sin(phase_v)+1.0)*0.5;
          ROM_v(i) := to_stdlogicvector(integer(sine_v*scale_y+1.0), C_SINE_DATA_WIDTH);
          ROM_v(i)(C_SINE_DATA_WIDTH-1) := not ROM_v(i)(C_SINE_DATA_WIDTH-1);
-         report to_hstring(to_stdlogicvector(i,C_SINE_ADDR_WIDTH)) & " -> " & to_hstring(ROM_v(i));
       end loop;
       return ROM_v;
    end function;

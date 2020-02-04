@@ -3,6 +3,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
 use ieee.math_real.all;
 
+use work.ym2151_package.all;
+
 -- This file contains the ROM with the phase increments (frequency) of each
 -- note.
 --
@@ -36,7 +38,8 @@ architecture synthesis of phase_increment_rom is
       for i in 0 to 767 loop
          freq_v     := 440.0 * (2.0 ** (real(i+4*64)/768.0));
          phaseinc_v := integer((2.0**24)*freq_v/real(G_CLOCK_HZ));
-         ROM_v(i)   := to_stdlogicvector(phaseinc_v, 12);
+         report to_string(freq_v) & " : " & to_string(phaseinc_v);
+         ROM_v(i)   := to_stdlogicvector(phaseinc_v, C_PHASEINC_DATA_WIDTH);
       end loop;
       return ROM_v;
    end function;
