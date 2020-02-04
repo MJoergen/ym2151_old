@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Tue Jan 14 19:14:04 2020
+[*]
+[dumpfile] "/home/mike/git/MJoergen/x16-nexys4ddr/fpga/main/ym2151/ym2151_tb.ghw"
+[dumpfile_mtime] "Tue Jan 14 19:13:58 2020"
+[dumpfile_size] 87080
+[savefile] "/home/mike/git/MJoergen/x16-nexys4ddr/fpga/main/ym2151/ym2151_tb.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-37.100479 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.ym2151_tb.
+[treeopen] top.ym2151_tb.i_ym2151.
+[treeopen] top.ym2151_tb.i_ym2151.channels.
+[sst_width] 249
+[signals_width] 210
+[sst_expanded] 1
+[sst_vpaned_height] 143
+@c00200
+-tb
+@28
+top.ym2151_tb.clk_s
+top.ym2151_tb.rst_s
+top.ym2151_tb.wr_en_s
+top.ym2151_tb.sim_test_running_s
+top.ym2151_tb.addr_s[0]
+@22
+#{top.ym2151_tb.wr_data_s[7:0]} top.ym2151_tb.wr_data_s[7] top.ym2151_tb.wr_data_s[6] top.ym2151_tb.wr_data_s[5] top.ym2151_tb.wr_data_s[4] top.ym2151_tb.wr_data_s[3] top.ym2151_tb.wr_data_s[2] top.ym2151_tb.wr_data_s[1] top.ym2151_tb.wr_data_s[0]
+#{top.ym2151_tb.ym2151_val_s[9:0]} top.ym2151_tb.ym2151_val_s[9] top.ym2151_tb.ym2151_val_s[8] top.ym2151_tb.ym2151_val_s[7] top.ym2151_tb.ym2151_val_s[6] top.ym2151_tb.ym2151_val_s[5] top.ym2151_tb.ym2151_val_s[4] top.ym2151_tb.ym2151_val_s[3] top.ym2151_tb.ym2151_val_s[2] top.ym2151_tb.ym2151_val_s[1] top.ym2151_tb.ym2151_val_s[0]
+@1401200
+-tb
+@800200
+-ym2151
+@28
+top.ym2151_tb.i_ym2151.wr_en_r
+@22
+#{top.ym2151_tb.i_ym2151.wr_addr_r[7:0]} top.ym2151_tb.i_ym2151.wr_addr_r[7] top.ym2151_tb.i_ym2151.wr_addr_r[6] top.ym2151_tb.i_ym2151.wr_addr_r[5] top.ym2151_tb.i_ym2151.wr_addr_r[4] top.ym2151_tb.i_ym2151.wr_addr_r[3] top.ym2151_tb.i_ym2151.wr_addr_r[2] top.ym2151_tb.i_ym2151.wr_addr_r[1] top.ym2151_tb.i_ym2151.wr_addr_r[0]
+#{top.ym2151_tb.i_ym2151.wr_data_r[7:0]} top.ym2151_tb.i_ym2151.wr_data_r[7] top.ym2151_tb.i_ym2151.wr_data_r[6] top.ym2151_tb.i_ym2151.wr_data_r[5] top.ym2151_tb.i_ym2151.wr_data_r[4] top.ym2151_tb.i_ym2151.wr_data_r[3] top.ym2151_tb.i_ym2151.wr_data_r[2] top.ym2151_tb.i_ym2151.wr_data_r[1] top.ym2151_tb.i_ym2151.wr_data_r[0]
+#{top.ym2151_tb.i_ym2151.cnt_r[7:0]} top.ym2151_tb.i_ym2151.cnt_r[7] top.ym2151_tb.i_ym2151.cnt_r[6] top.ym2151_tb.i_ym2151.cnt_r[5] top.ym2151_tb.i_ym2151.cnt_r[4] top.ym2151_tb.i_ym2151.cnt_r[3] top.ym2151_tb.i_ym2151.cnt_r[2] top.ym2151_tb.i_ym2151.cnt_r[1] top.ym2151_tb.i_ym2151.cnt_r[0]
+#{top.ym2151_tb.i_ym2151.val_r[9:0]} top.ym2151_tb.i_ym2151.val_r[9] top.ym2151_tb.i_ym2151.val_r[8] top.ym2151_tb.i_ym2151.val_r[7] top.ym2151_tb.i_ym2151.val_r[6] top.ym2151_tb.i_ym2151.val_r[5] top.ym2151_tb.i_ym2151.val_r[4] top.ym2151_tb.i_ym2151.val_r[3] top.ym2151_tb.i_ym2151.val_r[2] top.ym2151_tb.i_ym2151.val_r[1] top.ym2151_tb.i_ym2151.val_r[0]
+@1000200
+-ym2151
+[pattern_trace] 1
+[pattern_trace] 0
