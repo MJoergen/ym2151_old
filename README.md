@@ -8,6 +8,8 @@ the [MAME emulation](https://github.com/mamedev/mame/).
 
 At [this document](Register_Interface.md) is the complete register interface.
 
+I've written a separate document with the [notes on the design](Design_Notes.md).
+
 ## User guide
 
 The YM2151 has eight parallel sound channels and each sound channel consists 
