@@ -142,7 +142,7 @@ fractional phase increment scaled up to an integer. It turns out that scaling
 with 2^29 yields distinct integers in the range 1116 to 2230. From this we get
 that the ROM should have 12 bits of output to accommodate values in this range.
 
-The total size of the ROM becomes 12\*2^10 = 12 kbits, which fits within one
+The total size of the ROM becomes 12\*2^10 = 12 kbits, which fits within half a
 BRAM.
 
 ## Envelope Generator
