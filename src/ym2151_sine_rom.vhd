@@ -28,7 +28,7 @@ architecture synthesis of ym2151_sine_rom is
                  std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
    
    constant scale_x : real := real(2**C_SINE_ADDR_WIDTH);
-   constant scale_y : real := real(2**(C_SINE_DATA_WIDTH-1));
+   constant scale_y : real := real(2**(C_SINE_DATA_WIDTH-1)-1);
 
    impure function InitRom return mem_t is
       variable phase_v : real;

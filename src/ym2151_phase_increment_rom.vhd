@@ -49,7 +49,6 @@ architecture synthesis of phase_increment_rom is
       for i in 0 to 767 loop
          freq_v     := C_FREQ_INDEX_0 * (C_FACTOR ** real(i));
          phaseinc_v := integer(freq_v/real(G_CLOCK_HZ) * C_SCALE);
-         report to_string(i) & " : " & to_string(freq_v) & " : " & to_string(phaseinc_v);
          ROM_v(i)   := to_stdlogicvector(phaseinc_v, C_PHASEINC_DATA_WIDTH);
       end loop;
       return ROM_v;
