@@ -30,15 +30,26 @@ architecture synthesis of phase_increment_rom is
 
    -- This reads the ROM contents from a text file
    impure function InitRom return mem_t is
-      variable ROM_v      : mem_t := (others => (others => '0'));
-      variable freq_v     : real;
-      variable phaseinc_v : integer;
+      variable ROM_v          : mem_t := (others => (others => '0'));
+      variable freq_v         : real;
+      variable phaseinc_v     : integer;
+
+      -- There are 64 fractions per semitone, and 12 semitone per octave.
+      constant C_FACTOR       : real := 2.0 ** (1.0/768.0);
+
+      -- Frequency in Hz of the A4 tone.
+      constant C_FREQ_A4_HZ   : real := 440.0;
+
+      -- Index 0 corresponds to C#, which is 4 semitones above A4, but 5 octaves lower.
+      constant C_FREQ_INDEX_0 : real := C_FREQ_A4_HZ * (C_FACTOR**(4.0*64.0)) / 32.0;
+
+      constant C_SCALE        : real := 2.0 ** real(C_PHASE_WIDTH);
+
    begin
-      -- Index 0 corresponds to C#, which is 4 semitones above A.
       for i in 0 to 767 loop
-         freq_v     := 440.0 * (2.0 ** (real(i+4*64)/768.0));
-         phaseinc_v := integer((2.0**24)*freq_v/real(G_CLOCK_HZ));
-         report to_string(freq_v) & " : " & to_string(phaseinc_v);
+         freq_v     := C_FREQ_INDEX_0 * (C_FACTOR ** real(i));
+         phaseinc_v := integer(freq_v/real(G_CLOCK_HZ) * C_SCALE);
+         report to_string(i) & " : " & to_string(freq_v) & " : " & to_string(phaseinc_v);
          ROM_v(i)   := to_stdlogicvector(phaseinc_v, C_PHASEINC_DATA_WIDTH);
       end loop;
       return ROM_v;

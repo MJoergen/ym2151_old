@@ -31,9 +31,9 @@ architecture synthesis of ym2151 is
    signal envelopes_s  : t_envelope_vector(0 to 31);
    signal phases_s     : t_phase_vector(0 to 31);
 
-   signal key_code_s   : std_logic_vector(9 downto 0);
+   signal key_code_s   : std_logic_vector(6 downto 0);
 
-   signal phase_inc_s  : std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0);
+   signal phase_inc_s  : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
 
    -- Current waveform value
    signal phase_r      : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
@@ -71,20 +71,26 @@ begin
 
 
    ----------------------------------------------------
-   -- Phase Increment ROM
+   -- Determine key code to play.
    ----------------------------------------------------
 
-   key_code_s <= "000" & devices_s(0).pg.key_code;
+   key_code_s <= devices_s(0).pg.key_code;
 
-   i_phase_increment_rom : entity work.phase_increment_rom
+
+   ----------------------------------------------------
+   -- Phase Increment (frequency) lookup
+   ----------------------------------------------------
+
+   i_phase_increment : entity work.phase_increment
       generic map (
          G_CLOCK_HZ => G_CLOCK_HZ
       )
       port map (
-         clk_i  => clk_i,
-         addr_i => key_code_s,
-         data_o => phase_inc_s
-      ); -- i_phase_increment_rom
+         clk_i          => clk_i,
+         key_code_i     => key_code_s,
+         key_fraction_i => (others => '0'),
+         phase_inc_o    => phase_inc_s
+      ); -- i_phase_increment
 
 
    ----------------------------------------------------

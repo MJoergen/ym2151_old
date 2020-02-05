@@ -8,8 +8,8 @@ package ym2151_package is
    constant C_SINE_DATA_WIDTH     : integer := C_PDM_WIDTH;
    constant C_SINE_ADDR_WIDTH     : integer := C_PDM_WIDTH+1;
    constant C_PHASEINC_ADDR_WIDTH : integer := 10;
-   constant C_PHASEINC_DATA_WIDTH : integer := C_SINE_ADDR_WIDTH+3;
-   constant C_PHASE_WIDTH         : integer := C_SINE_ADDR_WIDTH + 10;
+   constant C_PHASEINC_DATA_WIDTH : integer := 12; 
+   constant C_PHASE_WIDTH         : integer := 29;
 
    type t_phase_generator is record
       key_code           : std_logic_vector(6 downto 0);

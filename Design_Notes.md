@@ -105,6 +105,8 @@ should match the output range [0, 1]. This output range consumes 11 bits of reso
 and corresponds to a quarter of the input range. This leads to an input resolution
 of 13 bits.
 
+The size of this ROM will be 12\*2^13 = 96 kbits, which fits in 3 BRAMs.
+
 ## Frequency Generation
 
 The YM2151 generates frequencies from key values. It uses the following values:
