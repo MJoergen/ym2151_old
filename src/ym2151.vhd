@@ -44,6 +44,9 @@ architecture synthesis of ym2151 is
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
+   -- Current waveform value
+   signal val_s        : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+
    -- Debug
    constant DEBUG_MODE                 : boolean := true; -- TRUE OR FALSE
 
@@ -52,6 +55,7 @@ architecture synthesis of ym2151 is
    attribute mark_debug of phase_inc_s : signal is DEBUG_MODE;
    attribute mark_debug of phase_r     : signal is DEBUG_MODE;
    attribute mark_debug of sine_s      : signal is DEBUG_MODE;
+   attribute mark_debug of val_s       : signal is DEBUG_MODE;
 
 begin
 
@@ -119,7 +123,9 @@ begin
          data_o => sine_s
       ); -- i_sine_rom
 
-   val_o <= sine_s xor C_NEGATIVE_ONE;
+   val_s <= sine_s xor C_NEGATIVE_ONE;
+
+   val_o <= val_s;
 
 end architecture synthesis;
 
