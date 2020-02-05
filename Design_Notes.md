@@ -119,19 +119,31 @@ So a total of 13 bits to determine the frequency. This frequency is then
 converted to a fractional phase increment by scaling with the clock frequency
 of the module.
 
-The note frequency is interpreted as 1 phase pr second, and the clock frequency
-is cycles pr second, so the quotient gives the (fractional) number of phases pr
+The desired frequency corresponds to 1 phase pr second, and the clock frequency
+is cycles per second, so the quotient gives the (fractional) number of phases per
 clock cycle.
 
-Each semitone increases the frequency by a factor of 2^(1/12). The note A has a
-frequency of 440 Hz. Semitone number 0 corresponds to C#, which is 4 semitones
-above A.
+There are 64 fractions in a semitone, and 12 semitones in an octave. Therefore
+there are 768 fractions in an octave, and each fraction increases the frequency
+by a factor of 2^(1/768) ~= 1.0009.
 
-The above conversion is implementer in ROM, except that the Octave is not part
-of the input. This is because the Octave corresponds to multiples of 2, and
-this can be calculated using simple shifts.
+The note A4 has a frequency of 440 Hz.  The first index is C#0, which is 4
+semitones above, but 5 octaves lower than A4. So C#0 has a frequency of around
+17.3 Hz.
 
+The conversion from key value to fractional phase increment is based on a
+lookup table implemented in ROM. The input to this lookup table is the number
+of fractions above C#, disregarding the octave.  This is because the Octave
+corresponds to multiples of 2, and this can be calculated using simple shifts.
 
+There are 768 fractions within an octave, so the address to this
+phase\_increment ROM should have 10 bits. The output of this ROM contains the
+fractional phase increment scaled up to an integer. It turns out that scaling
+with 2^29 yields distinct integers in the range 1116 to 2230. From this we get
+that the ROM should have 12 bits of output to accommodate values in this range.
+
+The total size of the ROM becomes 12\*2^10 = 12 kbits, which fits within one
+BRAM.
 
 ## Envelope Generator
 
