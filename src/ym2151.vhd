@@ -49,7 +49,6 @@ architecture synthesis of ym2151 is
 
    attribute mark_debug                : boolean;
    attribute mark_debug of key_code_s  : signal is DEBUG_MODE;
-   attribute mark_debug of phase_inc_s : signal is DEBUG_MODE;
    attribute mark_debug of phase_r     : signal is DEBUG_MODE;
    attribute mark_debug of sine_s      : signal is DEBUG_MODE;
 
