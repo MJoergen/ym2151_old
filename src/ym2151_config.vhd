@@ -84,7 +84,7 @@ architecture synthesis of ym2151_config is
    signal wr_en_r   : std_logic;
 
    -- Debug
-   constant DEBUG_MODE               : boolean := true; -- TRUE OR FALSE
+   constant DEBUG_MODE               : boolean := false; -- TRUE OR FALSE
 
    attribute mark_debug              : boolean;
    attribute mark_debug of wr_addr_r : signal is DEBUG_MODE;
