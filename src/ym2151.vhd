@@ -48,7 +48,7 @@ architecture synthesis of ym2151 is
    signal val_s        : std_logic_vector(C_PDM_WIDTH-1 downto 0);
 
    -- Debug
-   constant DEBUG_MODE                 : boolean := true; -- TRUE OR FALSE
+   constant DEBUG_MODE                 : boolean := false; -- TRUE OR FALSE
 
    attribute mark_debug                : boolean;
    attribute mark_debug of key_code_s  : signal is DEBUG_MODE;
