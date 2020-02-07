@@ -107,28 +107,40 @@ of 13 bits.
 
 ## Frequency Generation
 
-The YM2151 generates frequencies from key values. It uses the following values:
-
-* Octave (3 bits)
-* Semitone (4 bits)
-* Key Fraction (6 bits)
-
-So a total of 13 bits to determine the frequency. This frequency is then
-converted to a fractional phase increment by scaling with the clock frequency
-of the module.
-
-The note frequency is interpreted as 1 phase pr second, and the clock frequency
-is cycles pr second, so the quotient gives the (fractional) number of phases pr
-clock cycle.
+The note frequency is interpreted as 1 complete phase pr second, and the clock
+frequency is cycles pr second, so the quotient of the note frequency and the
+clock frequency gives the (fractional) number of phases pr clock cycle.  This
+fractional value is scaled up by a factor of 2^24 and then rounded to the
+nearest integer.
 
 Each semitone increases the frequency by a factor of 2^(1/12). The note A has a
 frequency of 440 Hz. Semitone number 0 corresponds to C#, which is 4 semitones
 above A.
 
+Each octave doubles the frequency, and this calculation can be readily
+done by shifts. So only the notes within a single octave need be stored
+in the ROM.
+
 The above conversion is implementer in ROM, except that the Octave is not part
 of the input. This is because the Octave corresponds to multiples of 2, and
 this can be calculated using simple shifts.
 
+## Key Codes
+
+The YM2151 stores the key code in three different parts:
+
+* Octave (3 bits)
+* Semitone (4 bits)
+* Key Fraction (6 bits)
+
+The particularly confusing part is the semitone, because the values
+are not evenly distributed. There are 12 semitones in an octave, and
+each semitone consists of 64 fractions (called "cents"). This gives
+a total of 768 values. To convert the 
+
+So a total of 13 bits to determine the frequency. This frequency is then
+converted to a fractional phase increment by scaling with the clock frequency
+of the module.
 
 
 ## Envelope Generator
