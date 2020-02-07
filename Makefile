@@ -1,6 +1,7 @@
 SRC    = src/ym2151_package.vhd
 SRC   += src/ym2151_config.vhd
 SRC   += src/ym2151_phase_increment_rom.vhd
+SRC   += src/ym2151_phase_increment.vhd
 SRC   += src/ym2151_sine_rom.vhd
 SRC   += src/ym2151.vhd
 TB     = ym2151_tb

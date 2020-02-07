@@ -4,12 +4,28 @@ use ieee.numeric_std_unsigned.all;
 
 package ym2151_package is
 
+   -- This constant is determined by the switching rate of the PDM signal (100 MHz)
+   -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
+   -- The ratio between the two is 6666, and we therefore go for 12 bits (i.e. 4096).
    constant C_PDM_WIDTH           : integer := 12;
+
+   -- The dimensions of the Sine ROM are determined by the output resolution.
    constant C_SINE_DATA_WIDTH     : integer := C_PDM_WIDTH;
    constant C_SINE_ADDR_WIDTH     : integer := C_PDM_WIDTH+1;
+
+   -- This constant is determined by the desired granularity of the key
+   -- (64*12 fractions within an octave)
    constant C_PHASEINC_ADDR_WIDTH : integer := 10;
-   constant C_PHASEINC_DATA_WIDTH : integer := C_SINE_ADDR_WIDTH+3;
-   constant C_PHASE_WIDTH         : integer := C_SINE_ADDR_WIDTH + 10;
+
+   -- This constant is determined by the ratio of the clock frequency (8.33 MHz)
+   -- and the minimum frequency generated (C#0 at 17.3 Hz). This ratio
+   -- is approx 480 thousand, i.e. 19 bits. Furthermore, each of the 768 fractions
+   -- should have a distinct phase increment.
+   constant C_PHASE_WIDTH         : integer := 19 + C_PHASEINC_ADDR_WIDTH;
+
+   -- This constant is determined by the maximum phase increment in the ROM,
+   -- which is 17.3*2/8.3E6*2^29 = 2230.
+   constant C_PHASEINC_DATA_WIDTH : integer := 12; 
 
    type t_phase_generator is record
       key_code           : std_logic_vector(6 downto 0);
