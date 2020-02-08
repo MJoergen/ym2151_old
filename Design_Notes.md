@@ -109,6 +109,12 @@ The size of this ROM will be 12\*2^13 = 96 kbits, which fits in 3 BRAMs.
 
 ## Frequency Generation
 
+The note frequency is interpreted as 1 complete phase pr second, and the clock
+frequency is cycles pr second, so the quotient of the note frequency and the
+clock frequency gives the (fractional) number of phases pr clock cycle.  This
+fractional value is scaled up by a factor of 2^24 and then rounded to the
+nearest integer.
+
 The YM2151 generates frequencies from key values. It uses the following values:
 
 * Octave (3 bits)
@@ -130,6 +136,31 @@ by a factor of 2^(1/768) ~= 1.0009.
 The note A4 has a frequency of 440 Hz.  The first index is C#0, which is 4
 semitones above, but 5 octaves lower than A4. So C#0 has a frequency of around
 17.3 Hz.
+
+Each octave doubles the frequency, and this calculation can be readily
+done by shifts. So only the notes within a single octave need be stored
+in the ROM.
+
+The above conversion is implementer in ROM, except that the Octave is not part
+of the input. This is because the Octave corresponds to multiples of 2, and
+this can be calculated using simple shifts.
+
+## Key Codes
+
+The YM2151 stores the key code in three different parts:
+
+* Octave (3 bits)
+* Semitone (4 bits)
+* Key Fraction (6 bits)
+
+The particularly confusing part is the semitone, because the values
+are not evenly distributed. There are 12 semitones in an octave, and
+each semitone consists of 64 fractions (called "cents"). This gives
+a total of 768 values. To convert the 
+
+So a total of 13 bits to determine the frequency. This frequency is then
+converted to a fractional phase increment by scaling with the clock frequency
+of the module.
 
 The conversion from key value to fractional phase increment is based on a
 lookup table implemented in ROM. The input to this lookup table is the number
@@ -158,5 +189,4 @@ This is done by a ROM.  So what should be the address and data widths of this
 ROM?  Well, the output of the ROM is always a positive number, so must be
 augmented with the sign. Therefore the width of the ROM need only be 11 bits.
 This is the constant C\_EXP\_WIDTH.
-
 
