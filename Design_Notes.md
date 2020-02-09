@@ -190,3 +190,18 @@ ROM?  Well, the output of the ROM is always a positive number, so must be
 augmented with the sign. Therefore the width of the ROM need only be 11 bits.
 This is the constant C\_EXP\_WIDTH.
 
+### Experiments with the emulator
+Choosing a decay rate of $0B and a key code of $4A, the output volume decreases
+by a rate of 96 dB pr 1795 ms. However, the voltage only decreases at half the
+rate, i.e. at roughly 96 sB pr 3600 ms. This is approximately in agreement with
+the documentation which gives the value 3444 ms.
+
+### DSP
+Attenuation is achieved by using the DSP to multiply the sine output by a
+decaying factor. The decay itself is achieved by a simple shift and subtract.
+For instance, shift by 6 and subtract gives a decay factor of 1-2^(-6), which
+is the same as 0.136 dB. So to achieve full attenuation at 96 dB requires 704
+reductions. However, the attenuation factor must have a significant amount of
+precision for this to work.
+
+
