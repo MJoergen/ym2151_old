@@ -42,7 +42,7 @@ architecture synthesis of ym2151_decay is
    constant C_DECAY_TIME_4  : real    := 110209.71/96.0;                            -- milliseconds per dB.
    constant C_DECAY_TIME_0  : real    := 2.0*C_DECAY_TIME_4;                        -- milliseconds per dB.
    constant C_FACTOR        : real    := 1.0-0.5**real(C_SHIFT_AMOUNT);
-   constant C_ATTENUNATION  : real    := log(C_FACTOR)/log(0.5) * 6.0;              -- Attenuation (dB) per iteration.
+   constant C_ATTENUNATION  : real    := log(C_FACTOR)/log(0.5) * 3.0;              -- Attenuation (dB) per iteration.
    constant C_CYCLES_MS     : real    := real(G_CLOCK_HZ)/1000.0;                   -- Clock cycles per millisecond.
    constant C_DELAY_VALUE_0 : real    := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
    constant C_TWO_ROOT_025  : real    := 2.0**0.25;
