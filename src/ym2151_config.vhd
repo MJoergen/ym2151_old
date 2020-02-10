@@ -131,10 +131,10 @@ begin
                when "000" => -- 0x00 - 0x1F
                   case wr_addr_r is
                      when X"08" => -- Key ON/OFF
-                        devices_o(device_v).eg.key_onoff <= wr_data_r(3);
-                        devices_o(device_v).eg.key_onoff <= wr_data_r(4);
-                        devices_o(device_v).eg.key_onoff <= wr_data_r(5);
-                        devices_o(device_v).eg.key_onoff <= wr_data_r(6);
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(3);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(4);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(5);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(6);
 
                      when others => null;
                   end case;
@@ -142,8 +142,8 @@ begin
                when "001" => -- 0x20 - 0x3F
                   case wr_addr_r(4 downto 3) is
                      when "01" => -- Key code
-                        devices_o(to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
-                        devices_o(8+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
                         devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
                         devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
 

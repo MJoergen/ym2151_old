@@ -43,14 +43,14 @@ architecture synthesis of ym2151_decay is
    constant C_DECAY_TIME_0  : real    := 2.0*C_DECAY_TIME_4;                        -- milliseconds per dB.
    constant C_FACTOR        : real    := 1.0-0.5**real(C_SHIFT_AMOUNT);
    constant C_ATTENUNATION  : real    := log(C_FACTOR)/log(0.5) * 6.0;              -- Attenuation (dB) per iteration.
-   constant C_CYCLES_MS     : real    := real(G_CLOCK_HZ)*1000.0;                   -- Clock cycles per millisecond.
+   constant C_CYCLES_MS     : real    := real(G_CLOCK_HZ)/1000.0;                   -- Clock cycles per millisecond.
    constant C_DELAY_VALUE_0 : real    := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
    constant C_TWO_ROOT_025  : real    := 2.0**0.25;
 
-   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                   22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),    22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025**2), 22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025**3), 22));
+   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       22),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        22),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**2.0)), 22),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**3.0)), 22));
 
    signal rate_s  : std_logic_vector(21 downto 0);
    signal shift_s : std_logic_vector( 3 downto 0);
@@ -63,7 +63,7 @@ begin
    process (rate_s, shift_s)
    begin
       delay_o <= (others => '0');
-      delay_o(20 - to_integer(shift_s) downto 0) <= rate_s(20 downto to_integer(shift_s));
+      delay_o(21 - to_integer(shift_s) downto 0) <= rate_s(21 downto to_integer(shift_s));
       if shift_s = 0 then
          delay_o <= (others => '1');
       end if;

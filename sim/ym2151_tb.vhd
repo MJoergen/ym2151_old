@@ -24,7 +24,7 @@ architecture structural of ym2151_tb is
    -- Control the execution of the test.
    signal sim_test_running_s  : std_logic := '1';
 
-   constant C_INPUT_FILENAME  : string := "test/test1.bin";
+   constant C_INPUT_FILENAME  : string := "sim/test1.bin";
    constant C_OUTPUT_FILENAME : string := "music.wav";
 
 begin
@@ -116,19 +116,25 @@ begin
       wait until rst_s = '0';
       wait until clk_s = '1';
 
-      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
+      write(X"28", X"4A");    -- Key code
+      write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
+      write(X"08", X"08");    -- Key ON
 
-      cpu_loop : while not endfile(input_file) loop
+--      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
+--
+--      cpu_loop : while not endfile(input_file) loop
+--
+--         addr_v := read_8_bits(input_file); 
+--         data_v := read_8_bits(input_file); 
+--
+--         if addr_v = X"02" then
+--            wait for to_integer(data_v) * 1 us;
+--         else
+--            write(addr_v, data_v);
+--         end if;
+--      end loop cpu_loop;
 
-         addr_v := read_8_bits(input_file); 
-         data_v := read_8_bits(input_file); 
-
-         if addr_v = X"02" then
-            wait for to_integer(data_v) * 1 us;
-         else
-            write(addr_v, data_v);
-         end if;
-      end loop cpu_loop;
+      wait for 5000 us;
 
 
       -----------------------------------------------
