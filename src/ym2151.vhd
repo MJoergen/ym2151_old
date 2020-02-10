@@ -42,13 +42,10 @@ architecture synthesis of ym2151 is
    signal decay_rate_s : std_logic_vector( 4 downto 0);
    signal key_onoff_s  : std_logic;
 
-   signal phase_inc_s  : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-
-   -- Current waveform value
-   signal phase_r      : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-
-   -- Current waveform value
-   signal sine_s       : std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
+   signal waveform_s   : std_logic_vector(17 downto 0);
+   signal envelope_s   : std_logic_vector(17 downto 0);
+   
+   signal product_s    : std_logic_vector(35 downto 0);
 
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
@@ -56,12 +53,6 @@ architecture synthesis of ym2151 is
    -- Current waveform value
    signal val_s        : std_logic_vector(C_PDM_WIDTH-1 downto 0);
 
-   signal input_a_s    : std_logic_vector(17 downto 0);
-   signal input_b_s    : std_logic_vector(17 downto 0);
-   signal product_s    : std_logic_vector(35 downto 0);
-
-   signal envelope_s   : std_logic_vector(17 downto 0);
-   
 begin
 
    ----------------------------------------------------
@@ -88,48 +79,20 @@ begin
    key_onoff_s  <= devices_s(0).eg.key_onoff;
 
 
-
    ----------------------------------------------------
-   -- Phase Increment (frequency) lookup
+   -- Instantiate waveform generator
    ----------------------------------------------------
 
-   i_phase_increment : entity work.phase_increment
+   i_ym2151_waveform_generator : entity work.ym2151_waveform_generator
       generic map (
          G_CLOCK_HZ => G_CLOCK_HZ
       )
       port map (
-         clk_i          => clk_i,
-         key_code_i     => key_code_s,
-         key_fraction_i => (others => '0'),
-         phase_inc_o    => phase_inc_s
-      ); -- i_phase_increment
-
-
-   ----------------------------------------------------
-   -- Phase
-   ----------------------------------------------------
-
-   p_phase : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         phase_r <= phase_r + phase_inc_s;
-         if rst_i = '1' then
-            phase_r <= (others => '0');
-         end if;
-      end if;
-   end process p_phase;
-
-
-   ----------------------------------------------------
-   -- Instantiate sine table
-   ----------------------------------------------------
-
-   i_ym2151_sine_rom : entity work.ym2151_sine_rom
-      port map (
-         clk_i  => clk_i,
-         addr_i => phase_r(phase_r'left downto phase_r'left - (C_SINE_ADDR_WIDTH-1)),
-         data_o => sine_s
-      ); -- i_ym2151_sine_rom
+         clk_i        => clk_i,
+         rst_i        => rst_i,
+         key_code_i   => key_code_s,
+         waveform_o   => waveform_s
+      ); -- i_ym2151_waveform_generator
 
 
    ----------------------------------------------------
@@ -154,14 +117,6 @@ begin
    -- Instantiate multiplier
    --------------------------
 
-   input_a_s <= envelope_s;
-
-   p_input_b : process (sine_s)
-   begin
-      input_b_s <= (others => sine_s(C_SINE_DATA_WIDTH-1));
-      input_b_s(C_SINE_DATA_WIDTH-1 downto 0) <= sine_s;
-   end process p_input_b;
-
    i_mult : mult_macro
       generic map (
          DEVICE  => "7SERIES",
@@ -173,9 +128,9 @@ begin
          CLK => clk_i,
          RST => rst_i,
          CE  => '1',
-         P   => product_s,
-         A   => input_a_s,
-         B   => input_b_s
+         A   => envelope_s,
+         B   => waveform_s,
+         P   => product_s
       ); -- i_mult
       
 
