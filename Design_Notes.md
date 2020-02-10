@@ -180,38 +180,33 @@ BRAM.
 
 A big part of the YM2151 is the envelope generator, the so-called ADSR-profile,
 consisting of Attack, Decay, Sustain (also called Second Decay), and Release.
-The last three steps all employ exponential decay. One common way to implement
-the exponential decay is to store the sign and absolute logarithm of the value.
-The exponential decay can be implemented as a simple subtraction.
-
-As a consequence, we need an easy way to compute the exponential of a function.
-This is done by a ROM.  So what should be the address and data widths of this
-ROM?  Well, the output of the ROM is always a positive number, so must be
-augmented with the sign. Therefore the width of the ROM need only be 11 bits.
-This is the constant C\_EXP\_WIDTH.
+The last three steps all employ exponential decay. To confirm my
+understanding of the documentation for the YM2151 I have made some experiments
+with the emulator.
 
 ### Experiments with the emulator
 Choosing a decay rate of $0B and a key code of $4A, the output volume decreases
 by a rate of 96 dB pr 1795 ms. However, the voltage only decreases at half the
-rate, i.e. at roughly 96 sB pr 3600 ms. This is approximately in agreement with
-the documentation which gives the value 3444 ms for the corresponding rate
+rate, i.e. at roughly 96 dB pr 3600 ms. This is approximately in agreement with
+the documentation, which gives the value 3444 ms for the corresponding rate
 constant of 6:0, i.e. 11\*2+2 = 24.
 
 Repeating the experiment with a decay rate of $0C gives a power decay rate of
 96 dB / 1100 ms, which is in agreement with a voltage decay rate of 96 dB /
 2200 ms, corresponding to the rate constant of 6:2, i.e. 12\*2+2 = 26.
 
-### DSP
-Attenuation is achieved by using a DSP to multiply the sine output by a
-decaying factor. The decay itself is achieved by a simple shift and subtract.
-For instance, a shift by 6 and subsequent subtract gives a decay factor of
-1-2^(-6), which is the same as 0.136 dB.
+### Attenuation
+Attenuation can be achieved by using a DSP to multiply the sine output by a
+decaying factor. The decay itself can then be achieved by a simple shift and
+subtract.  For instance, a shift by 6 and subsequent subtract gives a decay
+factor of 1-2^(-6), which is the same as 0.136 dB.
 
 The output resolution is 12 bits, which corresponds to 72 dB.  So to achieve
-full attenuation of 72 dB requires 529 reductions. However, the attenuation
-factor must have a significant amount of precision for this to work. In fact
-the, the precision of the attenuation factor must be the sum of the output
-resolution (12 bits) and the shift (6 bits), so a total of 18 bits.
+full attenuation of 72 dB requires 72/0.136 = 529 reductions. However, the
+attenuation factor must have a significant amount of precision for this to
+work. In fact, the precision of the attenuation factor must be the sum of the
+output resolution (12 bits) and the shift (6 bits), so a total of 18 bits.
+This fits nicely with the capabilities of a single DSP.
 
 ### Rate constant
 The chips uses a total of 64 different rate constants, where the rate constant

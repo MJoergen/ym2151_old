@@ -4,6 +4,9 @@ use ieee.numeric_std_unsigned.all;
 
 package ym2151_package is
 
+   -- This constant controls the attenuation used by the envelope generator.
+   constant C_SHIFT_AMOUNT        : integer := 6;
+
    -- This constant is determined by the switching rate of the PDM signal (100 MHz)
    -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
    -- The ratio between the two is 6666, and we therefore go for 12 bits (i.e. 4096).
