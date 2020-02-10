@@ -194,14 +194,67 @@ This is the constant C\_EXP\_WIDTH.
 Choosing a decay rate of $0B and a key code of $4A, the output volume decreases
 by a rate of 96 dB pr 1795 ms. However, the voltage only decreases at half the
 rate, i.e. at roughly 96 sB pr 3600 ms. This is approximately in agreement with
-the documentation which gives the value 3444 ms.
+the documentation which gives the value 3444 ms for the corresponding rate
+constant of 6:0, i.e. 11\*2+2 = 24.
+
+Repeating the experiment with a decay rate of $0C gives a power decay rate of
+96 dB / 1100 ms, which is in agreement with a voltage decay rate of 96 dB /
+2200 ms, corresponding to the rate constant of 6:2, i.e. 12\*2+2 = 26.
 
 ### DSP
-Attenuation is achieved by using the DSP to multiply the sine output by a
+Attenuation is achieved by using a DSP to multiply the sine output by a
 decaying factor. The decay itself is achieved by a simple shift and subtract.
-For instance, shift by 6 and subtract gives a decay factor of 1-2^(-6), which
-is the same as 0.136 dB. So to achieve full attenuation at 96 dB requires 704
-reductions. However, the attenuation factor must have a significant amount of
-precision for this to work.
+For instance, a shift by 6 and subsequent subtract gives a decay factor of
+1-2^(-6), which is the same as 0.136 dB.
 
+The output resolution is 12 bits, which corresponds to 72 dB.  So to achieve
+full attenuation of 72 dB requires 529 reductions. However, the attenuation
+factor must have a significant amount of precision for this to work. In fact
+the, the precision of the attenuation factor must be the sum of the output
+resolution (12 bits) and the shift (6 bits), so a total of 18 bits.
+
+### Rate constant
+The chips uses a total of 64 different rate constants, where the rate constant
+is defined as time (in ms) for output voltage attenuation of 96 dB. Some
+selected values are:
+
+| constant | rate (ms/96dB) |
+| -------- | -------------- | 
+|    63    |         6.73   |
+|    62    |         6.73   |
+|    61    |         6.73   |
+|    60    |         6.73   |
+|    59    |         7.49   |
+|    56    |        13.45   |
+|    52    |        26.91   |
+|     8    |     55104.85   |
+|     4    |    110209.71   |
+|     3    |  infinity      |
+|     0    |  infinity      |
+
+So the dynamic range is really from 6.73 ms to infinity, corresponding to the
+rate constants of 60 to 3. The rate increases by a factor of 2 for each
+increase of 4 in rate constant.
+
+In our implementation we will convert the rate constants into number of clock
+cycles between each attenuation (i.e. 0.136 dB).  For the rate constant 4 this
+is 110209.71 ms/(96 dB) * 0.136 dB/iter * 8333.333 cycles/ms = 1301087
+cycles/iter. In hex, this is 0x13DA5F, i.e. a 21 bit constant.
+
+So the attenuation cycle (shift 6 and subtract) will be applied once every this
+many clock cycles, and that will lead to an attenuation rate corresponding to
+the rate constant 4. A rate constant four higher (i.e. 8) has a delay exactly
+half that number of clock cycles.
+
+A rate constant of just one higher is achieved by dividing the required clock
+cycle delay by 2^0.25. This will be implemented by having a total of four
+different delay constants, corresponding to each of the four possible factors
+of 2^0.25. The four constants are:
+
+| rate mod 4 | constant |
+| ---------- | -------- |
+|      0     | 0x13DA5F |
+|      1     | 0x10B1BF |
+|      2     | 0x0E09C7 |
+|      3     | 0x0BCDFF |
 
