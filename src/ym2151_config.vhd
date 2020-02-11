@@ -153,6 +153,12 @@ begin
                         devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
                         devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
 
+                     when "10" => -- Key fraction
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
+
                      when others => null;
                   end case;
 

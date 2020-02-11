@@ -45,6 +45,7 @@ package ym2151_package is
 
    type t_phase_generator is record
       key_code           : std_logic_vector(6 downto 0);
+      key_fraction       : std_logic_vector(5 downto 0);
    end record t_phase_generator;
 
    type t_envelope_generator is record
@@ -62,7 +63,8 @@ package ym2151_package is
       eg : t_envelope_generator;
    end record t_device;
    constant C_DEVICE_DEFAULT : t_device := 
-            (pg => (key_code           => (others => '0')),
+            (pg => (key_code           => (others => '0'),
+                    key_fraction       => (others => '0')),
              eg => (total_level        => (others => '0'),
                     attack_rate        => (others => '0'),
                     first_decay_rate   => (others => '0'),
