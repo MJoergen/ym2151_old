@@ -24,7 +24,7 @@ entity ym2151_sine_rom is
       addr_i : in  std_logic_vector(C_SINE_ADDR_WIDTH-1 downto 0);
       data_o : out std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0)
    );
-end ym2151_sine_rom;
+end entity ym2151_sine_rom;
 
 architecture synthesis of ym2151_sine_rom is
 

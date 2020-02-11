@@ -30,7 +30,7 @@ entity ym2151 is
       -- Waveform output
       val_o     : out std_logic_vector(C_PDM_WIDTH-1 downto 0)
    );
-end ym2151;
+end entity ym2151;
 
 architecture synthesis of ym2151 is
 

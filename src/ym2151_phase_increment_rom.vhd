@@ -21,7 +21,7 @@ entity phase_increment_rom is
       addr_i : in  std_logic_vector(C_PHASEINC_ADDR_WIDTH-1 downto 0);
       data_o : out std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0)
    );
-end phase_increment_rom;
+end entity phase_increment_rom;
 
 architecture synthesis of phase_increment_rom is
 

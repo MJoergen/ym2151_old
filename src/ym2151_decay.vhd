@@ -38,7 +38,7 @@ entity ym2151_decay is
       rate_i  : in  std_logic_vector( 5 downto 0); -- One of 64 values
       delay_o : out std_logic_vector(21 downto 0)  -- Number of clock cycles between each decay
    );
-end ym2151_decay;
+end entity ym2151_decay;
 
 architecture synthesis of ym2151_decay is
 

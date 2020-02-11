@@ -21,7 +21,7 @@ entity ym2151_waveform_generator is
       key_code_i : in  std_logic_vector(6 downto 0);
       waveform_o : out std_logic_vector(17 downto 0)
    );
-end ym2151_waveform_generator;
+end entity ym2151_waveform_generator;
 
 architecture synthesis of ym2151_waveform_generator is
 

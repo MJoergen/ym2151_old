@@ -28,7 +28,7 @@ entity phase_increment is
       key_fraction_i : in  std_logic_vector(5 downto 0);
       phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
-end phase_increment;
+end entity phase_increment;
 
 architecture synthesis of phase_increment is
 

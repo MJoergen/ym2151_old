@@ -22,7 +22,7 @@ entity ym2151_envelope_generator is
       key_code_i   : in  std_logic_vector(6 downto 0);
       envelope_o   : out std_logic_vector(17 downto 0)
    );
-end ym2151_envelope_generator;
+end entity ym2151_envelope_generator;
 
 architecture synthesis of ym2151_envelope_generator is
 

@@ -77,7 +77,7 @@ entity ym2151_config is
       -- Configuration output
       devices_o : out t_device_vector(0 to 31)
    );
-end ym2151_config;
+end entity ym2151_config;
 
 architecture synthesis of ym2151_config is
 
