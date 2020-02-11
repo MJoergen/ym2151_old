@@ -173,7 +173,7 @@ begin
                   devices_o(device_v).eg.decay_rate   <= wr_data_r(4 downto 0);
 
                when "110" => -- 0xC0 - 0xDF
-                  devices_o(device_v).eg.sustain_rate <= wr_data_r(3 downto 0);
+                  devices_o(device_v).eg.sustain_rate <= wr_data_r(4 downto 0);
 
                when "111" => -- 0xE0 - 0xFF
                   devices_o(device_v).eg.decay_level  <= wr_data_r(7 downto 4);
