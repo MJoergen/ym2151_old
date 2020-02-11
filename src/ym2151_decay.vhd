@@ -31,7 +31,7 @@ use work.ym2151_package.all;
 
 entity ym2151_decay is
    generic (
-      G_CLOCK_HZ : integer := 8333333    -- Input clock frequency
+      G_UPDATE_HZ : integer             -- Update frequency
    );
    port (
       rate_i  : in  std_logic_vector( 5 downto 0); -- One of 64 values
@@ -44,13 +44,13 @@ architecture synthesis of ym2151_decay is
    type mem_t is array (0 to 3) of std_logic_vector(C_DECAY_SIZE-1 downto 0);
 
    -- Calculate the decay constants at compile time.
-   constant C_DECAY_TIME_4  : real    := 110209.71/96.0;                            -- milliseconds per dB.
-   constant C_DECAY_TIME_0  : real    := 2.0*C_DECAY_TIME_4;                        -- milliseconds per dB.
-   constant C_FACTOR        : real    := 1.0-0.5**real(C_SHIFT_AMOUNT);
-   constant C_ATTENUNATION  : real    := log(C_FACTOR)/log(0.5) * 3.0;              -- Attenuation (dB) per iteration.
-   constant C_CYCLES_MS     : real    := real(G_CLOCK_HZ)/1000.0;                   -- Clock cycles per millisecond.
-   constant C_DELAY_VALUE_0 : real    := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
-   constant C_TWO_ROOT_025  : real    := 2.0**0.25;
+   constant C_DECAY_TIME_4  : real := 110209.71/96.0;                            -- milliseconds per dB.
+   constant C_DECAY_TIME_0  : real := 2.0*C_DECAY_TIME_4;                        -- milliseconds per dB.
+   constant C_FACTOR        : real := 1.0-0.5**real(C_SHIFT_AMOUNT);
+   constant C_ATTENUNATION  : real := log(C_FACTOR)/log(0.5) * 3.0;              -- Attenuation (dB) per iteration.
+   constant C_CYCLES_MS     : real := real(G_UPDATE_HZ)/1000.0;                   -- Update cycles per millisecond.
+   constant C_DELAY_VALUE_0 : real := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
+   constant C_TWO_ROOT_025  : real := 2.0**0.25;
 
    constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       C_DECAY_SIZE),
                                 to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        C_DECAY_SIZE),

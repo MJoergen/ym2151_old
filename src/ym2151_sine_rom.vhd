@@ -22,9 +22,9 @@ use work.ym2151_package.all;
 
 entity ym2151_sine_rom is
    port (
-      clk_i  : in  std_logic;
-      addr_i : in  std_logic_vector(C_SINE_ADDR_WIDTH-1 downto 0);
-      data_o : out std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0)
+      clk_i      : in  std_logic;
+      phase_i    : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      waveform_o : out std_logic_vector(17 downto 0)
    );
 end entity ym2151_sine_rom;
 
@@ -57,14 +57,27 @@ architecture synthesis of ym2151_sine_rom is
 
    signal mem_r : mem_t := InitRom;
 
+   signal addr_s : std_logic_vector(C_SINE_ADDR_WIDTH-1 downto 0);
+   signal data_r : std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
+
 begin
+
+   addr_s <= phase_i(phase_i'left downto phase_i'left - (C_SINE_ADDR_WIDTH-1));
 
    p_read : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         data_o <= mem_r(to_integer(addr_i));
+         data_r <= mem_r(to_integer(addr_s));
       end if;
    end process p_read;
+
+
+   -- Sign extend
+   p_waveform : process (data_r)
+   begin
+      waveform_o <= (others => data_r(C_SINE_DATA_WIDTH-1));
+      waveform_o(C_SINE_DATA_WIDTH-1 downto 0) <= data_r;
+   end process p_waveform;
 
 end architecture synthesis;
 

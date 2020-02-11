@@ -22,9 +22,9 @@ use ieee.math_real.all;
 
 use work.ym2151_package.all;
 
-entity phase_increment is
+entity ym2151_phase_increment is
    generic (
-      G_CLOCK_HZ     : integer         -- Input clock frequency
+      G_UPDATE_HZ     : integer         -- Input clock frequency
    );
    port (
       clk_i          : in  std_logic;
@@ -32,9 +32,9 @@ entity phase_increment is
       key_fraction_i : in  std_logic_vector(5 downto 0);
       phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
-end entity phase_increment;
+end entity ym2151_phase_increment;
 
-architecture synthesis of phase_increment is
+architecture synthesis of ym2151_phase_increment is
 
    signal phinc_addr_s : std_logic_vector(9 downto 0);
    signal phinc_data_s : std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0);
@@ -51,9 +51,9 @@ begin
    phinc_addr_s(9 downto 6) <= key_code_i(3 downto 0) - ("00" & key_code_i(3 downto 2));
    phinc_addr_s(5 downto 0) <= key_fraction_i;
 
-   i_phase_increment_rom : entity work.phase_increment_rom
+   i_ym2151_phase_increment_rom : entity work.ym2151_phase_increment_rom
       generic map (
-         G_CLOCK_HZ => G_CLOCK_HZ
+         G_UPDATE_HZ => G_UPDATE_HZ
       )
       port map (
          clk_i  => clk_i,

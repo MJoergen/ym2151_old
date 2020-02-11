@@ -3,7 +3,6 @@ SRC   += src/ym2151_config.vhd
 SRC   += src/ym2151_phase_increment_rom.vhd
 SRC   += src/ym2151_phase_increment.vhd
 SRC   += src/ym2151_sine_rom.vhd
-SRC   += src/ym2151_waveform_generator.vhd
 SRC   += src/ym2151_decay.vhd
 SRC   += src/ym2151_envelope_generator.vhd
 SRC   += src/ym2151.vhd
