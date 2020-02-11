@@ -4,12 +4,16 @@
 --
 -- Description: This module calculates the frequency associated with the
 -- current note.
+--
 -- This file takes as input a 7-bit key code consisting of
 -- * Octave (3 bits)
 -- * Semitone (4 bits)
 -- as well as a 6-bit key fraction.
--- It generates the corresponding frequency as output, in
--- the units of fractional phase per clock cycle.
+--
+-- It generates the corresponding frequency as output, in the units of
+-- fractional phase per clock cycle.
+--
+-- Latency is 1 clock cycle.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -20,7 +24,7 @@ use work.ym2151_package.all;
 
 entity phase_increment is
    generic (
-      G_CLOCK_HZ : integer -- Frequency of input clock
+      G_CLOCK_HZ     : integer         -- Input clock frequency
    );
    port (
       clk_i          : in  std_logic;
@@ -40,10 +44,10 @@ architecture synthesis of phase_increment is
 begin
 
    ----------------------------------------------------
-   -- Generate lookup address in ROM
-   -- Convert the key code from range 0..14 to range 0..11
+   -- Generate lookup address in ROM.
    ----------------------------------------------------
 
+   -- Convert the key code from range 0..14 to range 0..11
    phinc_addr_s(9 downto 6) <= key_code_i(3 downto 0) - ("00" & key_code_i(3 downto 2));
    phinc_addr_s(5 downto 0) <= key_fraction_i;
 
@@ -59,7 +63,7 @@ begin
 
 
    ----------------------------------------------------
-   -- Store octave, so it is ready together the
+   -- Store octave, so it is ready together with the
    -- output from the Phase Increment ROM.
    ----------------------------------------------------
 

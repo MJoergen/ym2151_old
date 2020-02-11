@@ -16,6 +16,8 @@ package ym2151_package is
    -- -10*log10(1-2^(-6)).
    constant C_SHIFT_AMOUNT        : integer := 6;
 
+   constant C_DECAY_SIZE          : integer := 22;
+
    -- This constant is determined by the switching rate of the PDM signal (100 MHz)
    -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
    -- The ratio between the two is 6666, and we therefore go for 12 bits (i.e. 4096).

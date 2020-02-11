@@ -3,6 +3,9 @@
 -- Project: YM2151 implementation
 --
 -- Description: This module calculates the decay rate from the rate constant.
+-- It returns the number of clock cycles between each decay.  The decay is
+-- implemented by a shift-and-subtract, where the shift is controlled by the
+-- constant C_SHIFT_AMOUNT.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -26,23 +29,19 @@ use work.ym2151_package.all;
 -- |     3    |  infinity      | 2097151 (means infinity)
 -- |     0    |  infinity      | 2097151 (means infinity)
 
--- This module returns the number of clock cycles between each decay.
--- The decay is implemented by a shift-and-subtract, where the shift is
--- controlled by the constant C_SHIFT_AMOUNT.
-
 entity ym2151_decay is
    generic (
       G_CLOCK_HZ : integer := 8333333    -- Input clock frequency
    );
    port (
       rate_i  : in  std_logic_vector( 5 downto 0); -- One of 64 values
-      delay_o : out std_logic_vector(21 downto 0)  -- Number of clock cycles between each decay
+      delay_o : out std_logic_vector(C_DECAY_SIZE-1 downto 0)  -- Number of clock cycles between each decay
    );
 end entity ym2151_decay;
 
 architecture synthesis of ym2151_decay is
 
-   type mem_t is array (0 to 3) of std_logic_vector(21 downto 0);
+   type mem_t is array (0 to 3) of std_logic_vector(C_DECAY_SIZE-1 downto 0);
 
    -- Calculate the decay constants at compile time.
    constant C_DECAY_TIME_4  : real    := 110209.71/96.0;                            -- milliseconds per dB.
@@ -53,13 +52,13 @@ architecture synthesis of ym2151_decay is
    constant C_DELAY_VALUE_0 : real    := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
    constant C_TWO_ROOT_025  : real    := 2.0**0.25;
 
-   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**2.0)), 22),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**3.0)), 22));
+   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       C_DECAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        C_DECAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**2.0)), C_DECAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**3.0)), C_DECAY_SIZE));
 
-   signal rate_s  : std_logic_vector(21 downto 0);
-   signal shift_s : std_logic_vector( 3 downto 0);
+   signal rate_s  : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+   signal shift_s : std_logic_vector(3 downto 0);
 
 begin
 
@@ -69,7 +68,7 @@ begin
    process (rate_s, shift_s)
    begin
       delay_o <= (others => '0');
-      delay_o(21 - to_integer(shift_s) downto 0) <= rate_s(21 downto to_integer(shift_s));
+      delay_o(C_DECAY_SIZE-1 - to_integer(shift_s) downto 0) <= rate_s(C_DECAY_SIZE-1 downto to_integer(shift_s));
       if shift_s = 0 then
          delay_o <= (others => '1');
       end if;

@@ -4,6 +4,8 @@
 --
 -- Description: This module generates the waveform associated with the current
 -- note.
+--
+-- Latency is 3 clock cycles.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -25,21 +27,20 @@ end entity ym2151_waveform_generator;
 
 architecture synthesis of ym2151_waveform_generator is
 
+   -- Frequency, in units of fractional phase per clock cycle.
    signal phase_inc_s : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
 
-   -- Current waveform value
+   -- Current fractional phase.
    signal phase_r     : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
 
-   -- Current waveform value
+   -- Current sine value.
    signal sine_s      : std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
-
-   -- Current waveform value
-   signal val_s       : std_logic_vector(C_PDM_WIDTH-1 downto 0);
 
 begin
 
    ----------------------------------------------------
    -- Phase Increment (frequency) lookup
+   -- Latency 1 clock cycle.
    ----------------------------------------------------
 
    i_phase_increment : entity work.phase_increment
@@ -56,6 +57,7 @@ begin
 
    ----------------------------------------------------
    -- Phase
+   -- Latency 1 clock cycle.
    ----------------------------------------------------
 
    p_phase : process (clk_i)
@@ -71,6 +73,7 @@ begin
 
    ----------------------------------------------------
    -- Instantiate sine table
+   -- Latency 1 clock cycle.
    ----------------------------------------------------
 
    i_ym2151_sine_rom : entity work.ym2151_sine_rom
@@ -79,6 +82,11 @@ begin
          addr_i => phase_r(phase_r'left downto phase_r'left - (C_SINE_ADDR_WIDTH-1)),
          data_o => sine_s
       ); -- i_ym2151_sine_rom
+
+
+   ----------------------------------------------------
+   -- Sign extend the lookup value, converting to an 18-bit signed number.
+   ----------------------------------------------------
 
    p_waveform : process (sine_s)
    begin
