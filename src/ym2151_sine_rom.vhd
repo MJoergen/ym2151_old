@@ -65,5 +65,5 @@ begin
       end if;
    end process p_read;
 
-end synthesis;
+end architecture synthesis;
 

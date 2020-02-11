@@ -81,5 +81,5 @@ begin
       phase_inc_o(C_PHASEINC_DATA_WIDTH-1+to_integer(octave_r) downto to_integer(octave_r)) <= phinc_data_s;
    end process p_phase_inc;
 
-end synthesis;
+end architecture synthesis;
 
