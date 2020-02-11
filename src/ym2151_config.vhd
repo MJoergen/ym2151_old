@@ -163,20 +163,21 @@ begin
                   end case;
 
                when "011" => -- 0x60 - 0x7F
-                  devices_o(device_v).eg.total_level        <= wr_data_r(6 downto 0);
+                  devices_o(device_v).eg.total_level  <= wr_data_r(6 downto 0);
 
                when "100" => -- 0x80 - 0x9F
-                  devices_o(device_v).eg.attack_rate        <= wr_data_r(4 downto 0);
+                  devices_o(device_v).eg.key_scaling  <= wr_data_r(7 downto 6);
+                  devices_o(device_v).eg.attack_rate  <= wr_data_r(4 downto 0);
 
                when "101" => -- 0xA0 - 0xBF
-                  devices_o(device_v).eg.first_decay_rate   <= wr_data_r(4 downto 0);
+                  devices_o(device_v).eg.decay_rate   <= wr_data_r(4 downto 0);
 
                when "110" => -- 0xC0 - 0xDF
-                  devices_o(device_v).eg.second_decay_rate  <= wr_data_r(3 downto 0);
+                  devices_o(device_v).eg.sustain_rate <= wr_data_r(3 downto 0);
 
                when "111" => -- 0xE0 - 0xFF
-                  devices_o(device_v).eg.first_decay_level  <= wr_data_r(7 downto 4);
-                  devices_o(device_v).eg.release_rate       <= wr_data_r(3 downto 0);
+                  devices_o(device_v).eg.decay_level  <= wr_data_r(7 downto 4);
+                  devices_o(device_v).eg.release_rate <= wr_data_r(3 downto 0);
 
                when others => null;
             end case;

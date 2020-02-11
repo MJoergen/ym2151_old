@@ -49,13 +49,14 @@ package ym2151_package is
    end record t_phase_generator;
 
    type t_envelope_generator is record
-      total_level        : std_logic_vector(6 downto 0);
-      attack_rate        : std_logic_vector(4 downto 0);
-      first_decay_rate   : std_logic_vector(4 downto 0);
-      first_decay_level  : std_logic_vector(3 downto 0);
-      second_decay_rate  : std_logic_vector(3 downto 0);
-      release_rate       : std_logic_vector(3 downto 0);
-      key_onoff          : std_logic;
+      total_level  : std_logic_vector(6 downto 0);
+      key_scaling  : std_logic_vector(1 downto 0);
+      attack_rate  : std_logic_vector(4 downto 0);
+      decay_rate   : std_logic_vector(4 downto 0);
+      decay_level  : std_logic_vector(3 downto 0);
+      sustain_rate : std_logic_vector(4 downto 0);
+      release_rate : std_logic_vector(3 downto 0);
+      key_onoff    : std_logic;
    end record t_envelope_generator;
 
    type t_device is record
@@ -63,22 +64,23 @@ package ym2151_package is
       eg : t_envelope_generator;
    end record t_device;
    constant C_DEVICE_DEFAULT : t_device := 
-            (pg => (key_code           => (others => '0'),
-                    key_fraction       => (others => '0')),
-             eg => (total_level        => (others => '0'),
-                    attack_rate        => (others => '0'),
-                    first_decay_rate   => (others => '0'),
-                    first_decay_level  => (others => '0'),
-                    second_decay_rate  => (others => '0'),
-                    release_rate       => (others => '0'),
-                    key_onoff          => '0'));
+            (pg => (key_code     => (others => '0'),
+                    key_fraction => (others => '0')),
+             eg => (total_level  => (others => '0'),
+                    key_scaling  => (others => '0'),
+                    attack_rate  => (others => '0'),
+                    decay_rate   => (others => '0'),
+                    decay_level  => (others => '0'),
+                    sustain_rate => (others => '0'),
+                    release_rate => (others => '0'),
+                    key_onoff    => '0'));
    type t_device_vector is array (natural range<>) of t_device;
 
-   subtype t_envelope is std_logic_vector(9 downto 0);
-   type t_envelope_vector is array (natural range<>) of t_envelope;
-
-   subtype t_phase is std_logic_vector(19 downto 0);
-   type t_phase_vector is array (natural range<>) of t_phase;
+--   subtype t_envelope is std_logic_vector(9 downto 0);
+--   type t_envelope_vector is array (natural range<>) of t_envelope;
+--
+--   subtype t_phase is std_logic_vector(19 downto 0);
+--   type t_phase_vector is array (natural range<>) of t_phase;
 
 end package ym2151_package;
 
