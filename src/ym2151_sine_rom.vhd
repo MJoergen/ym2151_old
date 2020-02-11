@@ -1,11 +1,8 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std_unsigned.all;
-use ieee.math_real.all;
-
-use work.ym2151_package.all;
-
--- This file contains the ROM with the table of sine.
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module contains the ROM with the table of sine.
 -- Input is interpreted as an unsigned fractional number between 0 and 1.
 -- Output is the sine, interpreted as a signed number (in two's complement)
 -- beween -1 and 1.
@@ -13,6 +10,13 @@ use work.ym2151_package.all;
 -- The function calculated is y=sin(2*pi*x).
 -- The RAM is initialized by calculating first (1+sin), converting to integer,
 -- and then inverting the MSB.
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std_unsigned.all;
+use ieee.math_real.all;
+
+use work.ym2151_package.all;
 
 entity ym2151_sine_rom is
    port (

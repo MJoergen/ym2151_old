@@ -1,3 +1,9 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module contains the configuration of all the channels
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;

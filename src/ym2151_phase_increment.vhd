@@ -1,16 +1,22 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std_unsigned.all;
-use ieee.math_real.all;
-
-use work.ym2151_package.all;
-
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module calculates the frequency associated with the
+-- current note.
 -- This file takes as input a 7-bit key code consisting of
 -- * Octave (3 bits)
 -- * Semitone (4 bits)
 -- as well as a 6-bit key fraction.
 -- It generates the corresponding frequency as output, in
 -- the units of fractional phase per clock cycle.
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std_unsigned.all;
+use ieee.math_real.all;
+
+use work.ym2151_package.all;
 
 entity phase_increment is
    generic (

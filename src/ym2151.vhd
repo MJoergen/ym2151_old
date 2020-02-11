@@ -1,3 +1,9 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module is the top level for the YM2151.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
@@ -9,10 +15,6 @@ use unisim.vcomponents.all;
 
 library unimacro;
 use unimacro.vcomponents.all;
-
-
--- This is the main YM2151 module
--- The single clock is the CPU clock.
 
 entity ym2151 is
    generic (

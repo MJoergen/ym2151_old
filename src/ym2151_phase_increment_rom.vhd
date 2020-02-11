@@ -1,15 +1,16 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module contains the ROM with the phase increments
+-- (frequency) of each note.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
 use ieee.math_real.all;
 
 use work.ym2151_package.all;
-
--- This file contains the ROM with the phase increments (frequency) of each
--- note.
---
--- The input consists of 12*64 = 768 possible keys, represented as a 10-bit binary number.
--- The output is the phase increment
 
 entity phase_increment_rom is
    generic (

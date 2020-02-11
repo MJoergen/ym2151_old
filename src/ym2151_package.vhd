@@ -1,10 +1,19 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module contains a number of global constants
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
 
 package ym2151_package is
 
-   -- This constant controls the attenuation used by the envelope generator.
+   -- This constant controls the attenuation of each step.  This value is used
+   -- by the envelope generator.
+   -- A value of 6 corresponds to 0.06839 dB (voltage) per step, i.e.
+   -- -10*log10(1-2^(-6)).
    constant C_SHIFT_AMOUNT        : integer := 6;
 
    -- This constant is determined by the switching rate of the PDM signal (100 MHz)

@@ -1,3 +1,10 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 implementation
+--
+-- Description: This module generates the waveform associated with the current
+-- note.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
@@ -6,13 +13,13 @@ use work.ym2151_package.all;
 
 entity ym2151_waveform_generator is
    generic (
-      G_CLOCK_HZ : integer := 8333333    -- Input clock frequency
+      G_CLOCK_HZ : integer             -- Input clock frequency
    );
    port (
-      clk_i        : in  std_logic;
-      rst_i        : in  std_logic;
-      key_code_i   : in  std_logic_vector(6 downto 0);
-      waveform_o   : out std_logic_vector(17 downto 0)
+      clk_i      : in  std_logic;
+      rst_i      : in  std_logic;
+      key_code_i : in  std_logic_vector(6 downto 0);
+      waveform_o : out std_logic_vector(17 downto 0)
    );
 end ym2151_waveform_generator;
 
