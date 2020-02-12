@@ -18,7 +18,7 @@ SIM_LIB = /opt/ghdl/lib/ghdl/vendors/xilinx-vivado/
 # Simulation
 #####################################
 
-sim: $(SRC) build
+sim: $(SRC) $(TB_SRC) build
 	ghdl -i --ieee=synopsys --std=08 --workdir=build --work=work $(SRC) $(TB_SRC)
 	ghdl -m --ieee=synopsys --std=08 --workdir=build -frelaxed-rules -P$(SIM_LIB) $(TB)
 	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=7000us
