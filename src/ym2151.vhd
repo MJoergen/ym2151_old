@@ -66,17 +66,13 @@ begin
          config_o  => stages(0).config
       ); -- i_get_config
 
-
-   ----------------------------------------------------
    -- Copy state from previous iteration of this device.
-   ----------------------------------------------------
-
    stages(0).state_phase    <= stages(32).state_phase;
    stages(0).state_envelope <= stages(32).state_envelope;
 
 
    ----------------------------------------------------
-   -- Stage 1 : Calculate phase_inc
+   -- Stage 1 : Calculate phase_inc and delay
    ----------------------------------------------------
 
    i_calc_phase_inc : entity work.calc_phase_inc
@@ -89,11 +85,6 @@ begin
          key_fraction_i => stages(0).config.key_fraction,
          phase_inc_o    => stages(1).temp.phase_inc
       ); -- i_phase_increment
-
-
-   ----------------------------------------------------
-   -- Stage 1 : Calculate delay
-   ----------------------------------------------------
 
    i_calc_delay : entity work.calc_delay
       generic map (
@@ -113,7 +104,7 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 2 : Update cur_phase
+   -- Stage 2 : Update cur_phase and envelope
    ----------------------------------------------------
 
    i_update_cur_phase : entity work.update_cur_phase
@@ -124,11 +115,6 @@ begin
          cur_phase_i => stages(1).state_phase,
          cur_phase_o => stages(2).state_phase
       ); -- i_update_cur_phase
-
-
-   ----------------------------------------------------
-   -- Stage 2 : Update envelope
-   ----------------------------------------------------
 
    i_update_envelope : entity work.update_envelope
       port map (
@@ -158,7 +144,7 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 4-5 : Calculate product
+   -- Stages 4-5 : Calculate product
    ----------------------------------------------------
 
    i_calc_product : entity work.calc_product
@@ -171,9 +157,9 @@ begin
       ); -- i_calc_product
       
 
-   --------------------------
+   ----------------------------------------------------
    -- Generate pipeline
-   --------------------------
+   ----------------------------------------------------
 
    gen_config : for i in 1 to 5 generate
       p_config : process (clk_i)
@@ -239,7 +225,6 @@ begin
          end if;
       end process p_stages;
    end generate gen_stages;
-
 
    p_store_device0 : process (clk_i)
    begin
