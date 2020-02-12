@@ -92,6 +92,27 @@ begin
 
 
    ----------------------------------------------------
+   -- Stage 1 : Calculate delay
+   ----------------------------------------------------
+
+   i_calc_delay : entity work.calc_delay
+      generic map (
+         G_UPDATE_HZ => G_CLOCK_HZ/32
+      )
+      port map (
+         clk_i          => clk_i,
+         state_i        => stages(0).state_envelope.state,
+         key_code_i     => stages(0).config.key_code,
+         key_scaling_i  => stages(0).config.key_scaling,
+         attack_rate_i  => stages(0).config.attack_rate,
+         decay_rate_i   => stages(0).config.decay_rate,
+         sustain_rate_i => stages(0).config.sustain_rate,
+         release_rate_i => stages(0).config.release_rate,
+         delay_o        => stages(1).temp.delay
+      ); -- i_calc_delay
+
+
+   ----------------------------------------------------
    -- Stage 2 : Update cur_phase
    ----------------------------------------------------
 
@@ -103,6 +124,25 @@ begin
          cur_phase_i => stages(1).state_phase,
          cur_phase_o => stages(2).state_phase
       ); -- i_update_cur_phase
+
+
+   ----------------------------------------------------
+   -- Stage 2 : Update envelope
+   ----------------------------------------------------
+
+   i_update_envelope : entity work.update_envelope
+      port map (
+         clk_i       => clk_i,
+         rst_i       => rst_i,
+         key_onoff_i => stages(1).config.key_onoff,
+         delay_i     => stages(1).temp.delay,
+         state_i     => stages(1).state_envelope.state,
+         cnt_i       => stages(1).state_envelope.cnt,
+         envelope_i  => stages(1).state_envelope.envelope,
+         state_o     => stages(2).state_envelope.state,
+         cnt_o       => stages(2).state_envelope.cnt,
+         envelope_o  => stages(2).state_envelope.envelope
+      ); -- i_update_envelope
 
 
    ----------------------------------------------------
@@ -118,56 +158,16 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 4 : Calculate delay
-   ----------------------------------------------------
-
-   i_calc_delay : entity work.calc_delay
-      generic map (
-         G_UPDATE_HZ => G_CLOCK_HZ/32
-      )
-      port map (
-         clk_i          => clk_i,
-         state_i        => stages(3).state_envelope.state,
-         key_code_i     => stages(3).config.key_code,
-         key_scaling_i  => stages(3).config.key_scaling,
-         attack_rate_i  => stages(3).config.attack_rate,
-         decay_rate_i   => stages(3).config.decay_rate,
-         sustain_rate_i => stages(3).config.sustain_rate,
-         release_rate_i => stages(3).config.release_rate,
-         delay_o        => stages(4).temp.delay
-      ); -- i_calc_delay
-
-
-   ----------------------------------------------------
-   -- Stage 6 : Update ADSR envelope
-   ----------------------------------------------------
-
-   i_update_envelope : entity work.update_envelope
-      port map (
-         clk_i       => clk_i,
-         rst_i       => rst_i,
-         key_onoff_i => stages(5).config.key_onoff,
-         delay_i     => stages(5).temp.delay,
-         state_i     => stages(5).state_envelope.state,
-         cnt_i       => stages(5).state_envelope.cnt,
-         envelope_i  => stages(5).state_envelope.envelope,
-         state_o     => stages(6).state_envelope.state,
-         cnt_o       => stages(6).state_envelope.cnt,
-         envelope_o  => stages(6).state_envelope.envelope
-      ); -- i_update_envelope
-
-
-   ----------------------------------------------------
-   -- Stage 8 : Calculate product
+   -- Stage 4-5 : Calculate product
    ----------------------------------------------------
 
    i_calc_product : entity work.calc_product
       port map (
          clk_i      => clk_i,
          rst_i      => rst_i,
-         envelope_i => stages(6).state_envelope.envelope,
-         waveform_i => stages(6).temp.waveform,
-         product_o  => stages(8).temp.product
+         envelope_i => stages(3).state_envelope.envelope,
+         waveform_i => stages(3).temp.waveform,
+         product_o  => stages(5).temp.product
       ); -- i_calc_product
       
 
@@ -175,93 +175,77 @@ begin
    -- Generate pipeline
    --------------------------
 
-   gen_1 : for i in 1 to 8 generate
-      p_1 : process (clk_i)
+   gen_config : for i in 1 to 5 generate
+      p_config : process (clk_i)
       begin
          if rising_edge(clk_i) then
             stages(i).config <= stages(i-1).config;
          end if;
-      end process p_1;
-   end generate gen_1;
+      end process p_config;
+   end generate gen_config;
 
-   gen_2 : for i in 2 to 8 generate
-      p_2 : process (clk_i)
+   gen_phase_inc : for i in 2 to 5 generate
+      p_phase_inc : process (clk_i)
       begin
          if rising_edge(clk_i) then
             stages(i).temp.phase_inc <= stages(i-1).temp.phase_inc;
          end if;
-      end process p_2;
-   end generate gen_2;
+      end process p_phase_inc;
+   end generate gen_phase_inc;
 
-   gen_4 : for i in 4 to 8 generate
-      p_4 : process (clk_i)
+   gen_waveform : for i in 4 to 5 generate
+      p_waveform : process (clk_i)
       begin
          if rising_edge(clk_i) then
             stages(i).temp.waveform <= stages(i-1).temp.waveform;
          end if;
-      end process p_4;
-   end generate gen_4;
+      end process p_waveform;
+   end generate gen_waveform;
 
-   gen_5 : for i in 5 to 8 generate
-      p_5 : process (clk_i)
+   gen_delay : for i in 2 to 5 generate
+      p_delay : process (clk_i)
       begin
          if rising_edge(clk_i) then
             stages(i).temp.delay <= stages(i-1).temp.delay;
          end if;
-      end process p_5;
-   end generate gen_5;
+      end process p_delay;
+   end generate gen_delay;
 
-   gen_1_2 : for i in 1 to 1 generate
-      p_1_2 : process (clk_i)
+   gen_state1 : for i in 1 to 1 generate
+      p_state1 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state_phase <= stages(i-1).state_phase;
-         end if;
-      end process p_1_2;
-   end generate gen_1_2;
-
-   gen_3 : for i in 3 to 8 generate
-      p_3 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).state_phase <= stages(i-1).state_phase;
-         end if;
-      end process p_3;
-   end generate gen_3;
-
-   gen_1_6 : for i in 1 to 5 generate
-      p_1_6 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
+            stages(i).state_phase    <= stages(i-1).state_phase;
             stages(i).state_envelope <= stages(i-1).state_envelope;
          end if;
-      end process p_1_6;
-   end generate gen_1_6;
+      end process p_state1;
+   end generate gen_state1;
 
-   gen_7 : for i in 7 to 8 generate
-      p_7 : process (clk_i)
+   gen_state2 : for i in 3 to 5 generate
+      p_state2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
+            stages(i).state_phase    <= stages(i-1).state_phase;
             stages(i).state_envelope <= stages(i-1).state_envelope;
          end if;
-      end process p_7;
-   end generate gen_7;
+      end process p_state2;
+   end generate gen_state2;
 
-   gen_8 : for i in 9 to 32 generate
-      p_8 : process (clk_i)
+   gen_stages : for i in 6 to 32 generate
+      p_stages : process (clk_i)
       begin
          if rising_edge(clk_i) then
             stages(i) <= stages(i-1);
          end if;
-      end process p_8;
-   end generate gen_8;
+      end process p_stages;
+   end generate gen_stages;
 
 
    p_store_device0 : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if stages(8).config.device_cnt = 0 then
-            val_o <= stages(8).temp.product xor C_NEGATIVE_ONE;
+         if stages(5).config.device_cnt = 0 then
+            val_o <= stages(5).temp.product xor C_NEGATIVE_ONE;
          end if;
       end if;
    end process p_store_device0;
