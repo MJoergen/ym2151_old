@@ -10,7 +10,7 @@ use ieee.numeric_std_unsigned.all;
 
 use work.ym2151_package.all;
 
-entity calc_cur_phase is
+entity update_cur_phase is
    port (
       clk_i       : in  std_logic;
       rst_i       : in  std_logic;
@@ -18,9 +18,9 @@ entity calc_cur_phase is
       phase_inc_i : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       cur_phase_o : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
-end entity calc_cur_phase;
+end entity update_cur_phase;
 
-architecture synthesis of calc_cur_phase is
+architecture synthesis of update_cur_phase is
 
 begin
 

@@ -10,7 +10,7 @@ use ieee.numeric_std_unsigned.all;
 
 use work.ym2151_package.all;
 
-entity calc_envelope is
+entity update_envelope is
    port (
       clk_i        : in  std_logic;
       rst_i        : in  std_logic;
@@ -26,9 +26,9 @@ entity calc_envelope is
       cnt_o        : out std_logic_vector(C_DECAY_SIZE-1 downto 0);
       envelope_o   : out std_logic_vector(17 downto 0)
    );
-end entity calc_envelope;
+end entity update_envelope;
 
-architecture synthesis of calc_envelope is
+architecture synthesis of update_envelope is
 
    signal envelope_sub_s : std_logic_vector(17 downto 0);
 

@@ -76,11 +76,67 @@ package ym2151_package is
                     key_onoff    => '0'));
    type t_device_vector is array (natural range<>) of t_device;
 
---   subtype t_envelope is std_logic_vector(9 downto 0);
---   type t_envelope_vector is array (natural range<>) of t_envelope;
---
---   subtype t_phase is std_logic_vector(19 downto 0);
---   type t_phase_vector is array (natural range<>) of t_phase;
+
+   -- Configuration from CPU
+   type config_t is record
+      device_cnt   : std_logic_vector(4 downto 0);
+      key_code     : std_logic_vector(6 downto 0);
+      key_fraction : std_logic_vector(5 downto 0);
+      total_level  : std_logic_vector(6 downto 0);
+      key_scaling  : std_logic_vector(1 downto 0);
+      attack_rate  : std_logic_vector(4 downto 0);
+      decay_rate   : std_logic_vector(4 downto 0);
+      decay_level  : std_logic_vector(3 downto 0);
+      sustain_rate : std_logic_vector(4 downto 0);
+      release_rate : std_logic_vector(3 downto 0);
+      key_onoff    : std_logic;
+   end record config_t;
+
+   constant C_CONFIG_DEFAULT : config_t := (
+      device_cnt   => (others => '0'),
+      key_code     => (others => '0'),
+      key_fraction => (others => '0'),
+      total_level  => (others => '0'),
+      key_scaling  => (others => '0'),
+      attack_rate  => (others => '0'),
+      decay_rate   => (others => '0'),
+      decay_level  => (others => '0'),
+      sustain_rate => (others => '0'),
+      release_rate => (others => '0'),
+      key_onoff    => '0'
+   ); -- C_CONFIG_DEFAULT
+
+
+   type temp_t is record
+      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      waveform     : std_logic_vector(17 downto 0);
+      rate         : std_logic_vector( 5 downto 0);
+      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+   end record temp_t;
+
+   constant C_TEMP_DEFAULT : temp_t := (
+      phase_inc    => (others => '0'),
+      waveform     => (others => '0'),
+      rate         => (others => '0'),
+      delay        => (others => '0'),
+      product      => (others => '0')
+   ); -- C_TEMP_DEFAULT
+
+
+   -- State to be maintained for next iteration.
+   type state_envelope_t is record
+      state        : STATE_ADSR_t;
+      cnt          : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      envelope     : std_logic_vector(17 downto 0);
+   end record state_envelope_t;
+
+   constant C_STATE_ENVELOPE_DEFAULT : state_envelope_t := (
+      state        => RELEASE_ST,
+      cnt          => (others => '0'),
+      envelope     => (others => '0')
+   ); -- C_STATE_ENVELOPE_DEFAULT
+
 
 end package ym2151_package;
 

@@ -28,82 +28,24 @@ end entity ym2151;
 
 architecture synthesis of ym2151 is
 
-   signal devices_s    : t_device_vector(0 to 31);
-
-   signal device_cnt_r : std_logic_vector(4 downto 0) := (others => '0');
-
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
-   type config_t is record
-      device_cnt   : std_logic_vector(4 downto 0);
-      key_code     : std_logic_vector(6 downto 0);
-      key_fraction : std_logic_vector(5 downto 0);
-      total_level  : std_logic_vector(6 downto 0);
-      key_scaling  : std_logic_vector(1 downto 0);
-      attack_rate  : std_logic_vector(4 downto 0);
-      decay_rate   : std_logic_vector(4 downto 0);
-      decay_level  : std_logic_vector(3 downto 0);
-      sustain_rate : std_logic_vector(4 downto 0);
-      release_rate : std_logic_vector(3 downto 0);
-      key_onoff    : std_logic;
-   end record config_t;
-
-   constant C_CONFIG_DEFAULT : config_t := (
-      device_cnt   => (others => '0'),
-      key_code     => (others => '0'),
-      key_fraction => (others => '0'),
-      total_level  => (others => '0'),
-      key_scaling  => (others => '0'),
-      attack_rate  => (others => '0'),
-      decay_rate   => (others => '0'),
-      decay_level  => (others => '0'),
-      sustain_rate => (others => '0'),
-      release_rate => (others => '0'),
-      key_onoff    => '0'
-   );
-
-   type temp_t is record
-      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      waveform     : std_logic_vector(17 downto 0);
-      rate         : std_logic_vector( 5 downto 0);
-      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
-   end record temp_t;
-
-   constant C_TEMP_DEFAULT : temp_t := (
-      phase_inc    => (others => '0'),
-      waveform     => (others => '0'),
-      rate         => (others => '0'),
-      delay        => (others => '0'),
-      product      => (others => '0')
-   );
-
-   type state_t is record
-      cur_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      state        : STATE_ADSR_t;
-      cnt          : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      envelope     : std_logic_vector(17 downto 0);
-   end record state_t;
-
-   constant C_STATE_DEFAULT : state_t := (
-      cur_phase    => (others => '0'),
-      state        => RELEASE_ST,
-      cnt          => (others => '0'),
-      envelope     => (others => '0')
-   );
 
    type stage_t is record
-      config : config_t;
-      temp   : temp_t;
-      state  : state_t;
+      config         : config_t;
+      temp           : temp_t;
+      state_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      state_envelope : state_envelope_t;
    end record stage_t;
    
    constant C_STAGE_DEFAULT : stage_t := (
-      config => C_CONFIG_DEFAULT,
-      temp   => C_TEMP_DEFAULT,
-      state  => C_STATE_DEFAULT
-   );
+      config          => C_CONFIG_DEFAULT,
+      temp            => C_TEMP_DEFAULT,
+      state_phase     => (others => '0'),
+      state_envelope  => C_STATE_ENVELOPE_DEFAULT
+   ); -- C_STAGE_DEFAULT
+
 
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t := (others => C_STAGE_DEFAULT);
@@ -111,50 +53,26 @@ architecture synthesis of ym2151 is
 begin
 
    ----------------------------------------------------
-   -- Instantiate CPU configuration interface
+   -- Stage 0 : Read configuration for each device, one at a time.
    ----------------------------------------------------
 
-   i_ym2151_config : entity work.ym2151_config
+   i_get_config : entity work.get_config
       port map (
          clk_i     => clk_i,
          rst_i     => rst_i,
          addr_i    => addr_i,
          wr_en_i   => wr_en_i,
          wr_data_i => wr_data_i,
-         devices_o => devices_s
-      ); -- i_config
+         config_o  => stages(0).config
+      ); -- i_get_config
 
 
    ----------------------------------------------------
-   -- Loop through each of the 32 devices
-   ----------------------------------------------------
-
-   p_device_cnt : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         device_cnt_r <= device_cnt_r + 1;
-      end if;
-   end process p_device_cnt;
-
-
-   ----------------------------------------------------
-   -- Prepare stage 0 of pipeline
-   ----------------------------------------------------
-
-   stages(0).config.device_cnt   <= device_cnt_r;
-   stages(0).config.key_code     <= devices_s(to_integer(device_cnt_r)).pg.key_code;
-   stages(0).config.key_fraction <= devices_s(to_integer(device_cnt_r)).pg.key_fraction;
-   stages(0).config.total_level  <= devices_s(to_integer(device_cnt_r)).eg.total_level;
-   stages(0).config.key_scaling  <= devices_s(to_integer(device_cnt_r)).eg.key_scaling;
-   stages(0).config.attack_rate  <= devices_s(to_integer(device_cnt_r)).eg.attack_rate;
-   stages(0).config.decay_rate   <= devices_s(to_integer(device_cnt_r)).eg.decay_rate;
-   stages(0).config.decay_level  <= devices_s(to_integer(device_cnt_r)).eg.decay_level;
-   stages(0).config.sustain_rate <= devices_s(to_integer(device_cnt_r)).eg.sustain_rate;
-   stages(0).config.release_rate <= devices_s(to_integer(device_cnt_r)).eg.release_rate;
-   stages(0).config.key_onoff    <= devices_s(to_integer(device_cnt_r)).eg.key_onoff;
-
    -- Copy state from previous iteration of this device.
-   stages(0).state <= stages(32).state;
+   ----------------------------------------------------
+
+   stages(0).state_phase    <= stages(32).state_phase;
+   stages(0).state_envelope <= stages(32).state_envelope;
 
 
    ----------------------------------------------------
@@ -177,14 +95,14 @@ begin
    -- Stage 2 : Update cur_phase
    ----------------------------------------------------
 
-   i_calc_cur_phase : entity work.calc_cur_phase
+   i_update_cur_phase : entity work.update_cur_phase
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         cur_phase_i => stages(1).state.cur_phase,
          phase_inc_i => stages(1).temp.phase_inc,
-         cur_phase_o => stages(2).state.cur_phase
-      ); -- i_calc_cur_phase
+         cur_phase_i => stages(1).state_phase,
+         cur_phase_o => stages(2).state_phase
+      ); -- i_update_cur_phase
 
 
    ----------------------------------------------------
@@ -194,7 +112,7 @@ begin
    i_calc_waveform : entity work.calc_waveform
       port map (
          clk_i      => clk_i,
-         phase_i    => stages(2).state.cur_phase,
+         phase_i    => stages(2).state_phase,
          waveform_o => stages(3).temp.waveform
       ); -- i_ym2151_sine_rom
 
@@ -209,7 +127,7 @@ begin
       )
       port map (
          clk_i          => clk_i,
-         state_i        => stages(3).state.state,
+         state_i        => stages(3).state_envelope.state,
          key_code_i     => stages(3).config.key_code,
          key_scaling_i  => stages(3).config.key_scaling,
          attack_rate_i  => stages(3).config.attack_rate,
@@ -224,32 +142,32 @@ begin
    -- Stage 6 : Update ADSR envelope
    ----------------------------------------------------
 
-   i_calc_envelope : entity work.calc_envelope
+   i_update_envelope : entity work.update_envelope
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         state_i     => stages(5).state.state,
-         cnt_i       => stages(5).state.cnt,
-         envelope_i  => stages(5).state.envelope,
          key_onoff_i => stages(5).config.key_onoff,
          delay_i     => stages(5).temp.delay,
-         state_o     => stages(6).state.state,
-         cnt_o       => stages(6).state.cnt,
-         envelope_o  => stages(6).state.envelope
-      ); -- i_calc_envelope
+         state_i     => stages(5).state_envelope.state,
+         cnt_i       => stages(5).state_envelope.cnt,
+         envelope_i  => stages(5).state_envelope.envelope,
+         state_o     => stages(6).state_envelope.state,
+         cnt_o       => stages(6).state_envelope.cnt,
+         envelope_o  => stages(6).state_envelope.envelope
+      ); -- i_update_envelope
 
 
    ----------------------------------------------------
-   -- Stage 7 : Calculate product
+   -- Stage 8 : Calculate product
    ----------------------------------------------------
 
    i_calc_product : entity work.calc_product
       port map (
          clk_i      => clk_i,
          rst_i      => rst_i,
-         envelope_i => stages(6).state.envelope,
+         envelope_i => stages(6).state_envelope.envelope,
          waveform_i => stages(6).temp.waveform,
-         product_o  => stages(7).temp.product
+         product_o  => stages(8).temp.product
       ); -- i_calc_product
       
 
@@ -257,7 +175,7 @@ begin
    -- Generate pipeline
    --------------------------
 
-   gen_1 : for i in 1 to 7 generate
+   gen_1 : for i in 1 to 8 generate
       p_1 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -266,27 +184,7 @@ begin
       end process p_1;
    end generate gen_1;
 
-   gen_1_2 : for i in 1 to 1 generate
-      p_1_2 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).state.cur_phase <= stages(i-1).state.cur_phase;
-         end if;
-      end process p_1_2;
-   end generate gen_1_2;
-
-   gen_1_6 : for i in 1 to 5 generate
-      p_1_6 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).state.state    <= stages(i-1).state.state;
-            stages(i).state.cnt      <= stages(i-1).state.cnt;
-            stages(i).state.envelope <= stages(i-1).state.envelope;
-         end if;
-      end process p_1_6;
-   end generate gen_1_6;
-
-   gen_2 : for i in 2 to 7 generate
+   gen_2 : for i in 2 to 8 generate
       p_2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -295,16 +193,7 @@ begin
       end process p_2;
    end generate gen_2;
 
-   gen_3 : for i in 3 to 7 generate
-      p_3 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).state.cur_phase <= stages(i-1).state.cur_phase;
-         end if;
-      end process p_3;
-   end generate gen_3;
-
-   gen_4 : for i in 4 to 7 generate
+   gen_4 : for i in 4 to 8 generate
       p_4 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -313,7 +202,7 @@ begin
       end process p_4;
    end generate gen_4;
 
-   gen_5 : for i in 5 to 7 generate
+   gen_5 : for i in 5 to 8 generate
       p_5 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -322,18 +211,43 @@ begin
       end process p_5;
    end generate gen_5;
 
-   gen_7 : for i in 7 to 7 generate
+   gen_1_2 : for i in 1 to 1 generate
+      p_1_2 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).state_phase <= stages(i-1).state_phase;
+         end if;
+      end process p_1_2;
+   end generate gen_1_2;
+
+   gen_3 : for i in 3 to 8 generate
+      p_3 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).state_phase <= stages(i-1).state_phase;
+         end if;
+      end process p_3;
+   end generate gen_3;
+
+   gen_1_6 : for i in 1 to 5 generate
+      p_1_6 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).state_envelope <= stages(i-1).state_envelope;
+         end if;
+      end process p_1_6;
+   end generate gen_1_6;
+
+   gen_7 : for i in 7 to 8 generate
       p_7 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state.state    <= stages(i-1).state.state;
-            stages(i).state.cnt      <= stages(i-1).state.cnt;
-            stages(i).state.envelope <= stages(i-1).state.envelope;
+            stages(i).state_envelope <= stages(i-1).state_envelope;
          end if;
       end process p_7;
    end generate gen_7;
 
-   gen_8 : for i in 8 to 32 generate
+   gen_8 : for i in 9 to 32 generate
       p_8 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -346,8 +260,8 @@ begin
    p_store_device0 : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if stages(7).config.device_cnt = 0 then
-            val_o <= stages(7).temp.product xor C_NEGATIVE_ONE;
+         if stages(8).config.device_cnt = 0 then
+            val_o <= stages(8).temp.product xor C_NEGATIVE_ONE;
          end if;
       end if;
    end process p_store_device0;

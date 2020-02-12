@@ -1,13 +1,14 @@
 SRC    = src/ym2151_package.vhd
 SRC   += src/ym2151_config.vhd
+SRC   += src/get_config.vhd
 SRC   += src/ym2151_phase_increment_rom.vhd
 SRC   += src/ym2151_decay.vhd
 SRC   += src/calc_phase_inc.vhd
-SRC   += src/calc_cur_phase.vhd
 SRC   += src/calc_product.vhd
 SRC   += src/calc_waveform.vhd
 SRC   += src/calc_delay.vhd
-SRC   += src/calc_envelope.vhd
+SRC   += src/update_cur_phase.vhd
+SRC   += src/update_envelope.vhd
 SRC   += src/ym2151.vhd
 TB     = ym2151_tb
 TB_SRC = sim/$(TB).vhd

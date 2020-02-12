@@ -2,7 +2,7 @@
 -- License: Public domain; do with it what you like :-)
 -- Project: YM2151 implementation
 --
--- Description: This module is the top level for the YM2151.
+-- Description:
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -35,7 +35,7 @@ begin
    i_mult : mult_macro
       generic map (
          DEVICE  => "7SERIES",
-         LATENCY => 1,
+         LATENCY => 2,
          WIDTH_A => 18,
          WIDTH_B => 18
       )
