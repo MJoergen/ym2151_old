@@ -179,27 +179,6 @@ begin
          phase_inc_o    => stages(1).phase_inc
       ); -- i_phase_increment
 
-   p_stage1 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(1).device_cnt   <= stages(0).device_cnt;
-         stages(1).key_code     <= stages(0).key_code;
-         stages(1).key_fraction <= stages(0).key_fraction;
-         stages(1).total_level  <= stages(0).total_level;
-         stages(1).key_scaling  <= stages(0).key_scaling;
-         stages(1).attack_rate  <= stages(0).attack_rate;
-         stages(1).decay_rate   <= stages(0).decay_rate;
-         stages(1).decay_level  <= stages(0).decay_level;
-         stages(1).sustain_rate <= stages(0).sustain_rate;
-         stages(1).release_rate <= stages(0).release_rate;
-         stages(1).key_onoff    <= stages(0).key_onoff;
-         stages(1).cur_phase    <= stages(0).cur_phase;
-         stages(1).state        <= stages(0).state;
-         stages(1).cnt          <= stages(0).cnt;
-         stages(1).envelope     <= stages(0).envelope;
-      end if;
-   end process p_stage1;
-
 
    ----------------------------------------------------
    -- Stage 2 : Update cur_phase
@@ -208,24 +187,7 @@ begin
    p_stage2 : process (clk_i)
    begin
       if rising_edge(clk_i) then
-
-         stages(2).device_cnt   <= stages(1).device_cnt;
-         stages(2).key_code     <= stages(1).key_code;
-         stages(2).key_fraction <= stages(1).key_fraction;
-         stages(2).total_level  <= stages(1).total_level;
-         stages(2).key_scaling  <= stages(1).key_scaling;
-         stages(2).attack_rate  <= stages(1).attack_rate;
-         stages(2).decay_rate   <= stages(1).decay_rate;
-         stages(2).decay_level  <= stages(1).decay_level;
-         stages(2).sustain_rate <= stages(1).sustain_rate;
-         stages(2).release_rate <= stages(1).release_rate;
-         stages(2).key_onoff    <= stages(1).key_onoff;
-         stages(2).phase_inc    <= stages(1).phase_inc;
-         stages(2).state        <= stages(1).state;
-         stages(2).cnt          <= stages(1).cnt;
-         stages(2).envelope     <= stages(1).envelope;
-
-         stages(2).cur_phase    <= stages(1).cur_phase + stages(1).phase_inc;
+         stages(2).cur_phase <= stages(1).cur_phase + stages(1).phase_inc;
 
          if rst_i = '1' then
             stages(2).cur_phase <= (others => '0');
@@ -244,28 +206,6 @@ begin
          phase_i    => stages(2).cur_phase,
          waveform_o => stages(3).waveform
       ); -- i_ym2151_sine_rom
-
-   p_stage3 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(3).device_cnt   <= stages(2).device_cnt;
-         stages(3).key_code     <= stages(2).key_code;
-         stages(3).key_fraction <= stages(2).key_fraction;
-         stages(3).total_level  <= stages(2).total_level;
-         stages(3).key_scaling  <= stages(2).key_scaling;
-         stages(3).attack_rate  <= stages(2).attack_rate;
-         stages(3).decay_rate   <= stages(2).decay_rate;
-         stages(3).decay_level  <= stages(2).decay_level;
-         stages(3).sustain_rate <= stages(2).sustain_rate;
-         stages(3).release_rate <= stages(2).release_rate;
-         stages(3).key_onoff    <= stages(2).key_onoff;
-         stages(3).phase_inc    <= stages(2).phase_inc;
-         stages(3).cur_phase    <= stages(2).cur_phase;
-         stages(3).state        <= stages(2).state;
-         stages(3).cnt          <= stages(2).cnt;
-         stages(3).envelope     <= stages(2).envelope;
-      end if;
-   end process p_stage3;
 
 
    ----------------------------------------------------
@@ -288,41 +228,6 @@ begin
          delay_o        => stages(4).delay
       ); -- i_ym2151_calc_delay
 
-   p_stage4 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(4).device_cnt   <= stages(3).device_cnt;
-         stages(4).key_code     <= stages(3).key_code;
-         stages(4).key_fraction <= stages(3).key_fraction;
-         stages(4).total_level  <= stages(3).total_level;
-         stages(4).key_scaling  <= stages(3).key_scaling;
-         stages(4).attack_rate  <= stages(3).attack_rate;
-         stages(4).decay_rate   <= stages(3).decay_rate;
-         stages(4).decay_level  <= stages(3).decay_level;
-         stages(4).sustain_rate <= stages(3).sustain_rate;
-         stages(4).release_rate <= stages(3).release_rate;
-         stages(4).key_onoff    <= stages(3).key_onoff;
-         stages(4).phase_inc    <= stages(3).phase_inc;
-         stages(4).cur_phase    <= stages(3).cur_phase;
-         stages(4).state        <= stages(3).state;
-         stages(4).cnt          <= stages(3).cnt;
-         stages(4).envelope     <= stages(3).envelope;
-         stages(4).waveform     <= stages(3).waveform;
-      end if;
-   end process p_stage4;
-
-
-   ----------------------------------------------------
-   -- Stage 5 : Dummy
-   ----------------------------------------------------
-
-   p_stage5 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(5) <= stages(4);
-      end if;
-   end process p_stage5;
-
 
    ----------------------------------------------------
    -- Stage 6 : Update ADSR envelope
@@ -341,28 +246,6 @@ begin
          cnt_o       => stages(6).cnt,
          envelope_o  => stages(6).envelope
       ); -- i_ym2151_envelope_generator
-
-   p_stage6 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(6).device_cnt   <= stages(5).device_cnt;
-         stages(6).key_code     <= stages(5).key_code;
-         stages(6).key_fraction <= stages(5).key_fraction;
-         stages(6).total_level  <= stages(5).total_level;
-         stages(6).key_scaling  <= stages(5).key_scaling;
-         stages(6).attack_rate  <= stages(5).attack_rate;
-         stages(6).decay_rate   <= stages(5).decay_rate;
-         stages(6).decay_level  <= stages(5).decay_level;
-         stages(6).sustain_rate <= stages(5).sustain_rate;
-         stages(6).release_rate <= stages(5).release_rate;
-         stages(6).key_onoff    <= stages(5).key_onoff;
-         stages(6).phase_inc    <= stages(5).phase_inc;
-         stages(6).cur_phase    <= stages(5).cur_phase;
-         stages(6).waveform     <= stages(5).waveform;
-         stages(6).rate         <= stages(5).rate;
-         stages(6).delay        <= stages(5).delay;
-      end if;
-   end process p_stage6;
 
 
    --------------------------
@@ -385,39 +268,105 @@ begin
          P   => stages(7).product
       ); -- i_mult
       
-   p_stage7 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(7).device_cnt   <= stages(6).device_cnt;
-         stages(7).key_code     <= stages(6).key_code;
-         stages(7).key_fraction <= stages(6).key_fraction;
-         stages(7).total_level  <= stages(6).total_level;
-         stages(7).key_scaling  <= stages(6).key_scaling;
-         stages(7).attack_rate  <= stages(6).attack_rate;
-         stages(7).decay_rate   <= stages(6).decay_rate;
-         stages(7).decay_level  <= stages(6).decay_level;
-         stages(7).sustain_rate <= stages(6).sustain_rate;
-         stages(7).release_rate <= stages(6).release_rate;
-         stages(7).key_onoff    <= stages(6).key_onoff;
-         stages(7).phase_inc    <= stages(6).phase_inc;
-         stages(7).cur_phase    <= stages(6).cur_phase;
-         stages(7).waveform     <= stages(6).waveform;
-         stages(7).rate         <= stages(6).rate;
-         stages(7).delay        <= stages(6).delay;
-         stages(7).state        <= stages(6).state;
-         stages(7).cnt          <= stages(6).cnt;
-         stages(7).envelope     <= stages(6).envelope;
-      end if;
-   end process p_stage7;
 
-   gen_stages : for i in 8 to 32 generate
-      p_stages : process (clk_i)
+   --------------------------
+   -- Generate pipeline
+   --------------------------
+
+   gen_1 : for i in 1 to 7 generate
+      p_1 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i) <= stages(i-1);
+            stages(i).device_cnt   <= stages(i-1).device_cnt;
+            stages(i).key_code     <= stages(i-1).key_code;
+            stages(i).key_fraction <= stages(i-1).key_fraction;
+            stages(i).total_level  <= stages(i-1).total_level;
+            stages(i).key_scaling  <= stages(i-1).key_scaling;
+            stages(i).attack_rate  <= stages(i-1).attack_rate;
+            stages(i).decay_rate   <= stages(i-1).decay_rate;
+            stages(i).decay_level  <= stages(i-1).decay_level;
+            stages(i).sustain_rate <= stages(i-1).sustain_rate;
+            stages(i).release_rate <= stages(i-1).release_rate;
+            stages(i).key_onoff    <= stages(i-1).key_onoff;
          end if;
-      end process p_stages;
-   end generate gen_stages;
+      end process p_1;
+   end generate gen_1;
+
+   gen_1_2 : for i in 1 to 1 generate
+      p_1_2 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).cur_phase    <= stages(i-1).cur_phase;
+         end if;
+      end process p_1_2;
+   end generate gen_1_2;
+
+   gen_1_6 : for i in 1 to 5 generate
+      p_1_6 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).state        <= stages(i-1).state;
+            stages(i).cnt          <= stages(i-1).cnt;
+            stages(i).envelope     <= stages(i-1).envelope;
+         end if;
+      end process p_1_6;
+   end generate gen_1_6;
+
+   gen_2 : for i in 2 to 7 generate
+      p_2 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).phase_inc    <= stages(i-1).phase_inc;
+         end if;
+      end process p_2;
+   end generate gen_2;
+
+   gen_3 : for i in 3 to 7 generate
+      p_3 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).cur_phase    <= stages(i-1).cur_phase;
+         end if;
+      end process p_3;
+   end generate gen_3;
+
+   gen_4 : for i in 4 to 7 generate
+      p_4 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).waveform     <= stages(i-1).waveform;
+         end if;
+      end process p_4;
+   end generate gen_4;
+
+   gen_5 : for i in 5 to 7 generate
+      p_5 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).delay        <= stages(i-1).delay;
+         end if;
+      end process p_5;
+   end generate gen_5;
+
+   gen_7 : for i in 7 to 7 generate
+      p_7 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i).state        <= stages(i-1).state;
+            stages(i).cnt          <= stages(i-1).cnt;
+            stages(i).envelope     <= stages(i-1).envelope;
+         end if;
+      end process p_7;
+   end generate gen_7;
+
+   gen_8 : for i in 8 to 32 generate
+      p_8 : process (clk_i)
+      begin
+         if rising_edge(clk_i) then
+            stages(i)              <= stages(i-1);
+         end if;
+      end process p_8;
+   end generate gen_8;
 
 
    -- The output from the multiplier is a signed 36-bit integer.
