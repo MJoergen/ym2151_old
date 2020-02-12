@@ -30,6 +30,8 @@ end entity update_envelope;
 
 architecture synthesis of update_envelope is
 
+   constant C_DELAY_MAX : std_logic_vector(C_DECAY_SIZE-1 downto 0) := (others => '1');
+
    signal envelope_sub_s : std_logic_vector(17 downto 0);
 
 begin
@@ -70,7 +72,7 @@ begin
                if cnt_i = 0 then
                   cnt_o  <= delay_i;
                   envelope_o <= envelope_i - envelope_sub_s;
-               else
+               elsif cnt_i /= C_DELAY_MAX then
                   cnt_o <= cnt_i - 1;
                end if;
 
@@ -86,10 +88,6 @@ begin
                -- In this state the envelope should decrease exponentially, until
                -- it reaches the minimum value, or until Key OFF event.
                if key_onoff_i = '0' then
-                  state_o <= RELEASE_ST;
-               end if;
-
-               if envelope_sub_s = 0 then
                   state_o <= RELEASE_ST;
                end if;
 
