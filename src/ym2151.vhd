@@ -10,12 +10,6 @@ use ieee.numeric_std_unsigned.all;
 
 use work.ym2151_package.all;
 
-library unisim;
-use unisim.vcomponents.all;
-
-library unimacro;
-use unimacro.vcomponents.all;
-
 entity ym2151 is
    generic (
       G_CLOCK_HZ : integer := 8333333    -- Input clock frequency
@@ -41,8 +35,7 @@ architecture synthesis of ym2151 is
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
-   type stage_t is record
-      -- Valid in stage 0 and later
+   type config_t is record
       device_cnt   : std_logic_vector(4 downto 0);
       key_code     : std_logic_vector(6 downto 0);
       key_fraction : std_logic_vector(5 downto 0);
@@ -54,32 +47,9 @@ architecture synthesis of ym2151 is
       sustain_rate : std_logic_vector(4 downto 0);
       release_rate : std_logic_vector(3 downto 0);
       key_onoff    : std_logic;
+   end record config_t;
 
-      -- Valid in stage 1 and later
-      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-
-      -- Updated in stage 2.
-      cur_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-
-      -- Valid in stage 3 and later
-      waveform     : std_logic_vector(17 downto 0);
-
-      -- Valid in stage 4 and later
-      rate         : std_logic_vector( 5 downto 0); -- One of 64 values
-
-      -- Valid in stage 5 and later
-      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-
-      -- Updated in stage 6.
-      state        : STATE_ADSR_t;
-      cnt          : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      envelope     : std_logic_vector(17 downto 0);
-
-      -- Valid in stage 7 and later
-      product      : std_logic_vector(35 downto 0);
-   end record stage_t;
-   
-   constant C_STAGE_DEFAULT : stage_t := (
+   constant C_CONFIG_DEFAULT : config_t := (
       device_cnt   => (others => '0'),
       key_code     => (others => '0'),
       key_fraction => (others => '0'),
@@ -90,23 +60,49 @@ architecture synthesis of ym2151 is
       decay_level  => (others => '0'),
       sustain_rate => (others => '0'),
       release_rate => (others => '0'),
-      key_onoff    => '0',
-      --
+      key_onoff    => '0'
+   );
+
+   type temp_t is record
+      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      waveform     : std_logic_vector(17 downto 0);
+      rate         : std_logic_vector( 5 downto 0);
+      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+   end record temp_t;
+
+   constant C_TEMP_DEFAULT : temp_t := (
       phase_inc    => (others => '0'),
-      --
-      cur_phase    => (others => '0'),
-      --
       waveform     => (others => '0'),
-      --
       rate         => (others => '0'),
-      --
       delay        => (others => '0'),
-      --
+      product      => (others => '0')
+   );
+
+   type state_t is record
+      cur_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      state        : STATE_ADSR_t;
+      cnt          : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      envelope     : std_logic_vector(17 downto 0);
+   end record state_t;
+
+   constant C_STATE_DEFAULT : state_t := (
+      cur_phase    => (others => '0'),
       state        => RELEASE_ST,
       cnt          => (others => '0'),
-      envelope     => (others => '0'),
-      --
-      product      => (others => '0')
+      envelope     => (others => '0')
+   );
+
+   type stage_t is record
+      config : config_t;
+      temp   : temp_t;
+      state  : state_t;
+   end record stage_t;
+   
+   constant C_STAGE_DEFAULT : stage_t := (
+      config => C_CONFIG_DEFAULT,
+      temp   => C_TEMP_DEFAULT,
+      state  => C_STATE_DEFAULT
    );
 
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
@@ -145,23 +141,20 @@ begin
    -- Prepare stage 0 of pipeline
    ----------------------------------------------------
 
-   stages(0).device_cnt   <= device_cnt_r;
-   stages(0).key_code     <= devices_s(to_integer(device_cnt_r)).pg.key_code;
-   stages(0).key_fraction <= devices_s(to_integer(device_cnt_r)).pg.key_fraction;
-   stages(0).total_level  <= devices_s(to_integer(device_cnt_r)).eg.total_level;
-   stages(0).key_scaling  <= devices_s(to_integer(device_cnt_r)).eg.key_scaling;
-   stages(0).attack_rate  <= devices_s(to_integer(device_cnt_r)).eg.attack_rate;
-   stages(0).decay_rate   <= devices_s(to_integer(device_cnt_r)).eg.decay_rate;
-   stages(0).decay_level  <= devices_s(to_integer(device_cnt_r)).eg.decay_level;
-   stages(0).sustain_rate <= devices_s(to_integer(device_cnt_r)).eg.sustain_rate;
-   stages(0).release_rate <= devices_s(to_integer(device_cnt_r)).eg.release_rate;
-   stages(0).key_onoff    <= devices_s(to_integer(device_cnt_r)).eg.key_onoff;
+   stages(0).config.device_cnt   <= device_cnt_r;
+   stages(0).config.key_code     <= devices_s(to_integer(device_cnt_r)).pg.key_code;
+   stages(0).config.key_fraction <= devices_s(to_integer(device_cnt_r)).pg.key_fraction;
+   stages(0).config.total_level  <= devices_s(to_integer(device_cnt_r)).eg.total_level;
+   stages(0).config.key_scaling  <= devices_s(to_integer(device_cnt_r)).eg.key_scaling;
+   stages(0).config.attack_rate  <= devices_s(to_integer(device_cnt_r)).eg.attack_rate;
+   stages(0).config.decay_rate   <= devices_s(to_integer(device_cnt_r)).eg.decay_rate;
+   stages(0).config.decay_level  <= devices_s(to_integer(device_cnt_r)).eg.decay_level;
+   stages(0).config.sustain_rate <= devices_s(to_integer(device_cnt_r)).eg.sustain_rate;
+   stages(0).config.release_rate <= devices_s(to_integer(device_cnt_r)).eg.release_rate;
+   stages(0).config.key_onoff    <= devices_s(to_integer(device_cnt_r)).eg.key_onoff;
 
    -- Copy state from previous iteration of this device.
-   stages(0).cur_phase  <= stages(32).cur_phase;
-   stages(0).state      <= stages(32).state;
-   stages(0).cnt        <= stages(32).cnt;
-   stages(0).envelope   <= stages(32).envelope;
+   stages(0).state <= stages(32).state;
 
 
    ----------------------------------------------------
@@ -174,9 +167,9 @@ begin
       )
       port map (
          clk_i          => clk_i,
-         key_code_i     => stages(0).key_code,
-         key_fraction_i => stages(0).key_fraction,
-         phase_inc_o    => stages(1).phase_inc
+         key_code_i     => stages(0).config.key_code,
+         key_fraction_i => stages(0).config.key_fraction,
+         phase_inc_o    => stages(1).temp.phase_inc
       ); -- i_phase_increment
 
 
@@ -188,9 +181,9 @@ begin
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         cur_phase_i => stages(1).cur_phase,
-         phase_inc_i => stages(1).phase_inc,
-         cur_phase_o => stages(2).cur_phase
+         cur_phase_i => stages(1).state.cur_phase,
+         phase_inc_i => stages(1).temp.phase_inc,
+         cur_phase_o => stages(2).state.cur_phase
       ); -- i_calc_cur_phase
 
 
@@ -201,8 +194,8 @@ begin
    i_calc_waveform : entity work.calc_waveform
       port map (
          clk_i      => clk_i,
-         phase_i    => stages(2).cur_phase,
-         waveform_o => stages(3).waveform
+         phase_i    => stages(2).state.cur_phase,
+         waveform_o => stages(3).temp.waveform
       ); -- i_ym2151_sine_rom
 
 
@@ -216,14 +209,14 @@ begin
       )
       port map (
          clk_i          => clk_i,
-         state_i        => stages(3).state,
-         key_code_i     => stages(3).key_code,
-         key_scaling_i  => stages(3).key_scaling,
-         attack_rate_i  => stages(3).attack_rate,
-         decay_rate_i   => stages(3).decay_rate,
-         sustain_rate_i => stages(3).sustain_rate,
-         release_rate_i => stages(3).release_rate,
-         delay_o        => stages(4).delay
+         state_i        => stages(3).state.state,
+         key_code_i     => stages(3).config.key_code,
+         key_scaling_i  => stages(3).config.key_scaling,
+         attack_rate_i  => stages(3).config.attack_rate,
+         decay_rate_i   => stages(3).config.decay_rate,
+         sustain_rate_i => stages(3).config.sustain_rate,
+         release_rate_i => stages(3).config.release_rate,
+         delay_o        => stages(4).temp.delay
       ); -- i_calc_delay
 
 
@@ -235,14 +228,14 @@ begin
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         state_i     => stages(5).state,
-         cnt_i       => stages(5).cnt,
-         envelope_i  => stages(5).envelope,
-         key_onoff_i => stages(5).key_onoff,
-         delay_i     => stages(5).delay,
-         state_o     => stages(6).state,
-         cnt_o       => stages(6).cnt,
-         envelope_o  => stages(6).envelope
+         state_i     => stages(5).state.state,
+         cnt_i       => stages(5).state.cnt,
+         envelope_i  => stages(5).state.envelope,
+         key_onoff_i => stages(5).config.key_onoff,
+         delay_i     => stages(5).temp.delay,
+         state_o     => stages(6).state.state,
+         cnt_o       => stages(6).state.cnt,
+         envelope_o  => stages(6).state.envelope
       ); -- i_calc_envelope
 
 
@@ -254,9 +247,9 @@ begin
       port map (
          clk_i      => clk_i,
          rst_i      => rst_i,
-         envelope_i => stages(6).envelope,
-         waveform_i => stages(6).waveform,
-         product_o  => stages(7).product
+         envelope_i => stages(6).state.envelope,
+         waveform_i => stages(6).temp.waveform,
+         product_o  => stages(7).temp.product
       ); -- i_calc_product
       
 
@@ -268,17 +261,7 @@ begin
       p_1 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).device_cnt   <= stages(i-1).device_cnt;
-            stages(i).key_code     <= stages(i-1).key_code;
-            stages(i).key_fraction <= stages(i-1).key_fraction;
-            stages(i).total_level  <= stages(i-1).total_level;
-            stages(i).key_scaling  <= stages(i-1).key_scaling;
-            stages(i).attack_rate  <= stages(i-1).attack_rate;
-            stages(i).decay_rate   <= stages(i-1).decay_rate;
-            stages(i).decay_level  <= stages(i-1).decay_level;
-            stages(i).sustain_rate <= stages(i-1).sustain_rate;
-            stages(i).release_rate <= stages(i-1).release_rate;
-            stages(i).key_onoff    <= stages(i-1).key_onoff;
+            stages(i).config <= stages(i-1).config;
          end if;
       end process p_1;
    end generate gen_1;
@@ -287,7 +270,7 @@ begin
       p_1_2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).cur_phase    <= stages(i-1).cur_phase;
+            stages(i).state.cur_phase <= stages(i-1).state.cur_phase;
          end if;
       end process p_1_2;
    end generate gen_1_2;
@@ -296,9 +279,9 @@ begin
       p_1_6 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state        <= stages(i-1).state;
-            stages(i).cnt          <= stages(i-1).cnt;
-            stages(i).envelope     <= stages(i-1).envelope;
+            stages(i).state.state    <= stages(i-1).state.state;
+            stages(i).state.cnt      <= stages(i-1).state.cnt;
+            stages(i).state.envelope <= stages(i-1).state.envelope;
          end if;
       end process p_1_6;
    end generate gen_1_6;
@@ -307,7 +290,7 @@ begin
       p_2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).phase_inc    <= stages(i-1).phase_inc;
+            stages(i).temp.phase_inc <= stages(i-1).temp.phase_inc;
          end if;
       end process p_2;
    end generate gen_2;
@@ -316,7 +299,7 @@ begin
       p_3 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).cur_phase    <= stages(i-1).cur_phase;
+            stages(i).state.cur_phase <= stages(i-1).state.cur_phase;
          end if;
       end process p_3;
    end generate gen_3;
@@ -325,7 +308,7 @@ begin
       p_4 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).waveform     <= stages(i-1).waveform;
+            stages(i).temp.waveform <= stages(i-1).temp.waveform;
          end if;
       end process p_4;
    end generate gen_4;
@@ -334,7 +317,7 @@ begin
       p_5 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).delay        <= stages(i-1).delay;
+            stages(i).temp.delay <= stages(i-1).temp.delay;
          end if;
       end process p_5;
    end generate gen_5;
@@ -343,9 +326,9 @@ begin
       p_7 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state        <= stages(i-1).state;
-            stages(i).cnt          <= stages(i-1).cnt;
-            stages(i).envelope     <= stages(i-1).envelope;
+            stages(i).state.state    <= stages(i-1).state.state;
+            stages(i).state.cnt      <= stages(i-1).state.cnt;
+            stages(i).state.envelope <= stages(i-1).state.envelope;
          end if;
       end process p_7;
    end generate gen_7;
@@ -354,22 +337,17 @@ begin
       p_8 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i)              <= stages(i-1);
+            stages(i) <= stages(i-1);
          end if;
       end process p_8;
    end generate gen_8;
 
 
-   -- The output from the multiplier is a signed 36-bit integer.
-   assert (or(stages(7).product(35 downto 17+C_PDM_WIDTH)) = '0') or
-          (and(stages(7).product(35 downto 17+C_PDM_WIDTH)) = '1') or
-          rst_i /= '0';
-
    p_store_device0 : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if stages(7).device_cnt = 0 then
-            val_o <= stages(7).product(17+C_PDM_WIDTH-1 downto 17) xor C_NEGATIVE_ONE;
+         if stages(7).config.device_cnt = 0 then
+            val_o <= stages(7).temp.product xor C_NEGATIVE_ONE;
          end if;
       end if;
    end process p_store_device0;
