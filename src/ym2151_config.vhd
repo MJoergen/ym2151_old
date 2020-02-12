@@ -135,8 +135,8 @@ begin
          if wr_en_r = '1' then
             case wr_addr_r(7 downto 5) is
                when "000" => -- 0x00 - 0x1F
-                  case wr_addr_r is
-                     when X"08" => -- Key ON/OFF
+                  case wr_addr_r(4 downto 3) is
+                     when "01" => -- Key ON/OFF
                         devices_o(   to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(3);
                         devices_o( 8+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(4);
                         devices_o(16+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(5);

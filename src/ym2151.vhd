@@ -50,6 +50,8 @@ architecture synthesis of ym2151 is
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t := (others => C_STAGE_DEFAULT);
 
+   signal sum_r : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+
 begin
 
    ----------------------------------------------------
@@ -226,11 +228,31 @@ begin
       end process p_stages;
    end generate gen_stages;
 
-   p_store_device0 : process (clk_i)
+   p_sum_outputs : process (clk_i)
+      variable sum_v : std_logic_vector(C_PDM_WIDTH-1 downto 0);
    begin
       if rising_edge(clk_i) then
          if stages(5).config.device_cnt = 0 then
-            val_o <= stages(5).temp.product xor C_NEGATIVE_ONE;
+            sum_r <= stages(5).temp.product;
+         end if;
+         if stages(5).config.device_cnt > 0 then
+            sum_v := sum_r + stages(5).temp.product;
+            -- Check for overflow
+            if sum_r(C_PDM_WIDTH-1) = stages(5).temp.product(C_PDM_WIDTH-1) and 
+               sum_r(C_PDM_WIDTH-1) /= sum_v(C_PDM_WIDTH-1) then
+               sum_v                := (others => not sum_r(C_PDM_WIDTH-1));
+               sum_v(C_PDM_WIDTH-1) := sum_r(C_PDM_WIDTH-1);
+            end if;
+            sum_r <= sum_v;
+         end if;
+      end if;
+   end process p_sum_outputs;
+
+   p_store_device0 : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if stages(5).config.device_cnt = 8 then
+            val_o <= sum_r xor C_NEGATIVE_ONE;
          end if;
       end if;
    end process p_store_device0;
