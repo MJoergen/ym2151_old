@@ -47,7 +47,7 @@ begin
    -- Generate cpu reset
    proc_rst : process
    begin
-      rst_s <= '1', '0' after 500 ns;
+      rst_s <= '1', '0' after 5000 ns;
       wait;
    end process proc_rst;
 

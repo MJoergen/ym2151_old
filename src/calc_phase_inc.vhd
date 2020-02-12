@@ -22,7 +22,7 @@ use ieee.math_real.all;
 
 use work.ym2151_package.all;
 
-entity ym2151_phase_increment is
+entity calc_phase_inc is
    generic (
       G_UPDATE_HZ     : integer         -- Input clock frequency
    );
@@ -32,9 +32,9 @@ entity ym2151_phase_increment is
       key_fraction_i : in  std_logic_vector(5 downto 0);
       phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
-end entity ym2151_phase_increment;
+end entity calc_phase_inc;
 
-architecture synthesis of ym2151_phase_increment is
+architecture synthesis of calc_phase_inc is
 
    signal phinc_addr_s : std_logic_vector(9 downto 0);
    signal phinc_data_s : std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0);

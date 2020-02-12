@@ -165,10 +165,10 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 1 : Phase Increment (frequency) lookup
+   -- Stage 1 : Calculate phase_inc
    ----------------------------------------------------
 
-   i_ym2151_phase_increment : entity work.ym2151_phase_increment
+   i_calc_phase_inc : entity work.calc_phase_inc
       generic map (
          G_UPDATE_HZ => G_CLOCK_HZ/32
       )
@@ -184,23 +184,21 @@ begin
    -- Stage 2 : Update cur_phase
    ----------------------------------------------------
 
-   p_stage2 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         stages(2).cur_phase <= stages(1).cur_phase + stages(1).phase_inc;
-
-         if rst_i = '1' then
-            stages(2).cur_phase <= (others => '0');
-         end if;
-      end if;
-   end process p_stage2;
+   i_calc_cur_phase : entity work.calc_cur_phase
+      port map (
+         clk_i       => clk_i,
+         rst_i       => rst_i,
+         cur_phase_i => stages(1).cur_phase,
+         phase_inc_i => stages(1).phase_inc,
+         cur_phase_o => stages(2).cur_phase
+      ); -- i_calc_cur_phase
 
 
    ----------------------------------------------------
-   -- Stage 3 : Calculate sine of phase
+   -- Stage 3 : Calculate waveform
    ----------------------------------------------------
 
-   i_ym2151_sine_rom : entity work.ym2151_sine_rom
+   i_calc_waveform : entity work.calc_waveform
       port map (
          clk_i      => clk_i,
          phase_i    => stages(2).cur_phase,
@@ -209,10 +207,10 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 4 : Calculate time between each decay.
+   -- Stage 4 : Calculate delay
    ----------------------------------------------------
 
-   i_ym2151_calc_delay : entity work.ym2151_calc_delay
+   i_calc_delay : entity work.calc_delay
       generic map (
          G_UPDATE_HZ => G_CLOCK_HZ/32
       )
@@ -226,14 +224,14 @@ begin
          sustain_rate_i => stages(3).sustain_rate,
          release_rate_i => stages(3).release_rate,
          delay_o        => stages(4).delay
-      ); -- i_ym2151_calc_delay
+      ); -- i_calc_delay
 
 
    ----------------------------------------------------
    -- Stage 6 : Update ADSR envelope
    ----------------------------------------------------
 
-   i_ym2151_envelope_generator : entity work.ym2151_envelope_generator
+   i_calc_envelope : entity work.calc_envelope
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
@@ -245,28 +243,21 @@ begin
          state_o     => stages(6).state,
          cnt_o       => stages(6).cnt,
          envelope_o  => stages(6).envelope
-      ); -- i_ym2151_envelope_generator
+      ); -- i_calc_envelope
 
 
-   --------------------------
-   -- Stage 7 : Instantiate multiplier
-   --------------------------
+   ----------------------------------------------------
+   -- Stage 7 : Calculate product
+   ----------------------------------------------------
 
-   i_mult : mult_macro
-      generic map (
-         DEVICE  => "7SERIES",
-         LATENCY => 1,
-         WIDTH_A => 18,
-         WIDTH_B => 18
-      )
+   i_calc_product : entity work.calc_product
       port map (
-         CLK => clk_i,
-         RST => rst_i,
-         CE  => '1',
-         A   => stages(6).envelope,
-         B   => stages(6).waveform,
-         P   => stages(7).product
-      ); -- i_mult
+         clk_i      => clk_i,
+         rst_i      => rst_i,
+         envelope_i => stages(6).envelope,
+         waveform_i => stages(6).waveform,
+         product_o  => stages(7).product
+      ); -- i_calc_product
       
 
    --------------------------

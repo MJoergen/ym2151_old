@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Tue Feb 11 13:48:18 2020
+[*] Wed Feb 12 12:58:05 2020
 [*]
 [dumpfile] "/home/mfj/git/MJoergen/x16-nexys4ddr/sub/ym2151/build/ym2151_tb.ghw"
-[dumpfile_mtime] "Tue Feb 11 13:43:50 2020"
-[dumpfile_size] 3859680
+[dumpfile_mtime] "Wed Feb 12 12:57:44 2020"
+[dumpfile_size] 40590419
 [savefile] "/home/mfj/git/MJoergen/x16-nexys4ddr/sub/ym2151/sim/ym2151_tb.gtkw"
-[timestart] 6937000000
+[timestart] 0
 [size] 1853 1145
-[pos] -39 27
-*-28.729069 7724000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 0 27
+*-39.471050 73000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.ym2151_tb.
 [treeopen] top.ym2151_tb.i_ym2151.
@@ -17,11 +17,12 @@
 [treeopen] top.ym2151_tb.i_ym2151.devices_s.[0].eg.
 [treeopen] top.ym2151_tb.i_ym2151.devices_s.[0].pg.
 [treeopen] top.ym2151_tb.i_ym2151.stages.
-[treeopen] top.ym2151_tb.i_ym2151.stages.[0].
+[treeopen] top.ym2151_tb.i_ym2151.stages.[2].
+[treeopen] top.ym2151_tb.i_ym2151.stages.[32].
 [sst_width] 266
 [signals_width] 235
 [sst_expanded] 1
-[sst_vpaned_height] 655
+[sst_vpaned_height] 637
 @28
 top.ym2151_tb.i_ym2151.clk_i
 top.ym2151_tb.i_ym2151.rst_i
@@ -29,30 +30,95 @@ top.ym2151_tb.i_ym2151.wr_en_i
 top.ym2151_tb.i_ym2151.addr_i[0]
 @22
 #{top.ym2151_tb.i_ym2151.wr_data_i[7:0]} top.ym2151_tb.i_ym2151.wr_data_i[7] top.ym2151_tb.i_ym2151.wr_data_i[6] top.ym2151_tb.i_ym2151.wr_data_i[5] top.ym2151_tb.i_ym2151.wr_data_i[4] top.ym2151_tb.i_ym2151.wr_data_i[3] top.ym2151_tb.i_ym2151.wr_data_i[2] top.ym2151_tb.i_ym2151.wr_data_i[1] top.ym2151_tb.i_ym2151.wr_data_i[0]
+@8022
 #{top.ym2151_tb.i_ym2151.val_o[11:0]} top.ym2151_tb.i_ym2151.val_o[11] top.ym2151_tb.i_ym2151.val_o[10] top.ym2151_tb.i_ym2151.val_o[9] top.ym2151_tb.i_ym2151.val_o[8] top.ym2151_tb.i_ym2151.val_o[7] top.ym2151_tb.i_ym2151.val_o[6] top.ym2151_tb.i_ym2151.val_o[5] top.ym2151_tb.i_ym2151.val_o[4] top.ym2151_tb.i_ym2151.val_o[3] top.ym2151_tb.i_ym2151.val_o[2] top.ym2151_tb.i_ym2151.val_o[1] top.ym2151_tb.i_ym2151.val_o[0]
-@800201
+@c00200
 -stage0
-@23
+@22
 #{top.ym2151_tb.i_ym2151.stages[0].device_cnt[4:0]} top.ym2151_tb.i_ym2151.stages[0].device_cnt[4] top.ym2151_tb.i_ym2151.stages[0].device_cnt[3] top.ym2151_tb.i_ym2151.stages[0].device_cnt[2] top.ym2151_tb.i_ym2151.stages[0].device_cnt[1] top.ym2151_tb.i_ym2151.stages[0].device_cnt[0]
 #{top.ym2151_tb.i_ym2151.stages[0].key_code[6:0]} top.ym2151_tb.i_ym2151.stages[0].key_code[6] top.ym2151_tb.i_ym2151.stages[0].key_code[5] top.ym2151_tb.i_ym2151.stages[0].key_code[4] top.ym2151_tb.i_ym2151.stages[0].key_code[3] top.ym2151_tb.i_ym2151.stages[0].key_code[2] top.ym2151_tb.i_ym2151.stages[0].key_code[1] top.ym2151_tb.i_ym2151.stages[0].key_code[0]
 #{top.ym2151_tb.i_ym2151.stages[0].decay_rate[4:0]} top.ym2151_tb.i_ym2151.stages[0].decay_rate[4] top.ym2151_tb.i_ym2151.stages[0].decay_rate[3] top.ym2151_tb.i_ym2151.stages[0].decay_rate[2] top.ym2151_tb.i_ym2151.stages[0].decay_rate[1] top.ym2151_tb.i_ym2151.stages[0].decay_rate[0]
-@29
+@28
 top.ym2151_tb.i_ym2151.stages[0].key_onoff
-@23
-#{top.ym2151_tb.i_ym2151.stages[0].phase_inc[28:0]} top.ym2151_tb.i_ym2151.stages[0].phase_inc[28] top.ym2151_tb.i_ym2151.stages[0].phase_inc[27] top.ym2151_tb.i_ym2151.stages[0].phase_inc[26] top.ym2151_tb.i_ym2151.stages[0].phase_inc[25] top.ym2151_tb.i_ym2151.stages[0].phase_inc[24] top.ym2151_tb.i_ym2151.stages[0].phase_inc[23] top.ym2151_tb.i_ym2151.stages[0].phase_inc[22] top.ym2151_tb.i_ym2151.stages[0].phase_inc[21] top.ym2151_tb.i_ym2151.stages[0].phase_inc[20] top.ym2151_tb.i_ym2151.stages[0].phase_inc[19] top.ym2151_tb.i_ym2151.stages[0].phase_inc[18] top.ym2151_tb.i_ym2151.stages[0].phase_inc[17] top.ym2151_tb.i_ym2151.stages[0].phase_inc[16] top.ym2151_tb.i_ym2151.stages[0].phase_inc[15] top.ym2151_tb.i_ym2151.stages[0].phase_inc[14] top.ym2151_tb.i_ym2151.stages[0].phase_inc[13] top.ym2151_tb.i_ym2151.stages[0].phase_inc[12] top.ym2151_tb.i_ym2151.stages[0].phase_inc[11] top.ym2151_tb.i_ym2151.stages[0].phase_inc[10] top.ym2151_tb.i_ym2151.stages[0].phase_inc[9] top.ym2151_tb.i_ym2151.stages[0].phase_inc[8] top.ym2151_tb.i_ym2151.stages[0].phase_inc[7] top.ym2151_tb.i_ym2151.stages[0].phase_inc[6] top.ym2151_tb.i_ym2151.stages[0].phase_inc[5] top.ym2151_tb.i_ym2151.stages[0].phase_inc[4] top.ym2151_tb.i_ym2151.stages[0].phase_inc[3] top.ym2151_tb.i_ym2151.stages[0].phase_inc[2] top.ym2151_tb.i_ym2151.stages[0].phase_inc[1] top.ym2151_tb.i_ym2151.stages[0].phase_inc[0]
-#{top.ym2151_tb.i_ym2151.stages[0].cur_phase[28:0]} top.ym2151_tb.i_ym2151.stages[0].cur_phase[28] top.ym2151_tb.i_ym2151.stages[0].cur_phase[27] top.ym2151_tb.i_ym2151.stages[0].cur_phase[26] top.ym2151_tb.i_ym2151.stages[0].cur_phase[25] top.ym2151_tb.i_ym2151.stages[0].cur_phase[24] top.ym2151_tb.i_ym2151.stages[0].cur_phase[23] top.ym2151_tb.i_ym2151.stages[0].cur_phase[22] top.ym2151_tb.i_ym2151.stages[0].cur_phase[21] top.ym2151_tb.i_ym2151.stages[0].cur_phase[20] top.ym2151_tb.i_ym2151.stages[0].cur_phase[19] top.ym2151_tb.i_ym2151.stages[0].cur_phase[18] top.ym2151_tb.i_ym2151.stages[0].cur_phase[17] top.ym2151_tb.i_ym2151.stages[0].cur_phase[16] top.ym2151_tb.i_ym2151.stages[0].cur_phase[15] top.ym2151_tb.i_ym2151.stages[0].cur_phase[14] top.ym2151_tb.i_ym2151.stages[0].cur_phase[13] top.ym2151_tb.i_ym2151.stages[0].cur_phase[12] top.ym2151_tb.i_ym2151.stages[0].cur_phase[11] top.ym2151_tb.i_ym2151.stages[0].cur_phase[10] top.ym2151_tb.i_ym2151.stages[0].cur_phase[9] top.ym2151_tb.i_ym2151.stages[0].cur_phase[8] top.ym2151_tb.i_ym2151.stages[0].cur_phase[7] top.ym2151_tb.i_ym2151.stages[0].cur_phase[6] top.ym2151_tb.i_ym2151.stages[0].cur_phase[5] top.ym2151_tb.i_ym2151.stages[0].cur_phase[4] top.ym2151_tb.i_ym2151.stages[0].cur_phase[3] top.ym2151_tb.i_ym2151.stages[0].cur_phase[2] top.ym2151_tb.i_ym2151.stages[0].cur_phase[1] top.ym2151_tb.i_ym2151.stages[0].cur_phase[0]
+@22
+#{top.ym2151_tb.i_ym2151.stages[0].phase_inc[28:0]} top.ym2151_tb.i_ym2151.stages[0].phase_inc[23] top.ym2151_tb.i_ym2151.stages[0].phase_inc[22] top.ym2151_tb.i_ym2151.stages[0].phase_inc[21] top.ym2151_tb.i_ym2151.stages[0].phase_inc[20] top.ym2151_tb.i_ym2151.stages[0].phase_inc[19] top.ym2151_tb.i_ym2151.stages[0].phase_inc[18] top.ym2151_tb.i_ym2151.stages[0].phase_inc[17] top.ym2151_tb.i_ym2151.stages[0].phase_inc[16] top.ym2151_tb.i_ym2151.stages[0].phase_inc[15] top.ym2151_tb.i_ym2151.stages[0].phase_inc[14] top.ym2151_tb.i_ym2151.stages[0].phase_inc[13] top.ym2151_tb.i_ym2151.stages[0].phase_inc[12] top.ym2151_tb.i_ym2151.stages[0].phase_inc[11] top.ym2151_tb.i_ym2151.stages[0].phase_inc[10] top.ym2151_tb.i_ym2151.stages[0].phase_inc[9] top.ym2151_tb.i_ym2151.stages[0].phase_inc[8] top.ym2151_tb.i_ym2151.stages[0].phase_inc[7] top.ym2151_tb.i_ym2151.stages[0].phase_inc[6] top.ym2151_tb.i_ym2151.stages[0].phase_inc[5] top.ym2151_tb.i_ym2151.stages[0].phase_inc[4] top.ym2151_tb.i_ym2151.stages[0].phase_inc[3] top.ym2151_tb.i_ym2151.stages[0].phase_inc[2] top.ym2151_tb.i_ym2151.stages[0].phase_inc[1] top.ym2151_tb.i_ym2151.stages[0].phase_inc[0]
+@c00022
+#{top.ym2151_tb.i_ym2151.stages[0].cur_phase[28:0]} top.ym2151_tb.i_ym2151.stages[0].cur_phase[23] top.ym2151_tb.i_ym2151.stages[0].cur_phase[22] top.ym2151_tb.i_ym2151.stages[0].cur_phase[21] top.ym2151_tb.i_ym2151.stages[0].cur_phase[20] top.ym2151_tb.i_ym2151.stages[0].cur_phase[19] top.ym2151_tb.i_ym2151.stages[0].cur_phase[18] top.ym2151_tb.i_ym2151.stages[0].cur_phase[17] top.ym2151_tb.i_ym2151.stages[0].cur_phase[16] top.ym2151_tb.i_ym2151.stages[0].cur_phase[15] top.ym2151_tb.i_ym2151.stages[0].cur_phase[14] top.ym2151_tb.i_ym2151.stages[0].cur_phase[13] top.ym2151_tb.i_ym2151.stages[0].cur_phase[12] top.ym2151_tb.i_ym2151.stages[0].cur_phase[11] top.ym2151_tb.i_ym2151.stages[0].cur_phase[10] top.ym2151_tb.i_ym2151.stages[0].cur_phase[9] top.ym2151_tb.i_ym2151.stages[0].cur_phase[8] top.ym2151_tb.i_ym2151.stages[0].cur_phase[7] top.ym2151_tb.i_ym2151.stages[0].cur_phase[6] top.ym2151_tb.i_ym2151.stages[0].cur_phase[5] top.ym2151_tb.i_ym2151.stages[0].cur_phase[4] top.ym2151_tb.i_ym2151.stages[0].cur_phase[3] top.ym2151_tb.i_ym2151.stages[0].cur_phase[2] top.ym2151_tb.i_ym2151.stages[0].cur_phase[1] top.ym2151_tb.i_ym2151.stages[0].cur_phase[0]
+@28
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[23]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[22]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[21]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[20]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[19]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[18]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[17]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[16]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[15]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[14]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[13]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[12]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[11]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[10]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[9]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[8]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[7]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[6]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[5]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[4]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[3]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[2]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[1]
+top.ym2151_tb.i_ym2151.stages[0].cur_phase[0]
+@1401200
+-group_end
+@22
 #{top.ym2151_tb.i_ym2151.stages[0].waveform[17:0]} top.ym2151_tb.i_ym2151.stages[0].waveform[17] top.ym2151_tb.i_ym2151.stages[0].waveform[16] top.ym2151_tb.i_ym2151.stages[0].waveform[15] top.ym2151_tb.i_ym2151.stages[0].waveform[14] top.ym2151_tb.i_ym2151.stages[0].waveform[13] top.ym2151_tb.i_ym2151.stages[0].waveform[12] top.ym2151_tb.i_ym2151.stages[0].waveform[11] top.ym2151_tb.i_ym2151.stages[0].waveform[10] top.ym2151_tb.i_ym2151.stages[0].waveform[9] top.ym2151_tb.i_ym2151.stages[0].waveform[8] top.ym2151_tb.i_ym2151.stages[0].waveform[7] top.ym2151_tb.i_ym2151.stages[0].waveform[6] top.ym2151_tb.i_ym2151.stages[0].waveform[5] top.ym2151_tb.i_ym2151.stages[0].waveform[4] top.ym2151_tb.i_ym2151.stages[0].waveform[3] top.ym2151_tb.i_ym2151.stages[0].waveform[2] top.ym2151_tb.i_ym2151.stages[0].waveform[1] top.ym2151_tb.i_ym2151.stages[0].waveform[0]
 #{top.ym2151_tb.i_ym2151.stages[0].rate[5:0]} top.ym2151_tb.i_ym2151.stages[0].rate[5] top.ym2151_tb.i_ym2151.stages[0].rate[4] top.ym2151_tb.i_ym2151.stages[0].rate[3] top.ym2151_tb.i_ym2151.stages[0].rate[2] top.ym2151_tb.i_ym2151.stages[0].rate[1] top.ym2151_tb.i_ym2151.stages[0].rate[0]
 #{top.ym2151_tb.i_ym2151.stages[0].delay[21:0]} top.ym2151_tb.i_ym2151.stages[0].delay[21] top.ym2151_tb.i_ym2151.stages[0].delay[20] top.ym2151_tb.i_ym2151.stages[0].delay[19] top.ym2151_tb.i_ym2151.stages[0].delay[18] top.ym2151_tb.i_ym2151.stages[0].delay[17] top.ym2151_tb.i_ym2151.stages[0].delay[16] top.ym2151_tb.i_ym2151.stages[0].delay[15] top.ym2151_tb.i_ym2151.stages[0].delay[14] top.ym2151_tb.i_ym2151.stages[0].delay[13] top.ym2151_tb.i_ym2151.stages[0].delay[12] top.ym2151_tb.i_ym2151.stages[0].delay[11] top.ym2151_tb.i_ym2151.stages[0].delay[10] top.ym2151_tb.i_ym2151.stages[0].delay[9] top.ym2151_tb.i_ym2151.stages[0].delay[8] top.ym2151_tb.i_ym2151.stages[0].delay[7] top.ym2151_tb.i_ym2151.stages[0].delay[6] top.ym2151_tb.i_ym2151.stages[0].delay[5] top.ym2151_tb.i_ym2151.stages[0].delay[4] top.ym2151_tb.i_ym2151.stages[0].delay[3] top.ym2151_tb.i_ym2151.stages[0].delay[2] top.ym2151_tb.i_ym2151.stages[0].delay[1] top.ym2151_tb.i_ym2151.stages[0].delay[0]
-@421
+@420
 top.ym2151_tb.i_ym2151.stages[0].state
-@23
+@22
 #{top.ym2151_tb.i_ym2151.stages[0].cnt[21:0]} top.ym2151_tb.i_ym2151.stages[0].cnt[21] top.ym2151_tb.i_ym2151.stages[0].cnt[20] top.ym2151_tb.i_ym2151.stages[0].cnt[19] top.ym2151_tb.i_ym2151.stages[0].cnt[18] top.ym2151_tb.i_ym2151.stages[0].cnt[17] top.ym2151_tb.i_ym2151.stages[0].cnt[16] top.ym2151_tb.i_ym2151.stages[0].cnt[15] top.ym2151_tb.i_ym2151.stages[0].cnt[14] top.ym2151_tb.i_ym2151.stages[0].cnt[13] top.ym2151_tb.i_ym2151.stages[0].cnt[12] top.ym2151_tb.i_ym2151.stages[0].cnt[11] top.ym2151_tb.i_ym2151.stages[0].cnt[10] top.ym2151_tb.i_ym2151.stages[0].cnt[9] top.ym2151_tb.i_ym2151.stages[0].cnt[8] top.ym2151_tb.i_ym2151.stages[0].cnt[7] top.ym2151_tb.i_ym2151.stages[0].cnt[6] top.ym2151_tb.i_ym2151.stages[0].cnt[5] top.ym2151_tb.i_ym2151.stages[0].cnt[4] top.ym2151_tb.i_ym2151.stages[0].cnt[3] top.ym2151_tb.i_ym2151.stages[0].cnt[2] top.ym2151_tb.i_ym2151.stages[0].cnt[1] top.ym2151_tb.i_ym2151.stages[0].cnt[0]
 #{top.ym2151_tb.i_ym2151.stages[0].envelope[17:0]} top.ym2151_tb.i_ym2151.stages[0].envelope[17] top.ym2151_tb.i_ym2151.stages[0].envelope[16] top.ym2151_tb.i_ym2151.stages[0].envelope[15] top.ym2151_tb.i_ym2151.stages[0].envelope[14] top.ym2151_tb.i_ym2151.stages[0].envelope[13] top.ym2151_tb.i_ym2151.stages[0].envelope[12] top.ym2151_tb.i_ym2151.stages[0].envelope[11] top.ym2151_tb.i_ym2151.stages[0].envelope[10] top.ym2151_tb.i_ym2151.stages[0].envelope[9] top.ym2151_tb.i_ym2151.stages[0].envelope[8] top.ym2151_tb.i_ym2151.stages[0].envelope[7] top.ym2151_tb.i_ym2151.stages[0].envelope[6] top.ym2151_tb.i_ym2151.stages[0].envelope[5] top.ym2151_tb.i_ym2151.stages[0].envelope[4] top.ym2151_tb.i_ym2151.stages[0].envelope[3] top.ym2151_tb.i_ym2151.stages[0].envelope[2] top.ym2151_tb.i_ym2151.stages[0].envelope[1] top.ym2151_tb.i_ym2151.stages[0].envelope[0]
 #{top.ym2151_tb.i_ym2151.stages[0].product[35:0]} top.ym2151_tb.i_ym2151.stages[0].product[35] top.ym2151_tb.i_ym2151.stages[0].product[34] top.ym2151_tb.i_ym2151.stages[0].product[33] top.ym2151_tb.i_ym2151.stages[0].product[32] top.ym2151_tb.i_ym2151.stages[0].product[31] top.ym2151_tb.i_ym2151.stages[0].product[30] top.ym2151_tb.i_ym2151.stages[0].product[29] top.ym2151_tb.i_ym2151.stages[0].product[28] top.ym2151_tb.i_ym2151.stages[0].product[27] top.ym2151_tb.i_ym2151.stages[0].product[26] top.ym2151_tb.i_ym2151.stages[0].product[25] top.ym2151_tb.i_ym2151.stages[0].product[24] top.ym2151_tb.i_ym2151.stages[0].product[23] top.ym2151_tb.i_ym2151.stages[0].product[22] top.ym2151_tb.i_ym2151.stages[0].product[21] top.ym2151_tb.i_ym2151.stages[0].product[20] top.ym2151_tb.i_ym2151.stages[0].product[19] top.ym2151_tb.i_ym2151.stages[0].product[18] top.ym2151_tb.i_ym2151.stages[0].product[17] top.ym2151_tb.i_ym2151.stages[0].product[16] top.ym2151_tb.i_ym2151.stages[0].product[15] top.ym2151_tb.i_ym2151.stages[0].product[14] top.ym2151_tb.i_ym2151.stages[0].product[13] top.ym2151_tb.i_ym2151.stages[0].product[12] top.ym2151_tb.i_ym2151.stages[0].product[11] top.ym2151_tb.i_ym2151.stages[0].product[10] top.ym2151_tb.i_ym2151.stages[0].product[9] top.ym2151_tb.i_ym2151.stages[0].product[8] top.ym2151_tb.i_ym2151.stages[0].product[7] top.ym2151_tb.i_ym2151.stages[0].product[6] top.ym2151_tb.i_ym2151.stages[0].product[5] top.ym2151_tb.i_ym2151.stages[0].product[4] top.ym2151_tb.i_ym2151.stages[0].product[3] top.ym2151_tb.i_ym2151.stages[0].product[2] top.ym2151_tb.i_ym2151.stages[0].product[1] top.ym2151_tb.i_ym2151.stages[0].product[0]
-@1000201
+@1401200
 -stage0
 @c00200
+-stage2
+@c00022
+#{top.ym2151_tb.i_ym2151.stages[2].cur_phase[23:0]} top.ym2151_tb.i_ym2151.stages[2].cur_phase[23] top.ym2151_tb.i_ym2151.stages[2].cur_phase[22] top.ym2151_tb.i_ym2151.stages[2].cur_phase[21] top.ym2151_tb.i_ym2151.stages[2].cur_phase[20] top.ym2151_tb.i_ym2151.stages[2].cur_phase[19] top.ym2151_tb.i_ym2151.stages[2].cur_phase[18] top.ym2151_tb.i_ym2151.stages[2].cur_phase[17] top.ym2151_tb.i_ym2151.stages[2].cur_phase[16] top.ym2151_tb.i_ym2151.stages[2].cur_phase[15] top.ym2151_tb.i_ym2151.stages[2].cur_phase[14] top.ym2151_tb.i_ym2151.stages[2].cur_phase[13] top.ym2151_tb.i_ym2151.stages[2].cur_phase[12] top.ym2151_tb.i_ym2151.stages[2].cur_phase[11] top.ym2151_tb.i_ym2151.stages[2].cur_phase[10] top.ym2151_tb.i_ym2151.stages[2].cur_phase[9] top.ym2151_tb.i_ym2151.stages[2].cur_phase[8] top.ym2151_tb.i_ym2151.stages[2].cur_phase[7] top.ym2151_tb.i_ym2151.stages[2].cur_phase[6] top.ym2151_tb.i_ym2151.stages[2].cur_phase[5] top.ym2151_tb.i_ym2151.stages[2].cur_phase[4] top.ym2151_tb.i_ym2151.stages[2].cur_phase[3] top.ym2151_tb.i_ym2151.stages[2].cur_phase[2] top.ym2151_tb.i_ym2151.stages[2].cur_phase[1] top.ym2151_tb.i_ym2151.stages[2].cur_phase[0]
+@28
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[23]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[22]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[21]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[20]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[19]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[18]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[17]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[16]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[15]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[14]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[13]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[12]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[11]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[10]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[9]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[8]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[7]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[6]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[5]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[4]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[3]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[2]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[1]
+top.ym2151_tb.i_ym2151.stages[2].cur_phase[0]
+@1401200
+-group_end
+@22
+#{top.ym2151_tb.i_ym2151.stages[2].phase_inc[23:0]} top.ym2151_tb.i_ym2151.stages[2].phase_inc[23] top.ym2151_tb.i_ym2151.stages[2].phase_inc[22] top.ym2151_tb.i_ym2151.stages[2].phase_inc[21] top.ym2151_tb.i_ym2151.stages[2].phase_inc[20] top.ym2151_tb.i_ym2151.stages[2].phase_inc[19] top.ym2151_tb.i_ym2151.stages[2].phase_inc[18] top.ym2151_tb.i_ym2151.stages[2].phase_inc[17] top.ym2151_tb.i_ym2151.stages[2].phase_inc[16] top.ym2151_tb.i_ym2151.stages[2].phase_inc[15] top.ym2151_tb.i_ym2151.stages[2].phase_inc[14] top.ym2151_tb.i_ym2151.stages[2].phase_inc[13] top.ym2151_tb.i_ym2151.stages[2].phase_inc[12] top.ym2151_tb.i_ym2151.stages[2].phase_inc[11] top.ym2151_tb.i_ym2151.stages[2].phase_inc[10] top.ym2151_tb.i_ym2151.stages[2].phase_inc[9] top.ym2151_tb.i_ym2151.stages[2].phase_inc[8] top.ym2151_tb.i_ym2151.stages[2].phase_inc[7] top.ym2151_tb.i_ym2151.stages[2].phase_inc[6] top.ym2151_tb.i_ym2151.stages[2].phase_inc[5] top.ym2151_tb.i_ym2151.stages[2].phase_inc[4] top.ym2151_tb.i_ym2151.stages[2].phase_inc[3] top.ym2151_tb.i_ym2151.stages[2].phase_inc[2] top.ym2151_tb.i_ym2151.stages[2].phase_inc[1] top.ym2151_tb.i_ym2151.stages[2].phase_inc[0]
+@1401200
+-stage2
+@800200
 -stage7
 @22
 #{top.ym2151_tb.i_ym2151.stages[7].device_cnt[4:0]} top.ym2151_tb.i_ym2151.stages[7].device_cnt[4] top.ym2151_tb.i_ym2151.stages[7].device_cnt[3] top.ym2151_tb.i_ym2151.stages[7].device_cnt[2] top.ym2151_tb.i_ym2151.stages[7].device_cnt[1] top.ym2151_tb.i_ym2151.stages[7].device_cnt[0]
@@ -61,8 +127,8 @@ top.ym2151_tb.i_ym2151.stages[0].state
 @28
 top.ym2151_tb.i_ym2151.stages[7].key_onoff
 @22
-#{top.ym2151_tb.i_ym2151.stages[7].phase_inc[28:0]} top.ym2151_tb.i_ym2151.stages[7].phase_inc[28] top.ym2151_tb.i_ym2151.stages[7].phase_inc[27] top.ym2151_tb.i_ym2151.stages[7].phase_inc[26] top.ym2151_tb.i_ym2151.stages[7].phase_inc[25] top.ym2151_tb.i_ym2151.stages[7].phase_inc[24] top.ym2151_tb.i_ym2151.stages[7].phase_inc[23] top.ym2151_tb.i_ym2151.stages[7].phase_inc[22] top.ym2151_tb.i_ym2151.stages[7].phase_inc[21] top.ym2151_tb.i_ym2151.stages[7].phase_inc[20] top.ym2151_tb.i_ym2151.stages[7].phase_inc[19] top.ym2151_tb.i_ym2151.stages[7].phase_inc[18] top.ym2151_tb.i_ym2151.stages[7].phase_inc[17] top.ym2151_tb.i_ym2151.stages[7].phase_inc[16] top.ym2151_tb.i_ym2151.stages[7].phase_inc[15] top.ym2151_tb.i_ym2151.stages[7].phase_inc[14] top.ym2151_tb.i_ym2151.stages[7].phase_inc[13] top.ym2151_tb.i_ym2151.stages[7].phase_inc[12] top.ym2151_tb.i_ym2151.stages[7].phase_inc[11] top.ym2151_tb.i_ym2151.stages[7].phase_inc[10] top.ym2151_tb.i_ym2151.stages[7].phase_inc[9] top.ym2151_tb.i_ym2151.stages[7].phase_inc[8] top.ym2151_tb.i_ym2151.stages[7].phase_inc[7] top.ym2151_tb.i_ym2151.stages[7].phase_inc[6] top.ym2151_tb.i_ym2151.stages[7].phase_inc[5] top.ym2151_tb.i_ym2151.stages[7].phase_inc[4] top.ym2151_tb.i_ym2151.stages[7].phase_inc[3] top.ym2151_tb.i_ym2151.stages[7].phase_inc[2] top.ym2151_tb.i_ym2151.stages[7].phase_inc[1] top.ym2151_tb.i_ym2151.stages[7].phase_inc[0]
-#{top.ym2151_tb.i_ym2151.stages[7].cur_phase[28:0]} top.ym2151_tb.i_ym2151.stages[7].cur_phase[28] top.ym2151_tb.i_ym2151.stages[7].cur_phase[27] top.ym2151_tb.i_ym2151.stages[7].cur_phase[26] top.ym2151_tb.i_ym2151.stages[7].cur_phase[25] top.ym2151_tb.i_ym2151.stages[7].cur_phase[24] top.ym2151_tb.i_ym2151.stages[7].cur_phase[23] top.ym2151_tb.i_ym2151.stages[7].cur_phase[22] top.ym2151_tb.i_ym2151.stages[7].cur_phase[21] top.ym2151_tb.i_ym2151.stages[7].cur_phase[20] top.ym2151_tb.i_ym2151.stages[7].cur_phase[19] top.ym2151_tb.i_ym2151.stages[7].cur_phase[18] top.ym2151_tb.i_ym2151.stages[7].cur_phase[17] top.ym2151_tb.i_ym2151.stages[7].cur_phase[16] top.ym2151_tb.i_ym2151.stages[7].cur_phase[15] top.ym2151_tb.i_ym2151.stages[7].cur_phase[14] top.ym2151_tb.i_ym2151.stages[7].cur_phase[13] top.ym2151_tb.i_ym2151.stages[7].cur_phase[12] top.ym2151_tb.i_ym2151.stages[7].cur_phase[11] top.ym2151_tb.i_ym2151.stages[7].cur_phase[10] top.ym2151_tb.i_ym2151.stages[7].cur_phase[9] top.ym2151_tb.i_ym2151.stages[7].cur_phase[8] top.ym2151_tb.i_ym2151.stages[7].cur_phase[7] top.ym2151_tb.i_ym2151.stages[7].cur_phase[6] top.ym2151_tb.i_ym2151.stages[7].cur_phase[5] top.ym2151_tb.i_ym2151.stages[7].cur_phase[4] top.ym2151_tb.i_ym2151.stages[7].cur_phase[3] top.ym2151_tb.i_ym2151.stages[7].cur_phase[2] top.ym2151_tb.i_ym2151.stages[7].cur_phase[1] top.ym2151_tb.i_ym2151.stages[7].cur_phase[0]
+#{top.ym2151_tb.i_ym2151.stages[7].phase_inc[28:0]} top.ym2151_tb.i_ym2151.stages[7].phase_inc[23] top.ym2151_tb.i_ym2151.stages[7].phase_inc[22] top.ym2151_tb.i_ym2151.stages[7].phase_inc[21] top.ym2151_tb.i_ym2151.stages[7].phase_inc[20] top.ym2151_tb.i_ym2151.stages[7].phase_inc[19] top.ym2151_tb.i_ym2151.stages[7].phase_inc[18] top.ym2151_tb.i_ym2151.stages[7].phase_inc[17] top.ym2151_tb.i_ym2151.stages[7].phase_inc[16] top.ym2151_tb.i_ym2151.stages[7].phase_inc[15] top.ym2151_tb.i_ym2151.stages[7].phase_inc[14] top.ym2151_tb.i_ym2151.stages[7].phase_inc[13] top.ym2151_tb.i_ym2151.stages[7].phase_inc[12] top.ym2151_tb.i_ym2151.stages[7].phase_inc[11] top.ym2151_tb.i_ym2151.stages[7].phase_inc[10] top.ym2151_tb.i_ym2151.stages[7].phase_inc[9] top.ym2151_tb.i_ym2151.stages[7].phase_inc[8] top.ym2151_tb.i_ym2151.stages[7].phase_inc[7] top.ym2151_tb.i_ym2151.stages[7].phase_inc[6] top.ym2151_tb.i_ym2151.stages[7].phase_inc[5] top.ym2151_tb.i_ym2151.stages[7].phase_inc[4] top.ym2151_tb.i_ym2151.stages[7].phase_inc[3] top.ym2151_tb.i_ym2151.stages[7].phase_inc[2] top.ym2151_tb.i_ym2151.stages[7].phase_inc[1] top.ym2151_tb.i_ym2151.stages[7].phase_inc[0]
+#{top.ym2151_tb.i_ym2151.stages[7].cur_phase[28:0]} top.ym2151_tb.i_ym2151.stages[7].cur_phase[23] top.ym2151_tb.i_ym2151.stages[7].cur_phase[22] top.ym2151_tb.i_ym2151.stages[7].cur_phase[21] top.ym2151_tb.i_ym2151.stages[7].cur_phase[20] top.ym2151_tb.i_ym2151.stages[7].cur_phase[19] top.ym2151_tb.i_ym2151.stages[7].cur_phase[18] top.ym2151_tb.i_ym2151.stages[7].cur_phase[17] top.ym2151_tb.i_ym2151.stages[7].cur_phase[16] top.ym2151_tb.i_ym2151.stages[7].cur_phase[15] top.ym2151_tb.i_ym2151.stages[7].cur_phase[14] top.ym2151_tb.i_ym2151.stages[7].cur_phase[13] top.ym2151_tb.i_ym2151.stages[7].cur_phase[12] top.ym2151_tb.i_ym2151.stages[7].cur_phase[11] top.ym2151_tb.i_ym2151.stages[7].cur_phase[10] top.ym2151_tb.i_ym2151.stages[7].cur_phase[9] top.ym2151_tb.i_ym2151.stages[7].cur_phase[8] top.ym2151_tb.i_ym2151.stages[7].cur_phase[7] top.ym2151_tb.i_ym2151.stages[7].cur_phase[6] top.ym2151_tb.i_ym2151.stages[7].cur_phase[5] top.ym2151_tb.i_ym2151.stages[7].cur_phase[4] top.ym2151_tb.i_ym2151.stages[7].cur_phase[3] top.ym2151_tb.i_ym2151.stages[7].cur_phase[2] top.ym2151_tb.i_ym2151.stages[7].cur_phase[1] top.ym2151_tb.i_ym2151.stages[7].cur_phase[0]
 #{top.ym2151_tb.i_ym2151.stages[7].waveform[17:0]} top.ym2151_tb.i_ym2151.stages[7].waveform[17] top.ym2151_tb.i_ym2151.stages[7].waveform[16] top.ym2151_tb.i_ym2151.stages[7].waveform[15] top.ym2151_tb.i_ym2151.stages[7].waveform[14] top.ym2151_tb.i_ym2151.stages[7].waveform[13] top.ym2151_tb.i_ym2151.stages[7].waveform[12] top.ym2151_tb.i_ym2151.stages[7].waveform[11] top.ym2151_tb.i_ym2151.stages[7].waveform[10] top.ym2151_tb.i_ym2151.stages[7].waveform[9] top.ym2151_tb.i_ym2151.stages[7].waveform[8] top.ym2151_tb.i_ym2151.stages[7].waveform[7] top.ym2151_tb.i_ym2151.stages[7].waveform[6] top.ym2151_tb.i_ym2151.stages[7].waveform[5] top.ym2151_tb.i_ym2151.stages[7].waveform[4] top.ym2151_tb.i_ym2151.stages[7].waveform[3] top.ym2151_tb.i_ym2151.stages[7].waveform[2] top.ym2151_tb.i_ym2151.stages[7].waveform[1] top.ym2151_tb.i_ym2151.stages[7].waveform[0]
 #{top.ym2151_tb.i_ym2151.stages[7].rate[5:0]} top.ym2151_tb.i_ym2151.stages[7].rate[5] top.ym2151_tb.i_ym2151.stages[7].rate[4] top.ym2151_tb.i_ym2151.stages[7].rate[3] top.ym2151_tb.i_ym2151.stages[7].rate[2] top.ym2151_tb.i_ym2151.stages[7].rate[1] top.ym2151_tb.i_ym2151.stages[7].rate[0]
 #{top.ym2151_tb.i_ym2151.stages[7].delay[21:0]} top.ym2151_tb.i_ym2151.stages[7].delay[21] top.ym2151_tb.i_ym2151.stages[7].delay[20] top.ym2151_tb.i_ym2151.stages[7].delay[19] top.ym2151_tb.i_ym2151.stages[7].delay[18] top.ym2151_tb.i_ym2151.stages[7].delay[17] top.ym2151_tb.i_ym2151.stages[7].delay[16] top.ym2151_tb.i_ym2151.stages[7].delay[15] top.ym2151_tb.i_ym2151.stages[7].delay[14] top.ym2151_tb.i_ym2151.stages[7].delay[13] top.ym2151_tb.i_ym2151.stages[7].delay[12] top.ym2151_tb.i_ym2151.stages[7].delay[11] top.ym2151_tb.i_ym2151.stages[7].delay[10] top.ym2151_tb.i_ym2151.stages[7].delay[9] top.ym2151_tb.i_ym2151.stages[7].delay[8] top.ym2151_tb.i_ym2151.stages[7].delay[7] top.ym2151_tb.i_ym2151.stages[7].delay[6] top.ym2151_tb.i_ym2151.stages[7].delay[5] top.ym2151_tb.i_ym2151.stages[7].delay[4] top.ym2151_tb.i_ym2151.stages[7].delay[3] top.ym2151_tb.i_ym2151.stages[7].delay[2] top.ym2151_tb.i_ym2151.stages[7].delay[1] top.ym2151_tb.i_ym2151.stages[7].delay[0]
@@ -70,9 +136,47 @@ top.ym2151_tb.i_ym2151.stages[7].key_onoff
 top.ym2151_tb.i_ym2151.stages[7].state
 @22
 #{top.ym2151_tb.i_ym2151.stages[7].cnt[21:0]} top.ym2151_tb.i_ym2151.stages[7].cnt[21] top.ym2151_tb.i_ym2151.stages[7].cnt[20] top.ym2151_tb.i_ym2151.stages[7].cnt[19] top.ym2151_tb.i_ym2151.stages[7].cnt[18] top.ym2151_tb.i_ym2151.stages[7].cnt[17] top.ym2151_tb.i_ym2151.stages[7].cnt[16] top.ym2151_tb.i_ym2151.stages[7].cnt[15] top.ym2151_tb.i_ym2151.stages[7].cnt[14] top.ym2151_tb.i_ym2151.stages[7].cnt[13] top.ym2151_tb.i_ym2151.stages[7].cnt[12] top.ym2151_tb.i_ym2151.stages[7].cnt[11] top.ym2151_tb.i_ym2151.stages[7].cnt[10] top.ym2151_tb.i_ym2151.stages[7].cnt[9] top.ym2151_tb.i_ym2151.stages[7].cnt[8] top.ym2151_tb.i_ym2151.stages[7].cnt[7] top.ym2151_tb.i_ym2151.stages[7].cnt[6] top.ym2151_tb.i_ym2151.stages[7].cnt[5] top.ym2151_tb.i_ym2151.stages[7].cnt[4] top.ym2151_tb.i_ym2151.stages[7].cnt[3] top.ym2151_tb.i_ym2151.stages[7].cnt[2] top.ym2151_tb.i_ym2151.stages[7].cnt[1] top.ym2151_tb.i_ym2151.stages[7].cnt[0]
+@800023
 #{top.ym2151_tb.i_ym2151.stages[7].envelope[17:0]} top.ym2151_tb.i_ym2151.stages[7].envelope[17] top.ym2151_tb.i_ym2151.stages[7].envelope[16] top.ym2151_tb.i_ym2151.stages[7].envelope[15] top.ym2151_tb.i_ym2151.stages[7].envelope[14] top.ym2151_tb.i_ym2151.stages[7].envelope[13] top.ym2151_tb.i_ym2151.stages[7].envelope[12] top.ym2151_tb.i_ym2151.stages[7].envelope[11] top.ym2151_tb.i_ym2151.stages[7].envelope[10] top.ym2151_tb.i_ym2151.stages[7].envelope[9] top.ym2151_tb.i_ym2151.stages[7].envelope[8] top.ym2151_tb.i_ym2151.stages[7].envelope[7] top.ym2151_tb.i_ym2151.stages[7].envelope[6] top.ym2151_tb.i_ym2151.stages[7].envelope[5] top.ym2151_tb.i_ym2151.stages[7].envelope[4] top.ym2151_tb.i_ym2151.stages[7].envelope[3] top.ym2151_tb.i_ym2151.stages[7].envelope[2] top.ym2151_tb.i_ym2151.stages[7].envelope[1] top.ym2151_tb.i_ym2151.stages[7].envelope[0]
+@29
+top.ym2151_tb.i_ym2151.stages[7].envelope[17]
+top.ym2151_tb.i_ym2151.stages[7].envelope[16]
+top.ym2151_tb.i_ym2151.stages[7].envelope[15]
+top.ym2151_tb.i_ym2151.stages[7].envelope[14]
+top.ym2151_tb.i_ym2151.stages[7].envelope[13]
+top.ym2151_tb.i_ym2151.stages[7].envelope[12]
+top.ym2151_tb.i_ym2151.stages[7].envelope[11]
+top.ym2151_tb.i_ym2151.stages[7].envelope[10]
+top.ym2151_tb.i_ym2151.stages[7].envelope[9]
+top.ym2151_tb.i_ym2151.stages[7].envelope[8]
+top.ym2151_tb.i_ym2151.stages[7].envelope[7]
+top.ym2151_tb.i_ym2151.stages[7].envelope[6]
+top.ym2151_tb.i_ym2151.stages[7].envelope[5]
+top.ym2151_tb.i_ym2151.stages[7].envelope[4]
+top.ym2151_tb.i_ym2151.stages[7].envelope[3]
+top.ym2151_tb.i_ym2151.stages[7].envelope[2]
+top.ym2151_tb.i_ym2151.stages[7].envelope[1]
+top.ym2151_tb.i_ym2151.stages[7].envelope[0]
+@1001201
+-group_end
+@22
 #{top.ym2151_tb.i_ym2151.stages[7].product[35:0]} top.ym2151_tb.i_ym2151.stages[7].product[35] top.ym2151_tb.i_ym2151.stages[7].product[34] top.ym2151_tb.i_ym2151.stages[7].product[33] top.ym2151_tb.i_ym2151.stages[7].product[32] top.ym2151_tb.i_ym2151.stages[7].product[31] top.ym2151_tb.i_ym2151.stages[7].product[30] top.ym2151_tb.i_ym2151.stages[7].product[29] top.ym2151_tb.i_ym2151.stages[7].product[28] top.ym2151_tb.i_ym2151.stages[7].product[27] top.ym2151_tb.i_ym2151.stages[7].product[26] top.ym2151_tb.i_ym2151.stages[7].product[25] top.ym2151_tb.i_ym2151.stages[7].product[24] top.ym2151_tb.i_ym2151.stages[7].product[23] top.ym2151_tb.i_ym2151.stages[7].product[22] top.ym2151_tb.i_ym2151.stages[7].product[21] top.ym2151_tb.i_ym2151.stages[7].product[20] top.ym2151_tb.i_ym2151.stages[7].product[19] top.ym2151_tb.i_ym2151.stages[7].product[18] top.ym2151_tb.i_ym2151.stages[7].product[17] top.ym2151_tb.i_ym2151.stages[7].product[16] top.ym2151_tb.i_ym2151.stages[7].product[15] top.ym2151_tb.i_ym2151.stages[7].product[14] top.ym2151_tb.i_ym2151.stages[7].product[13] top.ym2151_tb.i_ym2151.stages[7].product[12] top.ym2151_tb.i_ym2151.stages[7].product[11] top.ym2151_tb.i_ym2151.stages[7].product[10] top.ym2151_tb.i_ym2151.stages[7].product[9] top.ym2151_tb.i_ym2151.stages[7].product[8] top.ym2151_tb.i_ym2151.stages[7].product[7] top.ym2151_tb.i_ym2151.stages[7].product[6] top.ym2151_tb.i_ym2151.stages[7].product[5] top.ym2151_tb.i_ym2151.stages[7].product[4] top.ym2151_tb.i_ym2151.stages[7].product[3] top.ym2151_tb.i_ym2151.stages[7].product[2] top.ym2151_tb.i_ym2151.stages[7].product[1] top.ym2151_tb.i_ym2151.stages[7].product[0]
-@1401200
+@1000200
 -stage7
+@800200
+-stage32
+@22
+#{top.ym2151_tb.i_ym2151.stages[32].device_cnt[4:0]} top.ym2151_tb.i_ym2151.stages[32].device_cnt[4] top.ym2151_tb.i_ym2151.stages[32].device_cnt[3] top.ym2151_tb.i_ym2151.stages[32].device_cnt[2] top.ym2151_tb.i_ym2151.stages[32].device_cnt[1] top.ym2151_tb.i_ym2151.stages[32].device_cnt[0]
+#{top.ym2151_tb.i_ym2151.stages[32].key_code[6:0]} top.ym2151_tb.i_ym2151.stages[32].key_code[6] top.ym2151_tb.i_ym2151.stages[32].key_code[5] top.ym2151_tb.i_ym2151.stages[32].key_code[4] top.ym2151_tb.i_ym2151.stages[32].key_code[3] top.ym2151_tb.i_ym2151.stages[32].key_code[2] top.ym2151_tb.i_ym2151.stages[32].key_code[1] top.ym2151_tb.i_ym2151.stages[32].key_code[0]
+#{top.ym2151_tb.i_ym2151.stages[32].cur_phase[23:0]} top.ym2151_tb.i_ym2151.stages[32].cur_phase[23] top.ym2151_tb.i_ym2151.stages[32].cur_phase[22] top.ym2151_tb.i_ym2151.stages[32].cur_phase[21] top.ym2151_tb.i_ym2151.stages[32].cur_phase[20] top.ym2151_tb.i_ym2151.stages[32].cur_phase[19] top.ym2151_tb.i_ym2151.stages[32].cur_phase[18] top.ym2151_tb.i_ym2151.stages[32].cur_phase[17] top.ym2151_tb.i_ym2151.stages[32].cur_phase[16] top.ym2151_tb.i_ym2151.stages[32].cur_phase[15] top.ym2151_tb.i_ym2151.stages[32].cur_phase[14] top.ym2151_tb.i_ym2151.stages[32].cur_phase[13] top.ym2151_tb.i_ym2151.stages[32].cur_phase[12] top.ym2151_tb.i_ym2151.stages[32].cur_phase[11] top.ym2151_tb.i_ym2151.stages[32].cur_phase[10] top.ym2151_tb.i_ym2151.stages[32].cur_phase[9] top.ym2151_tb.i_ym2151.stages[32].cur_phase[8] top.ym2151_tb.i_ym2151.stages[32].cur_phase[7] top.ym2151_tb.i_ym2151.stages[32].cur_phase[6] top.ym2151_tb.i_ym2151.stages[32].cur_phase[5] top.ym2151_tb.i_ym2151.stages[32].cur_phase[4] top.ym2151_tb.i_ym2151.stages[32].cur_phase[3] top.ym2151_tb.i_ym2151.stages[32].cur_phase[2] top.ym2151_tb.i_ym2151.stages[32].cur_phase[1] top.ym2151_tb.i_ym2151.stages[32].cur_phase[0]
+@420
+top.ym2151_tb.i_ym2151.stages[32].state
+@28
+top.ym2151_tb.i_ym2151.stages[32].key_onoff
+@22
+#{top.ym2151_tb.i_ym2151.stages[32].cnt[21:0]} top.ym2151_tb.i_ym2151.stages[32].cnt[21] top.ym2151_tb.i_ym2151.stages[32].cnt[20] top.ym2151_tb.i_ym2151.stages[32].cnt[19] top.ym2151_tb.i_ym2151.stages[32].cnt[18] top.ym2151_tb.i_ym2151.stages[32].cnt[17] top.ym2151_tb.i_ym2151.stages[32].cnt[16] top.ym2151_tb.i_ym2151.stages[32].cnt[15] top.ym2151_tb.i_ym2151.stages[32].cnt[14] top.ym2151_tb.i_ym2151.stages[32].cnt[13] top.ym2151_tb.i_ym2151.stages[32].cnt[12] top.ym2151_tb.i_ym2151.stages[32].cnt[11] top.ym2151_tb.i_ym2151.stages[32].cnt[10] top.ym2151_tb.i_ym2151.stages[32].cnt[9] top.ym2151_tb.i_ym2151.stages[32].cnt[8] top.ym2151_tb.i_ym2151.stages[32].cnt[7] top.ym2151_tb.i_ym2151.stages[32].cnt[6] top.ym2151_tb.i_ym2151.stages[32].cnt[5] top.ym2151_tb.i_ym2151.stages[32].cnt[4] top.ym2151_tb.i_ym2151.stages[32].cnt[3] top.ym2151_tb.i_ym2151.stages[32].cnt[2] top.ym2151_tb.i_ym2151.stages[32].cnt[1] top.ym2151_tb.i_ym2151.stages[32].cnt[0]
+#{top.ym2151_tb.i_ym2151.stages[32].envelope[17:0]} top.ym2151_tb.i_ym2151.stages[32].envelope[17] top.ym2151_tb.i_ym2151.stages[32].envelope[16] top.ym2151_tb.i_ym2151.stages[32].envelope[15] top.ym2151_tb.i_ym2151.stages[32].envelope[14] top.ym2151_tb.i_ym2151.stages[32].envelope[13] top.ym2151_tb.i_ym2151.stages[32].envelope[12] top.ym2151_tb.i_ym2151.stages[32].envelope[11] top.ym2151_tb.i_ym2151.stages[32].envelope[10] top.ym2151_tb.i_ym2151.stages[32].envelope[9] top.ym2151_tb.i_ym2151.stages[32].envelope[8] top.ym2151_tb.i_ym2151.stages[32].envelope[7] top.ym2151_tb.i_ym2151.stages[32].envelope[6] top.ym2151_tb.i_ym2151.stages[32].envelope[5] top.ym2151_tb.i_ym2151.stages[32].envelope[4] top.ym2151_tb.i_ym2151.stages[32].envelope[3] top.ym2151_tb.i_ym2151.stages[32].envelope[2] top.ym2151_tb.i_ym2151.stages[32].envelope[1] top.ym2151_tb.i_ym2151.stages[32].envelope[0]
+@1000200
+-stage32
 [pattern_trace] 1
 [pattern_trace] 0

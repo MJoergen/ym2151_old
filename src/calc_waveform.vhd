@@ -20,15 +20,15 @@ use ieee.math_real.all;
 
 use work.ym2151_package.all;
 
-entity ym2151_sine_rom is
+entity calc_waveform is
    port (
       clk_i      : in  std_logic;
       phase_i    : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       waveform_o : out std_logic_vector(17 downto 0)
    );
-end entity ym2151_sine_rom;
+end entity calc_waveform;
 
-architecture synthesis of ym2151_sine_rom is
+architecture synthesis of calc_waveform is
 
    type mem_t is array (0 to 2**C_SINE_ADDR_WIDTH-1) of
                  std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);

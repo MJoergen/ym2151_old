@@ -10,7 +10,7 @@ use ieee.numeric_std_unsigned.all;
 
 use work.ym2151_package.all;
 
-entity ym2151_calc_delay is
+entity calc_delay is
    generic (
       G_UPDATE_HZ : integer             -- Update frequency
    );
@@ -25,9 +25,9 @@ entity ym2151_calc_delay is
       release_rate_i : in  std_logic_vector(3 downto 0);
       delay_o        : out std_logic_vector(C_DECAY_SIZE-1 downto 0)
    );
-end entity ym2151_calc_delay;
+end entity calc_delay;
 
-architecture synthesis of ym2151_calc_delay is
+architecture synthesis of calc_delay is
    
    signal rate_s  : std_logic_vector(5 downto 0);
    signal delay_s : std_logic_vector(C_DECAY_SIZE-1 downto 0);
