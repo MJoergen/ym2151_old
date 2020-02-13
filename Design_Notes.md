@@ -253,3 +253,14 @@ of 2^0.25. The four constants are:
 |      2     | 0x0E09C7 |
 |      3     | 0x0BCDFF |
 
+### Output volume
+Checking the YM2151 emulator shows that a single sine-wave at no attenuation
+has an output range of +/- 8191, which is a factor of 4 less than the maximum.
+This is confirmed by analyzing in audacity, which shows an output power
+amplitude of -12 dB.
+This kind of makes sense, because otherwise, as soon as two channels becomes
+active, there would be severe distortion due to clipping.
+
+## TODO
+Rewrite src/get\_config.vhd to make use of BRAM with byte-wide write enables.
+
