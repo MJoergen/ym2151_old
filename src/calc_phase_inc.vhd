@@ -50,7 +50,7 @@ begin
    phinc_addr_s(9 downto 6) <= device_i.key_code(3 downto 0) - ("00" & device_i.key_code(3 downto 2));
    phinc_addr_s(5 downto 0) <= device_i.key_fraction;
 
-   i_rom_phase_inc : entity work.rom_phase_inc
+   inst_rom_phase_inc : entity work.rom_phase_inc
       generic map (
          G_UPDATE_HZ => G_UPDATE_HZ
       )
@@ -58,7 +58,7 @@ begin
          clk_i  => clk_i,
          addr_i => phinc_addr_s,
          data_o => phinc_data_s
-      ); -- i_rom_phase_inc
+      ); -- inst_rom_phase_inc
 
 
    ----------------------------------------------------

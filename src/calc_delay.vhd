@@ -47,7 +47,7 @@ begin
 
    truncrate_s <= rate_s(5 downto 0) when rate_s(6) = '0' else "111111";
 
-   i_rom_delay : entity work.rom_delay
+   inst_rom_delay : entity work.rom_delay
       generic map (
          G_UPDATE_HZ => G_UPDATE_HZ
       )
@@ -55,7 +55,7 @@ begin
          clk_i   => clk_i,
          rate_i  => truncrate_s,
          delay_o => delay_o
-      ); -- i_rom_delay
+      ); -- inst_rom_delay
 
 end architecture synthesis;
 
