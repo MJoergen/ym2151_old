@@ -3,6 +3,12 @@
 -- Project: YM2151 implementation
 --
 -- Description: This module is the top level for the YM2151.
+--
+-- Devices:
+--  0- 7 : Modulator 1
+--  8-15 : Modulator 2
+-- 16-23 : Carrier 1
+-- 24-31 : Carrier 2
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -37,7 +43,7 @@ architecture synthesis of ym2151 is
       phase_inc : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       waveform  : std_logic_vector(17 downto 0);
       rate      : std_logic_vector( 5 downto 0);
-      delay     : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      delay     : std_logic_vector(C_DELAY_SIZE-1 downto 0);
       product   : std_logic_vector(C_PDM_WIDTH-1 downto 0);
    end record temp_t;
 

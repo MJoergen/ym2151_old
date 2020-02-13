@@ -19,7 +19,7 @@ entity calc_delay is
       clk_i    : in  std_logic;
       device_i : in  device_t;
       state_i  : in  state_t;
-      delay_o  : out std_logic_vector(C_DECAY_SIZE-1 downto 0)
+      delay_o  : out std_logic_vector(C_DELAY_SIZE-1 downto 0)
    );
 end entity calc_delay;
 

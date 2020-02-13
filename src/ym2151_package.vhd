@@ -18,7 +18,8 @@ package ym2151_package is
    -- -10*log10(1-2^(-6)).
    constant C_SHIFT_AMOUNT        : integer := 6;
 
-   constant C_DECAY_SIZE          : integer := 22;
+   -- Number of update cycles between updating the envelope.
+   constant C_DELAY_SIZE          : integer := 22;
 
    -- This constant is determined by the switching rate of the PDM signal (100 MHz)
    -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
@@ -62,7 +63,7 @@ package ym2151_package is
       phase_cur : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       env_cur   : std_logic_vector(17 downto 0);
       env_state : STATE_ADSR_t;
-      env_cnt   : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      env_cnt   : std_logic_vector(C_DELAY_SIZE-1 downto 0);
    end record state_t;
 
 end package ym2151_package;

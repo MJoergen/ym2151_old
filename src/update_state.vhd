@@ -16,7 +16,7 @@ entity update_state is
       rst_i       : in  std_logic;
       device_i    : in  device_t;
       phase_inc_i : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      delay_i     : in  std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      delay_i     : in  std_logic_vector(C_DELAY_SIZE-1 downto 0);
       cur_state_i : in  state_t;
       new_state_o : out state_t
    );
@@ -24,7 +24,7 @@ end entity update_state;
 
 architecture synthesis of update_state is
 
-   constant C_DELAY_MAX : std_logic_vector(C_DECAY_SIZE-1 downto 0) := (others => '1');
+   constant C_DELAY_MAX : std_logic_vector(C_DELAY_SIZE-1 downto 0) := (others => '1');
    constant C_ENV_MAX   : std_logic_vector(17 downto 0) := (17 => '0', others => '1');
 
    signal envelope_sub_s : std_logic_vector(17 downto 0);

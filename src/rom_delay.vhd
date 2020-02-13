@@ -36,13 +36,16 @@ entity rom_delay is
    port (
       clk_i   : in  std_logic;
       rate_i  : in  std_logic_vector( 5 downto 0); -- One of 64 values
-      delay_o : out std_logic_vector(C_DECAY_SIZE-1 downto 0)  -- Number of clock cycles between each decay
+      delay_o : out std_logic_vector(C_DELAY_SIZE-1 downto 0)  -- Number of clock cycles between each decay
    );
 end entity rom_delay;
 
 architecture synthesis of rom_delay is
 
-   type mem_t is array (0 to 3) of std_logic_vector(C_DECAY_SIZE-1 downto 0);
+   type mem_t is array (0 to 3) of std_logic_vector(C_DELAY_SIZE-1 downto 0);
+
+   constant C_ATTACK_TIME_4 : real := 7973.36;                                   -- milliseconds full range.
+   constant C_ATTACK_TIME_0 : real := 2.0*C_ATTACK_TIME_4;                       -- milliseconds full range.
 
    -- Calculate the decay constants at compile time.
    constant C_DECAY_TIME_4  : real := 110209.71/96.0;                            -- milliseconds per dB.
@@ -53,24 +56,24 @@ architecture synthesis of rom_delay is
    constant C_DELAY_VALUE_0 : real := C_DECAY_TIME_0*C_ATTENUNATION*C_CYCLES_MS;
    constant C_TWO_ROOT_025  : real := 2.0**0.25;
 
-   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       C_DECAY_SIZE),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        C_DECAY_SIZE),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**2.0)), C_DECAY_SIZE),
-                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**3.0)), C_DECAY_SIZE));
+   constant C_RATES : mem_t := (to_stdlogicvector(integer(C_DELAY_VALUE_0),                       C_DELAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/C_TWO_ROOT_025),        C_DELAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**2.0)), C_DELAY_SIZE),
+                                to_stdlogicvector(integer(C_DELAY_VALUE_0/(C_TWO_ROOT_025**3.0)), C_DELAY_SIZE));
 
-   signal rate_s  : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+   signal delay_s  : std_logic_vector(C_DELAY_SIZE-1 downto 0);
    signal shift_s : std_logic_vector(3 downto 0);
 
 begin
 
-   rate_s  <= C_RATES(to_integer(rate_i(1 downto 0)));
+   delay_s  <= C_RATES(to_integer(rate_i(1 downto 0)));
    shift_s <= rate_i(5 downto 2);
 
    process (clk_i)
    begin
       if rising_edge(clk_i) then
          delay_o <= (others => '0');
-         delay_o(C_DECAY_SIZE-1 - to_integer(shift_s) downto 0) <= rate_s(C_DECAY_SIZE-1 downto to_integer(shift_s));
+         delay_o(C_DELAY_SIZE-1 - to_integer(shift_s) downto 0) <= delay_s(C_DELAY_SIZE-1 downto to_integer(shift_s));
          if shift_s = 0 then
             delay_o <= (others => '1');
          end if;
