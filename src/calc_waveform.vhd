@@ -23,7 +23,7 @@ use work.ym2151_package.all;
 entity calc_waveform is
    port (
       clk_i      : in  std_logic;
-      phase_i    : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      state_i    : in  state_t;
       waveform_o : out std_logic_vector(17 downto 0)
    );
 end entity calc_waveform;
@@ -62,7 +62,7 @@ architecture synthesis of calc_waveform is
 
 begin
 
-   addr_s <= phase_i(phase_i'left downto phase_i'left - (C_SINE_ADDR_WIDTH-1));
+   addr_s <= state_i.phase_cur(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_SINE_ADDR_WIDTH);
 
    p_read : process (clk_i)
    begin

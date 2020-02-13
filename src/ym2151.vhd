@@ -31,12 +31,19 @@ architecture synthesis of ym2151 is
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
+   type temp_t is record
+      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      waveform     : std_logic_vector(17 downto 0);
+      rate         : std_logic_vector( 5 downto 0);
+      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+   end record temp_t;
+
    type stage_t is record
-      idx            : std_logic_vector(4 downto 0);
-      device         : device_t;
-      temp           : temp_t;
-      state_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      state_envelope : state_envelope_t;
+      idx    : std_logic_vector(4 downto 0);
+      device : device_t;
+      state  : state_t;
+      temp   : temp_t;
    end record stage_t;
 
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
@@ -62,8 +69,7 @@ begin
       ); -- i_get_config
 
    -- Copy state from previous iteration of this device.
-   stages(0).state_phase    <= stages(32).state_phase;
-   stages(0).state_envelope <= stages(32).state_envelope;
+   stages(0).state <= stages(32).state;
 
 
    ----------------------------------------------------
@@ -75,10 +81,9 @@ begin
          G_UPDATE_HZ => G_CLOCK_HZ/32
       )
       port map (
-         clk_i          => clk_i,
-         key_code_i     => stages(0).device.key_code,
-         key_fraction_i => stages(0).device.key_fraction,
-         phase_inc_o    => stages(1).temp.phase_inc
+         clk_i       => clk_i,
+         device_i    => stages(0).device,
+         phase_inc_o => stages(1).temp.phase_inc
       ); -- i_phase_increment
 
    i_calc_delay : entity work.calc_delay
@@ -86,15 +91,10 @@ begin
          G_UPDATE_HZ => G_CLOCK_HZ/32
       )
       port map (
-         clk_i          => clk_i,
-         key_code_i     => stages(0).device.key_code,
-         key_scaling_i  => stages(0).device.key_scaling,
-         attack_rate_i  => stages(0).device.attack_rate,
-         decay_rate_i   => stages(0).device.decay_rate,
-         sustain_rate_i => stages(0).device.sustain_rate,
-         release_rate_i => stages(0).device.release_rate,
-         state_i        => stages(0).state_envelope.state,
-         delay_o        => stages(1).temp.delay
+         clk_i    => clk_i,
+         device_i => stages(0).device,
+         state_i  => stages(0).state,
+         delay_o  => stages(1).temp.delay
       ); -- i_calc_delay
 
 
@@ -107,8 +107,8 @@ begin
          clk_i       => clk_i,
          rst_i       => rst_i,
          phase_inc_i => stages(1).temp.phase_inc,
-         cur_phase_i => stages(1).state_phase,
-         cur_phase_o => stages(2).state_phase
+         cur_phase_i => stages(1).state.phase_cur,
+         cur_phase_o => stages(2).state.phase_cur
       ); -- i_update_cur_phase
 
    i_update_envelope : entity work.update_envelope
@@ -117,12 +117,12 @@ begin
          rst_i       => rst_i,
          key_onoff_i => stages(1).device.key_onoff,
          delay_i     => stages(1).temp.delay,
-         state_i     => stages(1).state_envelope.state,
-         cnt_i       => stages(1).state_envelope.cnt,
-         envelope_i  => stages(1).state_envelope.envelope,
-         state_o     => stages(2).state_envelope.state,
-         cnt_o       => stages(2).state_envelope.cnt,
-         envelope_o  => stages(2).state_envelope.envelope
+         state_i     => stages(1).state.env_state,
+         cnt_i       => stages(1).state.env_cnt,
+         envelope_i  => stages(1).state.env_cur,
+         state_o     => stages(2).state.env_state,
+         cnt_o       => stages(2).state.env_cnt,
+         envelope_o  => stages(2).state.env_cur
       ); -- i_update_envelope
 
 
@@ -133,7 +133,7 @@ begin
    i_calc_waveform : entity work.calc_waveform
       port map (
          clk_i      => clk_i,
-         phase_i    => stages(2).state_phase,
+         state_i    => stages(2).state,
          waveform_o => stages(3).temp.waveform
       ); -- i_ym2151_sine_rom
 
@@ -146,7 +146,7 @@ begin
       port map (
          clk_i      => clk_i,
          rst_i      => rst_i,
-         envelope_i => stages(3).state_envelope.envelope,
+         state_i    => stages(3).state,
          waveform_i => stages(3).temp.waveform,
          product_o  => stages(5).temp.product
       ); -- i_calc_product
@@ -193,12 +193,12 @@ begin
       end process p_delay;
    end generate gen_delay;
 
+
    gen_state1 : for i in 1 to 1 generate
       p_state1 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state_phase    <= stages(i-1).state_phase;
-            stages(i).state_envelope <= stages(i-1).state_envelope;
+            stages(i).state <= stages(i-1).state;
          end if;
       end process p_state1;
    end generate gen_state1;
@@ -207,8 +207,7 @@ begin
       p_state2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).state_phase    <= stages(i-1).state_phase;
-            stages(i).state_envelope <= stages(i-1).state_envelope;
+            stages(i).state <= stages(i-1).state;
          end if;
       end process p_state2;
    end generate gen_state2;

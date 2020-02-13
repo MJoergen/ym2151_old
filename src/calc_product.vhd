@@ -20,7 +20,7 @@ entity calc_product is
    port (
       clk_i      : in  std_logic;
       rst_i      : in  std_logic;
-      envelope_i : in  std_logic_vector(17 downto 0);
+      state_i    : in  state_t;
       waveform_i : in  std_logic_vector(17 downto 0);
       product_o  : out std_logic_vector(C_PDM_WIDTH-1 downto 0)
    );
@@ -43,7 +43,7 @@ begin
          CLK => clk_i,
          RST => rst_i,
          CE  => '1',
-         A   => envelope_i,
+         A   => state_i.env_cur,
          B   => waveform_i,
          P   => product_s
       ); -- i_mult

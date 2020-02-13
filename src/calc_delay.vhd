@@ -15,15 +15,10 @@ entity calc_delay is
       G_UPDATE_HZ : integer             -- Update frequency
    );
    port (
-      clk_i          : in  std_logic;
-      state_i        : in  STATE_ADSR_t;
-      key_code_i     : in  std_logic_vector(6 downto 0);
-      key_scaling_i  : in  std_logic_vector(1 downto 0);
-      attack_rate_i  : in  std_logic_vector(4 downto 0);
-      decay_rate_i   : in  std_logic_vector(4 downto 0);
-      sustain_rate_i : in  std_logic_vector(4 downto 0);
-      release_rate_i : in  std_logic_vector(3 downto 0);
-      delay_o        : out std_logic_vector(C_DECAY_SIZE-1 downto 0)
+      clk_i    : in  std_logic;
+      device_i : in  device_t;
+      state_i  : in  state_t;
+      delay_o  : out std_logic_vector(C_DECAY_SIZE-1 downto 0)
    );
 end entity calc_delay;
 
@@ -35,7 +30,7 @@ architecture synthesis of calc_delay is
 begin
 
    -- TBD: Consider state_i and key_scaling_i
-   rate_s <= (decay_rate_i & "0") + ("0000" & key_code_i(6 downto 5));
+   rate_s <= (device_i.decay_rate & "0") + ("0000" & device_i.key_code(6 downto 5));
 
    i_ym2151_decay : entity work.ym2151_decay
       generic map (

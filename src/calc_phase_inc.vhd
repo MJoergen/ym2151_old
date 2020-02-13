@@ -28,8 +28,7 @@ entity calc_phase_inc is
    );
    port (
       clk_i          : in  std_logic;
-      key_code_i     : in  std_logic_vector(6 downto 0);
-      key_fraction_i : in  std_logic_vector(5 downto 0);
+      device_i       : in  device_t;
       phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
 end entity calc_phase_inc;
@@ -48,8 +47,8 @@ begin
    ----------------------------------------------------
 
    -- Convert the key code from range 0..14 to range 0..11
-   phinc_addr_s(9 downto 6) <= key_code_i(3 downto 0) - ("00" & key_code_i(3 downto 2));
-   phinc_addr_s(5 downto 0) <= key_fraction_i;
+   phinc_addr_s(9 downto 6) <= device_i.key_code(3 downto 0) - ("00" & device_i.key_code(3 downto 2));
+   phinc_addr_s(5 downto 0) <= device_i.key_fraction;
 
    i_ym2151_phase_increment_rom : entity work.ym2151_phase_increment_rom
       generic map (
@@ -70,7 +69,7 @@ begin
    p_octave : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         octave_r <= key_code_i(6 downto 4);
+         octave_r <= device_i.key_code(6 downto 4);
       end if;
    end process p_octave;
 

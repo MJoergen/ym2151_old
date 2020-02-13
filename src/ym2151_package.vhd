@@ -58,20 +58,12 @@ package ym2151_package is
    end record device_t;
    type device_vector_t is array (natural range<>) of device_t;
 
-   type temp_t is record
-      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      waveform     : std_logic_vector(17 downto 0);
-      rate         : std_logic_vector( 5 downto 0);
-      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
-   end record temp_t;
-
-   -- State to be maintained for next iteration.
-   type state_envelope_t is record
-      state        : STATE_ADSR_t;
-      cnt          : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      envelope     : std_logic_vector(17 downto 0);
-   end record state_envelope_t;
+   type state_t is record
+      phase_cur : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      env_cur   : std_logic_vector(17 downto 0);
+      env_state : STATE_ADSR_t;
+      env_cnt   : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+   end record state_t;
 
 end package ym2151_package;
 
