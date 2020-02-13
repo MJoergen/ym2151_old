@@ -14,8 +14,8 @@ entity update_state is
    port (
       clk_i       : in  std_logic;
       rst_i       : in  std_logic;
+      device_i    : in  device_t;
       phase_inc_i : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      key_onoff_i : in  std_logic;
       delay_i     : in  std_logic_vector(C_DECAY_SIZE-1 downto 0);
       cur_state_i : in  state_t;
       new_state_o : out state_t
@@ -63,7 +63,7 @@ begin
                new_state_o.env_cnt   <= delay_i;
                new_state_o.env_cur   <= (17 => '0', others => '1');
 
-               if key_onoff_i = '0' then
+               if device_i.key_onoff = '0' then
                   new_state_o.env_state <= RELEASE_ST;
                end if;
 
@@ -81,14 +81,14 @@ begin
                   new_state_o.env_state <= SUSTAIN_ST;
                end if;
 
-               if key_onoff_i = '0' then
+               if device_i.key_onoff = '0' then
                   new_state_o.env_state <= RELEASE_ST;
                end if;
 
             when SUSTAIN_ST =>
                -- In this state the envelope should decrease exponentially, until
                -- it reaches the minimum value, or until Key OFF event.
-               if key_onoff_i = '0' then
+               if device_i.key_onoff = '0' then
                   new_state_o.env_state <= RELEASE_ST;
                end if;
 
@@ -98,7 +98,7 @@ begin
                -- it reaches the minimum value, or until Key ON event.
                new_state_o.env_cur <= (others => '0');
 
-               if key_onoff_i = '1' then
+               if device_i.key_onoff = '1' then
                   new_state_o.env_state <= ATTACK_ST;
                end if;
 

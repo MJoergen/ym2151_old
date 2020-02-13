@@ -50,7 +50,7 @@ architecture synthesis of ym2151 is
       temp   : temp_t;                       -- Temporary storage.
    end record stage_t;
 
-   type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
+   type stages_t is array (0 to 33) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t;
 
    signal sum_r : std_logic_vector(C_PDM_WIDTH-1 downto 0);
@@ -74,6 +74,7 @@ begin
 
    -- Copy state from previous iteration of this device.
    stages(0).state <= stages(32).state;
+   stages(1).state <= stages(33).state;
 
 
    ----------------------------------------------------
@@ -110,7 +111,7 @@ begin
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         key_onoff_i => stages(1).device.key_onoff,
+         device_i    => stages(1).device,
          delay_i     => stages(1).temp.delay,
          phase_inc_i => stages(1).temp.phase_inc,
          cur_state_i => stages(1).state,
@@ -128,7 +129,7 @@ begin
          clk_i      => clk_i,
          state_i    => stages(2).state,
          waveform_o => stages(3).temp.waveform
-      ); -- i_ym2151_sine_rom
+      ); -- i_calc_waveform
 
 
    ----------------------------------------------------
@@ -164,6 +165,7 @@ begin
       begin
          if rising_edge(clk_i) then
             stages(i).temp.phase_inc <= stages(i-1).temp.phase_inc;
+            stages(i).temp.delay <= stages(i-1).temp.delay;
          end if;
       end process p_phase_inc;
    end generate gen_phase_inc;
@@ -177,24 +179,6 @@ begin
       end process p_waveform;
    end generate gen_waveform;
 
-   gen_delay : for i in 2 to 5 generate
-      p_delay : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).temp.delay <= stages(i-1).temp.delay;
-         end if;
-      end process p_delay;
-   end generate gen_delay;
-
-
-   gen_state1 : for i in 1 to 1 generate
-      p_state1 : process (clk_i)
-      begin
-         if rising_edge(clk_i) then
-            stages(i).state <= stages(i-1).state;
-         end if;
-      end process p_state1;
-   end generate gen_state1;
 
    gen_state2 : for i in 3 to 5 generate
       p_state2 : process (clk_i)
@@ -205,7 +189,7 @@ begin
       end process p_state2;
    end generate gen_state2;
 
-   gen_stages : for i in 6 to 32 generate
+   gen_stages : for i in 6 to 33 generate
       p_stages : process (clk_i)
       begin
          if rising_edge(clk_i) then
