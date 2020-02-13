@@ -75,11 +75,24 @@ entity ym2151_config is
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
       -- Configuration output
-      devices_o : out t_device_vector(0 to 31)
+      devices_o : out device_vector_t(0 to 31)
    );
 end entity ym2151_config;
 
 architecture synthesis of ym2151_config is
+
+   constant C_DEVICE_DEFAULT : device_t := (
+      key_code     => (others => '0'),
+      key_fraction => (others => '0'),
+      total_level  => (others => '0'),
+      key_scaling  => (others => '0'),
+      attack_rate  => (others => '0'),
+      decay_rate   => (others => '0'),
+      decay_level  => (others => '0'),
+      sustain_rate => (others => '0'),
+      release_rate => (others => '0'),
+      key_onoff    => '0'
+   );
 
    -------------------------------------
    -- CPU interface
@@ -137,10 +150,10 @@ begin
                when "000" => -- 0x00 - 0x1F
                   case wr_addr_r(4 downto 3) is
                      when "01" => -- Key ON/OFF
-                        devices_o(   to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(3);
-                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(4);
-                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(5);
-                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).eg.key_onoff <= wr_data_r(6);
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).key_onoff <= wr_data_r(3);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).key_onoff <= wr_data_r(4);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).key_onoff <= wr_data_r(5);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).key_onoff <= wr_data_r(6);
 
                      when others => null;
                   end case;
@@ -148,36 +161,36 @@ begin
                when "001" => -- 0x20 - 0x3F
                   case wr_addr_r(4 downto 3) is
                      when "01" => -- Key code
-                        devices_o(   to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
-                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
-                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
-                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_code <= wr_data_r(6 downto 0);
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
 
                      when "10" => -- Key fraction
-                        devices_o(   to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
-                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
-                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
-                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).pg.key_fraction <= wr_data_r(7 downto 2);
+                        devices_o(   to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
+                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
+                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
+                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
 
                      when others => null;
                   end case;
 
                when "011" => -- 0x60 - 0x7F
-                  devices_o(device_v).eg.total_level  <= wr_data_r(6 downto 0);
+                  devices_o(device_v).total_level  <= wr_data_r(6 downto 0);
 
                when "100" => -- 0x80 - 0x9F
-                  devices_o(device_v).eg.key_scaling  <= wr_data_r(7 downto 6);
-                  devices_o(device_v).eg.attack_rate  <= wr_data_r(4 downto 0);
+                  devices_o(device_v).key_scaling  <= wr_data_r(7 downto 6);
+                  devices_o(device_v).attack_rate  <= wr_data_r(4 downto 0);
 
                when "101" => -- 0xA0 - 0xBF
-                  devices_o(device_v).eg.decay_rate   <= wr_data_r(4 downto 0);
+                  devices_o(device_v).decay_rate   <= wr_data_r(4 downto 0);
 
                when "110" => -- 0xC0 - 0xDF
-                  devices_o(device_v).eg.sustain_rate <= wr_data_r(4 downto 0);
+                  devices_o(device_v).sustain_rate <= wr_data_r(4 downto 0);
 
                when "111" => -- 0xE0 - 0xFF
-                  devices_o(device_v).eg.decay_level  <= wr_data_r(7 downto 4);
-                  devices_o(device_v).eg.release_rate <= wr_data_r(3 downto 0);
+                  devices_o(device_v).decay_level  <= wr_data_r(7 downto 4);
+                  devices_o(device_v).release_rate <= wr_data_r(3 downto 0);
 
                when others => null;
             end case;

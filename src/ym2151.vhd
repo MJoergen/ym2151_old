@@ -12,7 +12,7 @@ use work.ym2151_package.all;
 
 entity ym2151 is
    generic (
-      G_CLOCK_HZ : integer := 8333333    -- Input clock frequency
+      G_CLOCK_HZ : integer               -- Input clock frequency
    );
    port (
       clk_i     : in  std_logic;
@@ -31,24 +31,16 @@ architecture synthesis of ym2151 is
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
-
    type stage_t is record
-      config         : config_t;
+      idx            : std_logic_vector(4 downto 0);
+      device         : device_t;
       temp           : temp_t;
       state_phase    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       state_envelope : state_envelope_t;
    end record stage_t;
-   
-   constant C_STAGE_DEFAULT : stage_t := (
-      config          => C_CONFIG_DEFAULT,
-      temp            => C_TEMP_DEFAULT,
-      state_phase     => (others => '0'),
-      state_envelope  => C_STATE_ENVELOPE_DEFAULT
-   ); -- C_STAGE_DEFAULT
-
 
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
-   signal stages : stages_t := (others => C_STAGE_DEFAULT);
+   signal stages : stages_t;
 
    signal sum_r : std_logic_vector(C_PDM_WIDTH-1 downto 0);
 
@@ -65,7 +57,8 @@ begin
          addr_i    => addr_i,
          wr_en_i   => wr_en_i,
          wr_data_i => wr_data_i,
-         config_o  => stages(0).config
+         idx_o     => stages(0).idx,
+         device_o  => stages(0).device
       ); -- i_get_config
 
    -- Copy state from previous iteration of this device.
@@ -83,8 +76,8 @@ begin
       )
       port map (
          clk_i          => clk_i,
-         key_code_i     => stages(0).config.key_code,
-         key_fraction_i => stages(0).config.key_fraction,
+         key_code_i     => stages(0).device.key_code,
+         key_fraction_i => stages(0).device.key_fraction,
          phase_inc_o    => stages(1).temp.phase_inc
       ); -- i_phase_increment
 
@@ -94,13 +87,13 @@ begin
       )
       port map (
          clk_i          => clk_i,
+         key_code_i     => stages(0).device.key_code,
+         key_scaling_i  => stages(0).device.key_scaling,
+         attack_rate_i  => stages(0).device.attack_rate,
+         decay_rate_i   => stages(0).device.decay_rate,
+         sustain_rate_i => stages(0).device.sustain_rate,
+         release_rate_i => stages(0).device.release_rate,
          state_i        => stages(0).state_envelope.state,
-         key_code_i     => stages(0).config.key_code,
-         key_scaling_i  => stages(0).config.key_scaling,
-         attack_rate_i  => stages(0).config.attack_rate,
-         decay_rate_i   => stages(0).config.decay_rate,
-         sustain_rate_i => stages(0).config.sustain_rate,
-         release_rate_i => stages(0).config.release_rate,
          delay_o        => stages(1).temp.delay
       ); -- i_calc_delay
 
@@ -122,7 +115,7 @@ begin
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
-         key_onoff_i => stages(1).config.key_onoff,
+         key_onoff_i => stages(1).device.key_onoff,
          delay_i     => stages(1).temp.delay,
          state_i     => stages(1).state_envelope.state,
          cnt_i       => stages(1).state_envelope.cnt,
@@ -163,14 +156,15 @@ begin
    -- Generate pipeline
    ----------------------------------------------------
 
-   gen_config : for i in 1 to 5 generate
-      p_config : process (clk_i)
+   gen_device : for i in 1 to 5 generate
+      p_device : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).config <= stages(i-1).config;
+            stages(i).idx    <= stages(i-1).idx;
+            stages(i).device <= stages(i-1).device;
          end if;
-      end process p_config;
-   end generate gen_config;
+      end process p_device;
+   end generate gen_device;
 
    gen_phase_inc : for i in 2 to 5 generate
       p_phase_inc : process (clk_i)
@@ -232,10 +226,10 @@ begin
       variable sum_v : std_logic_vector(C_PDM_WIDTH-1 downto 0);
    begin
       if rising_edge(clk_i) then
-         if stages(5).config.device_cnt = 0 then
+         if stages(5).idx = 0 then
             sum_r <= stages(5).temp.product;
          end if;
-         if stages(5).config.device_cnt > 0 then
+         if stages(5).idx > 0 then
             sum_v := sum_r + stages(5).temp.product;
             -- Check for overflow
             if sum_r(C_PDM_WIDTH-1) = stages(5).temp.product(C_PDM_WIDTH-1) and 
@@ -251,7 +245,7 @@ begin
    p_store_device0 : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if stages(5).config.device_cnt = 8 then
+         if stages(5).idx = 8 then
             val_o <= sum_r xor C_NEGATIVE_ONE;
          end if;
       end if;

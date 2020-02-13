@@ -56,6 +56,9 @@ begin
    -------------------
 
    i_ym2151 : entity work.ym2151
+      generic map (
+         G_CLOCK_HZ => 8333333    -- Input clock frequency
+      )
       port map (
          clk_i     => clk_s,
          rst_i     => rst_s,
