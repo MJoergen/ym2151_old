@@ -31,19 +31,23 @@ architecture synthesis of ym2151 is
    constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
       (C_PDM_WIDTH-1 => '1', others => '0');
 
+   -- This record contains temporary values calcuted in the pipeline,
+   -- but which do not need to be stored later.
    type temp_t is record
-      phase_inc    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
-      waveform     : std_logic_vector(17 downto 0);
-      rate         : std_logic_vector( 5 downto 0);
-      delay        : std_logic_vector(C_DECAY_SIZE-1 downto 0);
-      product      : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+      phase_inc : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      waveform  : std_logic_vector(17 downto 0);
+      rate      : std_logic_vector( 5 downto 0);
+      delay     : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+      product   : std_logic_vector(C_PDM_WIDTH-1 downto 0);
    end record temp_t;
 
+   -- This record contains the entire information available at every stage
+   -- of the pipeline.
    type stage_t is record
-      idx    : std_logic_vector(4 downto 0);
-      device : device_t;
-      state  : state_t;
-      temp   : temp_t;
+      idx    : std_logic_vector(4 downto 0); -- Device index (0-31)
+      device : device_t;                     -- Configuration
+      state  : state_t;                      -- State preserved from last iteration.
+      temp   : temp_t;                       -- Temporary storage.
    end record stage_t;
 
    type stages_t is array (0 to 32) of stage_t; -- Stage 32 is the same device as stage 0.
@@ -64,8 +68,8 @@ begin
          addr_i    => addr_i,
          wr_en_i   => wr_en_i,
          wr_data_i => wr_data_i,
-         idx_o     => stages(0).idx,
-         device_o  => stages(0).device
+         idx_o     => stages(0).idx,   -- Device index (0-31)
+         device_o  => stages(0).device -- Configuration
       ); -- i_get_config
 
    -- Copy state from previous iteration of this device.
@@ -99,31 +103,20 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 2 : Update cur_phase and envelope
+   -- Stage 2 : Update state
    ----------------------------------------------------
 
-   i_update_cur_phase : entity work.update_cur_phase
-      port map (
-         clk_i       => clk_i,
-         rst_i       => rst_i,
-         phase_inc_i => stages(1).temp.phase_inc,
-         cur_phase_i => stages(1).state.phase_cur,
-         cur_phase_o => stages(2).state.phase_cur
-      ); -- i_update_cur_phase
-
-   i_update_envelope : entity work.update_envelope
+   i_update_state : entity work.update_state
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
          key_onoff_i => stages(1).device.key_onoff,
          delay_i     => stages(1).temp.delay,
-         state_i     => stages(1).state.env_state,
-         cnt_i       => stages(1).state.env_cnt,
-         envelope_i  => stages(1).state.env_cur,
-         state_o     => stages(2).state.env_state,
-         cnt_o       => stages(2).state.env_cnt,
-         envelope_o  => stages(2).state.env_cur
-      ); -- i_update_envelope
+         phase_inc_i => stages(1).temp.phase_inc,
+         cur_state_i => stages(1).state,
+         new_state_o => stages(2).state
+      ); -- i_update_state
+
 
 
    ----------------------------------------------------
