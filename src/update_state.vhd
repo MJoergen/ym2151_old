@@ -25,17 +25,11 @@ end entity update_state;
 architecture synthesis of update_state is
 
    constant C_DELAY_MAX : std_logic_vector(C_DECAY_SIZE-1 downto 0) := (others => '1');
+   constant C_ENV_MAX   : std_logic_vector(17 downto 0) := (17 => '0', others => '1');
 
    signal envelope_sub_s : std_logic_vector(17 downto 0);
 
 begin
-
-   p_cur_phase : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-      end if;
-   end process p_cur_phase;
-
 
    ----------------------------------------------------
    -- The amount to subtract is obtained by shifting C_SHIFT_AMOUNT.
@@ -59,9 +53,18 @@ begin
          case cur_state_i.env_state is
             when ATTACK_ST =>
                -- In this state the envelope should increase linearly to maximum.
-               new_state_o.env_state <= DECAY_ST;
-               new_state_o.env_cnt   <= delay_i;
-               new_state_o.env_cur   <= (17 => '0', others => '1');
+               if cur_state_i.env_cnt = 0 then
+                  new_state_o.env_cnt <= delay_i;  -- Reset counter
+                  new_state_o.env_cur <= cur_state_i.env_cur + 1; -- TBD
+               elsif cur_state_i.env_cnt /= C_DELAY_MAX then
+                  new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
+               end if;
+
+               if cur_state_i.env_cur + 1 >= C_ENV_MAX or delay_i = 0 then
+                  new_state_o.env_state <= DECAY_ST;
+                  new_state_o.env_cur   <= C_ENV_MAX;
+                  new_state_o.env_cnt   <= (others => '0');
+               end if;
 
                if device_i.key_onoff = '0' then
                   new_state_o.env_state <= RELEASE_ST;
@@ -71,14 +74,15 @@ begin
                -- In this state the envelope should decrease exponentially, until
                -- it reaches the value decay_level.
                if cur_state_i.env_cnt = 0 then
-                  new_state_o.env_cnt <= delay_i;
+                  new_state_o.env_cnt <= delay_i;   -- Reset counter
                   new_state_o.env_cur <= cur_state_i.env_cur - envelope_sub_s;
                elsif cur_state_i.env_cnt /= C_DELAY_MAX then
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if envelope_sub_s = 0 then
+               if cur_state_i.env_cur - envelope_sub_s <= "0" & device_i.decay_level & X"000" & "0" then
                   new_state_o.env_state <= SUSTAIN_ST;
+                  new_state_o.env_cnt   <= (others => '0');
                end if;
 
                if device_i.key_onoff = '0' then
@@ -88,10 +92,16 @@ begin
             when SUSTAIN_ST =>
                -- In this state the envelope should decrease exponentially, until
                -- it reaches the minimum value, or until Key OFF event.
+               if cur_state_i.env_cnt = 0 then
+                  new_state_o.env_cnt <= delay_i;   -- Reset counter
+                  new_state_o.env_cur <= cur_state_i.env_cur - envelope_sub_s;
+               elsif cur_state_i.env_cnt /= C_DELAY_MAX then
+                  new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
+               end if;
+
                if device_i.key_onoff = '0' then
                   new_state_o.env_state <= RELEASE_ST;
                end if;
-
 
             when RELEASE_ST =>
                -- In this state the envelope should decrease exponentially, until
@@ -100,8 +110,8 @@ begin
 
                if device_i.key_onoff = '1' then
                   new_state_o.env_state <= ATTACK_ST;
+                  new_state_o.env_cnt   <= (others => '0');
                end if;
-
          end case;
 
          if rst_i = '1' then

@@ -26,7 +26,8 @@ end entity calc_delay;
 architecture synthesis of calc_delay is
    
    signal device_rate_s : std_logic_vector(4 downto 0);
-   signal rate_s        : std_logic_vector(5 downto 0);
+   signal rate_s        : std_logic_vector(6 downto 0);
+   signal truncrate_s   : std_logic_vector(5 downto 0);
 
 begin
 
@@ -42,7 +43,9 @@ begin
    end process p_device_rate;
 
    -- TBD: Consider device_i.key_scaling
-   rate_s <= (device_rate_s & "0") + ("0000" & device_i.key_code(6 downto 5));
+   rate_s <= ("0" & device_rate_s & "0") + ("00000" & device_i.key_code(6 downto 5));
+
+   truncrate_s <= rate_s(5 downto 0) when rate_s(6) = '0' else "111111";
 
    i_rom_delay : entity work.rom_delay
       generic map (
@@ -50,7 +53,7 @@ begin
       )
       port map (
          clk_i   => clk_i,
-         rate_i  => rate_s,
+         rate_i  => truncrate_s,
          delay_o => delay_o
       ); -- i_rom_delay
 

@@ -120,11 +120,12 @@ begin
       wait until clk_s = '1';
 
       write(X"28", X"4A");    -- Key code
+      write(X"80", X"1F");    -- Attack rate
       write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
       write(X"08", X"08");    -- Key ON
 
       write(X"29", X"7A");    -- Key code
-      write(X"A0", X"0F");    -- Decay rate
+      write(X"81", X"1F");    -- Attack rate
       write(X"09", X"08");    -- Key ON
 
 --      file_open(input_file, C_INPUT_FILENAME, READ_MODE);

@@ -2,7 +2,7 @@
 -- License: Public domain; do with it what you like :-)
 -- Project: YM2151 implementation
 --
--- Description: This module contains the ROM with the table of sine values.
+-- Description: This module calculates the waveform from the current phase.
 -- Input is interpreted as an unsigned fractional number between 0 and 1.
 -- Output is the sine, interpreted as a signed number (in two's complement)
 -- beween -1 and 1.
@@ -35,7 +35,7 @@ architecture synthesis of calc_waveform is
    
    impure function InitRom return mem_t is
       constant scale_x : real := real(2**C_SINE_ADDR_WIDTH);
-      constant scale_y : real := real(2**(C_SINE_DATA_WIDTH-1)-1);
+      constant scale_y : real := real(2**(C_SINE_DATA_WIDTH-3)-1);
       variable phase_v : real;
       variable sine_v  : real;
       variable ROM_v   : mem_t := (others => (others => '0'));
@@ -50,7 +50,9 @@ architecture synthesis of calc_waveform is
          ROM_v(i) := to_stdlogicvector(integer(sine_v*scale_y)+1, C_SINE_DATA_WIDTH);
 
          -- And translate back down by 1 again.
-         ROM_v(i)(C_SINE_DATA_WIDTH-1) := not ROM_v(i)(C_SINE_DATA_WIDTH-1);
+         ROM_v(i)(C_SINE_DATA_WIDTH-1) := not ROM_v(i)(C_SINE_DATA_WIDTH-3);
+         ROM_v(i)(C_SINE_DATA_WIDTH-2) := not ROM_v(i)(C_SINE_DATA_WIDTH-3);
+         ROM_v(i)(C_SINE_DATA_WIDTH-3) := not ROM_v(i)(C_SINE_DATA_WIDTH-3);
       end loop;
       return ROM_v;
    end function;
@@ -62,6 +64,7 @@ architecture synthesis of calc_waveform is
 
 begin
 
+   -- Truncate current phase.
    addr_s <= state_i.phase_cur(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_SINE_ADDR_WIDTH);
 
    p_read : process (clk_i)
