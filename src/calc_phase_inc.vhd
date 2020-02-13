@@ -22,19 +22,18 @@ use ieee.math_real.all;
 
 use work.ym2151_package.all;
 
-entity ym2151_phase_increment is
+entity calc_phase_inc is
    generic (
-      G_UPDATE_HZ     : integer         -- Input clock frequency
+      G_UPDATE_HZ : integer            -- Input clock frequency
    );
    port (
-      clk_i          : in  std_logic;
-      key_code_i     : in  std_logic_vector(6 downto 0);
-      key_fraction_i : in  std_logic_vector(5 downto 0);
-      phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
+      clk_i       : in  std_logic;
+      device_i    : in  device_t;
+      phase_inc_o : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
-end entity ym2151_phase_increment;
+end entity calc_phase_inc;
 
-architecture synthesis of ym2151_phase_increment is
+architecture synthesis of calc_phase_inc is
 
    signal phinc_addr_s : std_logic_vector(9 downto 0);
    signal phinc_data_s : std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0);
@@ -48,10 +47,10 @@ begin
    ----------------------------------------------------
 
    -- Convert the key code from range 0..14 to range 0..11
-   phinc_addr_s(9 downto 6) <= key_code_i(3 downto 0) - ("00" & key_code_i(3 downto 2));
-   phinc_addr_s(5 downto 0) <= key_fraction_i;
+   phinc_addr_s(9 downto 6) <= device_i.key_code(3 downto 0) - ("00" & device_i.key_code(3 downto 2));
+   phinc_addr_s(5 downto 0) <= device_i.key_fraction;
 
-   i_ym2151_phase_increment_rom : entity work.ym2151_phase_increment_rom
+   inst_rom_phase_inc : entity work.rom_phase_inc
       generic map (
          G_UPDATE_HZ => G_UPDATE_HZ
       )
@@ -59,7 +58,7 @@ begin
          clk_i  => clk_i,
          addr_i => phinc_addr_s,
          data_o => phinc_data_s
-      ); -- i_phase_increment_rom
+      ); -- inst_rom_phase_inc
 
 
    ----------------------------------------------------
@@ -70,7 +69,7 @@ begin
    p_octave : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         octave_r <= key_code_i(6 downto 4);
+         octave_r <= device_i.key_code(6 downto 4);
       end if;
    end process p_octave;
 

@@ -47,7 +47,7 @@ begin
    -- Generate cpu reset
    proc_rst : process
    begin
-      rst_s <= '1', '0' after 500 ns;
+      rst_s <= '1', '0' after 5000 ns;
       wait;
    end process proc_rst;
 
@@ -56,6 +56,9 @@ begin
    -------------------
 
    i_ym2151 : entity work.ym2151
+      generic map (
+         G_CLOCK_HZ => 8333333    -- Input clock frequency
+      )
       port map (
          clk_i     => clk_s,
          rst_i     => rst_s,
@@ -117,8 +120,13 @@ begin
       wait until clk_s = '1';
 
       write(X"28", X"4A");    -- Key code
+      write(X"80", X"1F");    -- Attack rate
       write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
       write(X"08", X"08");    -- Key ON
+
+      write(X"29", X"7A");    -- Key code
+      write(X"81", X"1F");    -- Attack rate
+      write(X"09", X"08");    -- Key ON
 
 --      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
 --

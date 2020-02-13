@@ -18,7 +18,8 @@ package ym2151_package is
    -- -10*log10(1-2^(-6)).
    constant C_SHIFT_AMOUNT        : integer := 6;
 
-   constant C_DECAY_SIZE          : integer := 22;
+   -- Number of update cycles between updating the envelope.
+   constant C_DELAY_SIZE          : integer := 22;
 
    -- This constant is determined by the switching rate of the PDM signal (100 MHz)
    -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
@@ -43,12 +44,10 @@ package ym2151_package is
    -- which is 17.3*2/8.3E6*2^29 = 2230.
    constant C_PHASEINC_DATA_WIDTH : integer := 12; 
 
-   type t_phase_generator is record
-      key_code           : std_logic_vector(6 downto 0);
-      key_fraction       : std_logic_vector(5 downto 0);
-   end record t_phase_generator;
-
-   type t_envelope_generator is record
+   -- Configuraion of each device
+   type device_t is record
+      key_code     : std_logic_vector(6 downto 0);
+      key_fraction : std_logic_vector(5 downto 0);
       total_level  : std_logic_vector(6 downto 0);
       key_scaling  : std_logic_vector(1 downto 0);
       attack_rate  : std_logic_vector(4 downto 0);
@@ -57,30 +56,15 @@ package ym2151_package is
       sustain_rate : std_logic_vector(4 downto 0);
       release_rate : std_logic_vector(3 downto 0);
       key_onoff    : std_logic;
-   end record t_envelope_generator;
+   end record device_t;
+   type device_vector_t is array (natural range<>) of device_t;
 
-   type t_device is record
-      pg : t_phase_generator;
-      eg : t_envelope_generator;
-   end record t_device;
-   constant C_DEVICE_DEFAULT : t_device := 
-            (pg => (key_code     => (others => '0'),
-                    key_fraction => (others => '0')),
-             eg => (total_level  => (others => '0'),
-                    key_scaling  => (others => '0'),
-                    attack_rate  => (others => '0'),
-                    decay_rate   => (others => '0'),
-                    decay_level  => (others => '0'),
-                    sustain_rate => (others => '0'),
-                    release_rate => (others => '0'),
-                    key_onoff    => '0'));
-   type t_device_vector is array (natural range<>) of t_device;
-
---   subtype t_envelope is std_logic_vector(9 downto 0);
---   type t_envelope_vector is array (natural range<>) of t_envelope;
---
---   subtype t_phase is std_logic_vector(19 downto 0);
---   type t_phase_vector is array (natural range<>) of t_phase;
+   type state_t is record
+      phase_cur : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      env_cur   : std_logic_vector(17 downto 0);
+      env_state : STATE_ADSR_t;
+      env_cnt   : std_logic_vector(C_DELAY_SIZE-1 downto 0);
+   end record state_t;
 
 end package ym2151_package;
 

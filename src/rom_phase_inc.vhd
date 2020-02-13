@@ -12,7 +12,7 @@ use ieee.math_real.all;
 
 use work.ym2151_package.all;
 
-entity ym2151_phase_increment_rom is
+entity rom_phase_inc is
    generic (
       G_UPDATE_HZ : integer -- Frequency of input clock
    );
@@ -21,9 +21,9 @@ entity ym2151_phase_increment_rom is
       addr_i : in  std_logic_vector(C_PHASEINC_ADDR_WIDTH-1 downto 0);
       data_o : out std_logic_vector(C_PHASEINC_DATA_WIDTH-1 downto 0)
    );
-end entity ym2151_phase_increment_rom;
+end entity rom_phase_inc;
 
-architecture synthesis of ym2151_phase_increment_rom is
+architecture synthesis of rom_phase_inc is
 
    -- This defines a type containing an array of bytes
    type mem_t is array (0 to 2**C_PHASEINC_ADDR_WIDTH-1) of
