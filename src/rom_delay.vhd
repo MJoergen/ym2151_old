@@ -29,17 +29,18 @@ use work.ym2151_package.all;
 -- |     3    |  infinity      | 2097151 (means infinity)
 -- |     0    |  infinity      | 2097151 (means infinity)
 
-entity ym2151_decay is
+entity rom_delay is
    generic (
       G_UPDATE_HZ : integer             -- Update frequency
    );
    port (
+      clk_i   : in  std_logic;
       rate_i  : in  std_logic_vector( 5 downto 0); -- One of 64 values
       delay_o : out std_logic_vector(C_DECAY_SIZE-1 downto 0)  -- Number of clock cycles between each decay
    );
-end entity ym2151_decay;
+end entity rom_delay;
 
-architecture synthesis of ym2151_decay is
+architecture synthesis of rom_delay is
 
    type mem_t is array (0 to 3) of std_logic_vector(C_DECAY_SIZE-1 downto 0);
 
@@ -65,12 +66,14 @@ begin
    rate_s  <= C_RATES(to_integer(rate_i(1 downto 0)));
    shift_s <= rate_i(5 downto 2);
 
-   process (rate_s, shift_s)
+   process (clk_i)
    begin
-      delay_o <= (others => '0');
-      delay_o(C_DECAY_SIZE-1 - to_integer(shift_s) downto 0) <= rate_s(C_DECAY_SIZE-1 downto to_integer(shift_s));
-      if shift_s = 0 then
-         delay_o <= (others => '1');
+      if rising_edge(clk_i) then
+         delay_o <= (others => '0');
+         delay_o(C_DECAY_SIZE-1 - to_integer(shift_s) downto 0) <= rate_s(C_DECAY_SIZE-1 downto to_integer(shift_s));
+         if shift_s = 0 then
+            delay_o <= (others => '1');
+         end if;
       end if;
    end process;
 

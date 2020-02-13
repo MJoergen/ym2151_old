@@ -27,7 +27,6 @@ architecture synthesis of calc_delay is
    
    signal device_rate_s : std_logic_vector(4 downto 0);
    signal rate_s        : std_logic_vector(5 downto 0);
-   signal delay_s       : std_logic_vector(C_DECAY_SIZE-1 downto 0);
 
 begin
 
@@ -45,21 +44,15 @@ begin
    -- TBD: Consider device_i.key_scaling
    rate_s <= (device_rate_s & "0") + ("0000" & device_i.key_code(6 downto 5));
 
-   i_ym2151_decay : entity work.ym2151_decay
+   i_rom_delay : entity work.rom_delay
       generic map (
          G_UPDATE_HZ => G_UPDATE_HZ
       )
       port map (
+         clk_i   => clk_i,
          rate_i  => rate_s,
-         delay_o => delay_s
-      ); -- i_ym2151_decay
-
-   p_register : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         delay_o <= delay_s;
-      end if;
-   end process p_register;
+         delay_o => delay_o
+      ); -- i_rom_delay
 
 end architecture synthesis;
 

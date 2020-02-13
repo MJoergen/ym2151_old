@@ -24,12 +24,12 @@ use work.ym2151_package.all;
 
 entity calc_phase_inc is
    generic (
-      G_UPDATE_HZ     : integer         -- Input clock frequency
+      G_UPDATE_HZ : integer            -- Input clock frequency
    );
    port (
-      clk_i          : in  std_logic;
-      device_i       : in  device_t;
-      phase_inc_o    : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
+      clk_i       : in  std_logic;
+      device_i    : in  device_t;
+      phase_inc_o : out std_logic_vector(C_PHASE_WIDTH-1 downto 0)
    );
 end entity calc_phase_inc;
 
@@ -50,7 +50,7 @@ begin
    phinc_addr_s(9 downto 6) <= device_i.key_code(3 downto 0) - ("00" & device_i.key_code(3 downto 2));
    phinc_addr_s(5 downto 0) <= device_i.key_fraction;
 
-   i_ym2151_phase_increment_rom : entity work.ym2151_phase_increment_rom
+   i_rom_phase_inc : entity work.rom_phase_inc
       generic map (
          G_UPDATE_HZ => G_UPDATE_HZ
       )
@@ -58,7 +58,7 @@ begin
          clk_i  => clk_i,
          addr_i => phinc_addr_s,
          data_o => phinc_data_s
-      ); -- i_phase_increment_rom
+      ); -- i_rom_phase_inc
 
 
    ----------------------------------------------------
