@@ -3,6 +3,7 @@
 -- Project: YM2151 implementation
 --
 -- Description:
+-- This calculates the delay between each update to the envelope.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -24,13 +25,25 @@ end entity calc_delay;
 
 architecture synthesis of calc_delay is
    
-   signal rate_s  : std_logic_vector(5 downto 0);
-   signal delay_s : std_logic_vector(C_DECAY_SIZE-1 downto 0);
+   signal device_rate_s : std_logic_vector(4 downto 0);
+   signal rate_s        : std_logic_vector(5 downto 0);
+   signal delay_s       : std_logic_vector(C_DECAY_SIZE-1 downto 0);
 
 begin
 
-   -- TBD: Consider state_i and key_scaling_i
-   rate_s <= (device_i.decay_rate & "0") + ("0000" & device_i.key_code(6 downto 5));
+   p_device_rate : process (device_i, state_i)
+   begin
+      device_rate_s <= (others => '0');
+      case state_i.env_state is
+         when ATTACK_ST  => device_rate_s <= device_i.attack_rate;
+         when DECAY_ST   => device_rate_s <= device_i.decay_rate;
+         when SUSTAIN_ST => device_rate_s <= device_i.sustain_rate;
+         when RELEASE_ST => device_rate_s <= device_i.release_rate & "0";
+      end case;
+   end process p_device_rate;
+
+   -- TBD: Consider device_i.key_scaling
+   rate_s <= (device_rate_s & "0") + ("0000" & device_i.key_code(6 downto 5));
 
    i_ym2151_decay : entity work.ym2151_decay
       generic map (

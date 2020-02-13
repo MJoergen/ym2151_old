@@ -78,7 +78,7 @@ begin
 
 
    ----------------------------------------------------
-   -- Stage 1 : Calculate phase_inc and delay
+   -- Stage 1 : Calculate temp.phase_inc and temp.delay
    ----------------------------------------------------
 
    i_calc_phase_inc : entity work.calc_phase_inc
