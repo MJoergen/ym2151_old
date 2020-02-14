@@ -2,9 +2,7 @@
 -- License: Public domain; do with it what you like :-)
 -- Project: YM2151 implementation
 --
--- Description: This module is the top level for the YM2151.
--- This is the main YM2151 module
--- The single clock is the CPU clock.
+-- Description: This module contains the CPU configuration
 --
 -- The register map is as follows (taken from http://www.cx5m.net/fmunit.htm)
 -- 0x01        : Bit  1   : LFO reset
@@ -83,134 +81,122 @@ end entity get_config;
 
 architecture synthesis of get_config is
 
-   constant C_CHANNEL_DEFAULT : channel_t := (
-      key_code     => (others => '0'),
-      key_fraction => (others => '0')
-   );
-
-   constant C_DEVICE_DEFAULT : device_t := (
-      total_level  => (others => '0'),
-      key_scaling  => (others => '0'),
-      attack_rate  => (others => '0'),
-      decay_rate   => (others => '0'),
-      decay_level  => (others => '0'),
-      sustain_rate => (others => '0'),
-      release_rate => (others => '0'),
-      key_onoff    => '0'
-   );
-
-   -------------------------------------
+   ----------------------------------------------------
    -- CPU interface
-   -------------------------------------
+   ----------------------------------------------------
 
-   signal wr_addr_r : std_logic_vector(7 downto 0);
-   signal wr_data_r : std_logic_vector(7 downto 0);
-   signal wr_en_r   : std_logic;
+   signal wr_addr_r           : std_logic_vector(7 downto 0);
+   signal wr_en_s             : std_logic;
 
-   signal rambe_a_addr_r : std_logic_vector(4 downto 0);
-   signal rambe_a_data_r : std_logic_vector(8 downto 0);
-   signal rambe_a_wren_r : std_logic;
-   signal rambe_a_be_r   : std_logic_vector(7 downto 0);
-   signal rambe_b_addr_s : std_logic_vector(4 downto 0);
-   signal rambe_b_data_s : std_logic_vector(71 downto 0);
 
-   signal channels_r    : channel_vector_t(0 to 7);
-   signal devices_s     : device_vector_t(0 to 31);
-   signal device_cnt_r  : std_logic_vector(4 downto 0) := (others => '0');
+   ----------------------------------------------------
+   -- Channel configuration
+   ----------------------------------------------------
 
-   signal key_onoff_r   : std_logic_vector(31 downto 0);
+   type byte_vector_t is array (0 to 7) of std_logic_vector(7 downto 0);
+   signal key_onoff_r         : byte_vector_t := (others => (others => '0'));
+   signal key_code_r          : byte_vector_t := (others => (others => '0'));
+   signal key_fraction_r      : byte_vector_t := (others => (others => '0'));
+
+
+   ----------------------------------------------------
+   -- Device configuration
+   ----------------------------------------------------
+
+   signal rambe_a_addr_s      : std_logic_vector(4 downto 0);
+   signal rambe_a_data_s      : std_logic_vector(8 downto 0);
+   signal rambe_a_wren_s      : std_logic;
+   signal rambe_a_be_s        : std_logic_vector(7 downto 0);
+
+
+   ----------------------------------------------------
+   -- Device counter
+   ----------------------------------------------------
+
+   signal device_cnt_r        : std_logic_vector(4 downto 0) := (others => '0');
+
+
+   ----------------------------------------------------
+   -- Read configuration from memories
+   ----------------------------------------------------
+
+   signal rambe_b_addr_s      : std_logic_vector(4 downto 0);
+   signal rambe_b_data_s      : std_logic_vector(71 downto 0);
+   signal key_onoff_read_r    : std_logic_vector(7 downto 0);
+   signal key_code_read_r     : std_logic_vector(7 downto 0);
+   signal key_fraction_read_r : std_logic_vector(7 downto 0);
 
    -- Debug
-   constant DEBUG_MODE               : boolean := false; -- TRUE OR FALSE
+   constant C_DEBUG_MODE             : boolean := false; -- TRUE OR FALSE
 
    attribute mark_debug              : boolean;
-   attribute mark_debug of wr_addr_r : signal is DEBUG_MODE;
-   attribute mark_debug of wr_data_r : signal is DEBUG_MODE;
-   attribute mark_debug of wr_en_r   : signal is DEBUG_MODE;
+   attribute mark_debug of wr_addr_r : signal is C_DEBUG_MODE;
+   attribute mark_debug of wr_data_i : signal is C_DEBUG_MODE;
+   attribute mark_debug of wr_en_s   : signal is C_DEBUG_MODE;
 
 begin
 
-   ----------------------
+   ----------------------------------------------------
    -- CPU interface
-   ----------------------
+   ----------------------------------------------------
 
-   p_regs : process (clk_i)
+   p_wr_addr : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         wr_en_r <= '0';
-         if wr_en_i = '1' then
-            case addr_i is
-               when "0" => 
-                  wr_addr_r <= wr_data_i;
-               when "1" => 
-                  wr_data_r <= wr_data_i;
-                  wr_en_r   <= '1';
-               when others => null;
-            end case;
+         if wr_en_i = '1'  and addr_i = 0 then
+            wr_addr_r <= wr_data_i;
          end if;
       end if;
-   end process p_regs;
+   end process p_wr_addr;
 
-
-   -----------------
-   -- Configuration
-   -----------------
-
-   p_config : process (clk_i)
-      variable channel_v : integer;
-      variable device_v : integer;
-   begin
-      if rising_edge(clk_i) then
-         rambe_a_wren_r <= '0';
-
-         device_v  := to_integer(wr_addr_r(4 downto 0));
-
-         if wr_en_r = '1' then
-            case wr_addr_r(7 downto 5) is
-               when "000" => -- 0x00 - 0x1F
-                  case wr_addr_r(4 downto 3) is
-                     when "01" => -- Key ON/OFF
-                        key_onoff_r(   to_integer(wr_addr_r(2 downto 0))) <= wr_data_r(3);
-                        key_onoff_r( 8+to_integer(wr_addr_r(2 downto 0))) <= wr_data_r(4);
-                        key_onoff_r(16+to_integer(wr_addr_r(2 downto 0))) <= wr_data_r(5);
-                        key_onoff_r(24+to_integer(wr_addr_r(2 downto 0))) <= wr_data_r(6);
-
-                     when others => null;
-                  end case;
-
-               when "001" => -- 0x20 - 0x3F
-                  case wr_addr_r(4 downto 3) is
-                     when "01" => -- Key code
-                        channels_r(to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
-
-                     when "10" => -- Key fraction
-                        channels_r(to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
-
-                     when others => null;
-                  end case;
-
-               when "011" | "100" | "101" | "110" | "111" => -- 0x60 - 0xFF
-                  rambe_a_addr_r <= wr_addr_r(4 downto 0);
-                  rambe_a_data_r <= "0" & wr_data_r;
-                  rambe_a_wren_r <= '1';
-                  rambe_a_be_r <= (others => '0');
-                  rambe_a_be_r(to_integer(wr_addr_r(7 downto 5))) <= '1';
-
-               when others => null;
-            end case;
-         end if;
-
-         if rst_i = '1' then
-            channels_r  <= (others => C_CHANNEL_DEFAULT);
-            key_onoff_r <= (others => '0');
-         end if;
-      end if;
-   end process p_config;
+   wr_en_s <= wr_en_i when addr_i = 1 else '0';
 
 
    ----------------------------------------------------
-   -- Instantiate configuration RAM
+   -- Channel configuration
    ----------------------------------------------------
+
+   p_key_onoff : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if wr_en_s = '1' and wr_addr_r = X"08" then
+            key_onoff_r(to_integer(wr_data_i(2 downto 0))) <= "0000" & wr_data_i(6 downto 3);
+         end if;
+      end if;
+   end process p_key_onoff;
+
+   p_key_code : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if wr_en_s = '1' and wr_addr_r(7 downto 3) = "00101" then
+            key_code_r(to_integer(wr_addr_r(2 downto 0))) <= "0" & wr_data_i(6 downto 0);
+         end if;
+      end if;
+   end process p_key_code;
+
+   p_key_fraction : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if wr_en_s = '1' and wr_addr_r(7 downto 3) = "00110" then
+            key_fraction_r(to_integer(wr_addr_r(2 downto 0))) <= "00" & wr_data_i(7 downto 2);
+         end if;
+      end if;
+   end process p_key_fraction;
+
+
+   ----------------------------------------------------
+   -- Device configuration
+   ----------------------------------------------------
+
+   rambe_a_addr_s <= wr_addr_r(4 downto 0);
+   rambe_a_data_s <= "0" & wr_data_i;
+   rambe_a_wren_s <= wr_en_s;
+
+   process (wr_addr_r)
+   begin
+      rambe_a_be_s   <= (others => '0');
+      rambe_a_be_s(to_integer(wr_addr_r(7 downto 5))) <= '1';
+   end process;
 
    i_rambe : entity work.rambe
       generic map (
@@ -219,17 +205,17 @@ begin
       )
       port map (
          clk_i    => clk_i,
-         a_addr_i => rambe_a_addr_r,
-         a_data_i => rambe_a_data_r,
-         a_wren_i => rambe_a_wren_r,
-         a_be_i   => rambe_a_be_r,
+         a_addr_i => rambe_a_addr_s,
+         a_data_i => rambe_a_data_s,
+         a_wren_i => rambe_a_wren_s,
+         a_be_i   => rambe_a_be_s,
          b_addr_i => rambe_b_addr_s,
          b_data_o => rambe_b_data_s
       ); -- i_rambe
 
 
    ----------------------------------------------------
-   -- Loop through each of the 32 devices
+   -- Device counter
    ----------------------------------------------------
 
    p_device_cnt : process (clk_i)
@@ -239,31 +225,38 @@ begin
       end if;
    end process p_device_cnt;
 
-   -- Read from RAM
+
+   ----------------------------------------------------
+   -- Read configuration from memories
+   ----------------------------------------------------
+
    rambe_b_addr_s <= device_cnt_r;
-
-
-   device_o.total_level  <= rambe_b_data_s(9*3+6 downto 9*3+0);   -- 0x60 - 0x7F
-
-   device_o.key_scaling  <= rambe_b_data_s(9*4+7 downto 9*4+6);   -- 0x80 - 0x9F
-   device_o.attack_rate  <= rambe_b_data_s(9*4+4 downto 9*4+0);   -- 0x80 - 0x9F
-
-   device_o.decay_rate   <= rambe_b_data_s(9*5+4 downto 9*5+0);   -- 0xA0 - 0xBF
-
-   device_o.sustain_rate <= rambe_b_data_s(9*6+4 downto 9*6+0);   -- 0xC0 - 0xDF
-
-   device_o.decay_level  <= rambe_b_data_s(9*7+7 downto 9*7+4);   -- 0xE0 - 0xFF
-   device_o.release_rate <= rambe_b_data_s(9*7+3 downto 9*7+0);   -- 0xE0 - 0xFF
-
 
    p_register : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         idx_o              <= device_cnt_r;
-         channel_o          <= channels_r(to_integer(device_cnt_r(2 downto 0)));
-         device_o.key_onoff <= key_onoff_r(to_integer(device_cnt_r));
+         idx_o               <= device_cnt_r;
+         key_onoff_read_r    <= key_onoff_r(to_integer(device_cnt_r(2 downto 0)));
+         key_code_read_r     <= key_code_r(to_integer(device_cnt_r(2 downto 0)));
+         key_fraction_read_r <= key_fraction_r(to_integer(device_cnt_r(2 downto 0)));
       end if;
    end process p_register;
+
+
+   ----------------------------------------------------
+   -- Drive output signals
+   ----------------------------------------------------
+
+   device_o.total_level   <= rambe_b_data_s(9*3+6 downto 9*3+0);   -- 0x60 - 0x7F
+   device_o.key_scaling   <= rambe_b_data_s(9*4+7 downto 9*4+6);   -- 0x80 - 0x9F
+   device_o.attack_rate   <= rambe_b_data_s(9*4+4 downto 9*4+0);   -- 0x80 - 0x9F
+   device_o.decay_rate    <= rambe_b_data_s(9*5+4 downto 9*5+0);   -- 0xA0 - 0xBF
+   device_o.sustain_rate  <= rambe_b_data_s(9*6+4 downto 9*6+0);   -- 0xC0 - 0xDF
+   device_o.decay_level   <= rambe_b_data_s(9*7+7 downto 9*7+4);   -- 0xE0 - 0xFF
+   device_o.release_rate  <= rambe_b_data_s(9*7+3 downto 9*7+0);   -- 0xE0 - 0xFF
+   device_o.key_onoff     <= key_onoff_read_r(to_integer(device_cnt_r(4 downto 3)));
+   channel_o.key_code     <= key_code_read_r(6 downto 0);
+   channel_o.key_fraction <= key_fraction_read_r(5 downto 0);
 
 end architecture synthesis;
 
