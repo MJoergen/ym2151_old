@@ -14,6 +14,7 @@ entity update_state is
    port (
       clk_i       : in  std_logic;
       rst_i       : in  std_logic;
+      channel_i   : in  channel_t;
       device_i    : in  device_t;
       phase_inc_i : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       delay_i     : in  std_logic_vector(C_DELAY_SIZE-1 downto 0);

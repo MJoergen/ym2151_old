@@ -20,14 +20,16 @@ entity get_config is
       wr_data_i : in  std_logic_vector(7 downto 0);
       -- Configuration output
       idx_o     : out std_logic_vector(4 downto 0);
+      channel_o : out channel_t;
       device_o  : out device_t
    );
 end entity get_config;
 
 architecture synthesis of get_config is
 
-   signal devices_s    : device_vector_t(0 to 31);
-   signal device_cnt_r : std_logic_vector(4 downto 0) := (others => '0');
+   signal channels_s    : channel_vector_t(0 to 7);
+   signal devices_s     : device_vector_t(0 to 31);
+   signal device_cnt_r  : std_logic_vector(4 downto 0) := (others => '0');
 
 begin
 
@@ -37,12 +39,13 @@ begin
 
    i_ym2151_config : entity work.ym2151_config
       port map (
-         clk_i     => clk_i,
-         rst_i     => rst_i,
-         addr_i    => addr_i,
-         wr_en_i   => wr_en_i,
-         wr_data_i => wr_data_i,
-         devices_o => devices_s
+         clk_i      => clk_i,
+         rst_i      => rst_i,
+         addr_i     => addr_i,
+         wr_en_i    => wr_en_i,
+         wr_data_i  => wr_data_i,
+         channels_o => channels_s,
+         devices_o  => devices_s
       ); -- i_config
 
 
@@ -57,8 +60,9 @@ begin
       end if;
    end process p_device_cnt;
 
-   idx_o    <= device_cnt_r;
-   device_o <= devices_s(to_integer(device_cnt_r));
+   idx_o     <= device_cnt_r;
+   device_o  <= devices_s(to_integer(device_cnt_r));
+   channel_o <= channels_s(to_integer(device_cnt_r(2 downto 0)));
 
 end architecture synthesis;
 

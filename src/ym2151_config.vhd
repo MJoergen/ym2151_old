@@ -68,22 +68,26 @@ use work.ym2151_package.all;
 
 entity ym2151_config is
    port (
-      clk_i     : in  std_logic;
-      rst_i     : in  std_logic;
+      clk_i      : in  std_logic;
+      rst_i      : in  std_logic;
       -- CPU interface
-      addr_i    : in  std_logic_vector(0 downto 0);
-      wr_en_i   : in  std_logic;
-      wr_data_i : in  std_logic_vector(7 downto 0);
+      addr_i     : in  std_logic_vector(0 downto 0);
+      wr_en_i    : in  std_logic;
+      wr_data_i  : in  std_logic_vector(7 downto 0);
       -- Configuration output
-      devices_o : out device_vector_t(0 to 31)
+      channels_o : out channel_vector_t(0 to 7);
+      devices_o  : out device_vector_t(0 to 31)
    );
 end entity ym2151_config;
 
 architecture synthesis of ym2151_config is
 
-   constant C_DEVICE_DEFAULT : device_t := (
+   constant C_CHANNEL_DEFAULT : channel_t := (
       key_code     => (others => '0'),
-      key_fraction => (others => '0'),
+      key_fraction => (others => '0')
+   );
+
+   constant C_DEVICE_DEFAULT : device_t := (
       total_level  => (others => '0'),
       key_scaling  => (others => '0'),
       attack_rate  => (others => '0'),
@@ -161,16 +165,10 @@ begin
                when "001" => -- 0x20 - 0x3F
                   case wr_addr_r(4 downto 3) is
                      when "01" => -- Key code
-                        devices_o(   to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
-                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
-                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
-                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
+                        channels_o(to_integer(wr_addr_r(2 downto 0))).key_code <= wr_data_r(6 downto 0);
 
                      when "10" => -- Key fraction
-                        devices_o(   to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
-                        devices_o( 8+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
-                        devices_o(16+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
-                        devices_o(24+to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
+                        channels_o(to_integer(wr_addr_r(2 downto 0))).key_fraction <= wr_data_r(7 downto 2);
 
                      when others => null;
                   end case;
@@ -197,7 +195,8 @@ begin
          end if;
 
          if rst_i = '1' then
-            devices_o <= (others => C_DEVICE_DEFAULT);
+            channels_o <= (others => C_CHANNEL_DEFAULT);
+            devices_o  <= (others => C_DEVICE_DEFAULT);
          end if;
       end if;
    end process p_config;

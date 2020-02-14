@@ -50,10 +50,11 @@ architecture synthesis of ym2151 is
    -- This record contains the entire information available at every stage
    -- of the pipeline.
    type stage_t is record
-      idx    : std_logic_vector(4 downto 0); -- Device index (0-31)
-      device : device_t;                     -- Configuration
-      state  : state_t;                      -- State preserved from last iteration.
-      temp   : temp_t;                       -- Temporary storage.
+      idx     : std_logic_vector(4 downto 0); -- Device index (0-31)
+      channel : channel_t;                    -- Configuration
+      device  : device_t;                     -- Configuration
+      state   : state_t;                      -- State preserved from last iteration.
+      temp    : temp_t;                       -- Temporary storage.
    end record stage_t;
 
    type stages_t is array (0 to 33) of stage_t; -- Stage 32 is the same device as stage 0.
@@ -74,8 +75,9 @@ begin
          addr_i    => addr_i,
          wr_en_i   => wr_en_i,
          wr_data_i => wr_data_i,
-         idx_o     => stages(0).idx,   -- Device index (0-31)
-         device_o  => stages(0).device -- Configuration
+         idx_o     => stages(0).idx,      -- Device index (0-31)
+         channel_o => stages(0).channel,  -- Configuration
+         device_o  => stages(0).device    -- Configuration
       ); -- i_get_config
 
    -- Copy state from previous iteration of this device.
@@ -93,6 +95,7 @@ begin
       )
       port map (
          clk_i       => clk_i,
+         channel_i   => stages(0).channel,
          device_i    => stages(0).device,
          phase_inc_o => stages(1).temp.phase_inc
       ); -- i_phase_increment
@@ -102,10 +105,11 @@ begin
          G_UPDATE_HZ => G_CLOCK_HZ/32
       )
       port map (
-         clk_i    => clk_i,
-         device_i => stages(0).device,
-         state_i  => stages(0).state,
-         delay_o  => stages(1).temp.delay
+         clk_i     => clk_i,
+         channel_i => stages(0).channel,
+         device_i  => stages(0).device,
+         state_i   => stages(0).state,
+         delay_o   => stages(1).temp.delay
       ); -- i_calc_delay
 
 
@@ -117,6 +121,7 @@ begin
       port map (
          clk_i       => clk_i,
          rst_i       => rst_i,
+         channel_i   => stages(1).channel,
          device_i    => stages(1).device,
          delay_i     => stages(1).temp.delay,
          phase_inc_i => stages(1).temp.phase_inc,
@@ -160,8 +165,9 @@ begin
       p_device : process (clk_i)
       begin
          if rising_edge(clk_i) then
-            stages(i).idx    <= stages(i-1).idx;
-            stages(i).device <= stages(i-1).device;
+            stages(i).idx     <= stages(i-1).idx;
+            stages(i).channel <= stages(i-1).channel;
+            stages(i).device  <= stages(i-1).device;
          end if;
       end process p_device;
    end generate gen_device;

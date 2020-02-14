@@ -16,10 +16,11 @@ entity calc_delay is
       G_UPDATE_HZ : integer             -- Update frequency
    );
    port (
-      clk_i    : in  std_logic;
-      device_i : in  device_t;
-      state_i  : in  state_t;
-      delay_o  : out std_logic_vector(C_DELAY_SIZE-1 downto 0)
+      clk_i     : in  std_logic;
+      channel_i : in  channel_t;
+      device_i  : in  device_t;
+      state_i   : in  state_t;
+      delay_o   : out std_logic_vector(C_DELAY_SIZE-1 downto 0)
    );
 end entity calc_delay;
 
@@ -43,7 +44,7 @@ begin
    end process p_device_rate;
 
    -- TBD: Consider device_i.key_scaling
-   rate_s <= ("0" & device_rate_s & "0") + ("00000" & device_i.key_code(6 downto 5));
+   rate_s <= ("0" & device_rate_s & "0") + ("00000" & channel_i.key_code(6 downto 5));
 
    truncrate_s <= rate_s(5 downto 0) when rate_s(6) = '0' else "111111";
 
