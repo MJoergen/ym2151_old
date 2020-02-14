@@ -56,12 +56,12 @@ begin
                -- In this state the envelope should increase linearly to maximum.
                if cur_state_i.env_cnt = 0 then
                   new_state_o.env_cnt <= delay_i;  -- Reset counter
-                  new_state_o.env_cur <= cur_state_i.env_cur + 1; -- TBD
+                  new_state_o.env_cur <= cur_state_i.env_cur + C_ATTACK_INCREMENT;
                elsif cur_state_i.env_cnt /= C_DELAY_MAX then
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if cur_state_i.env_cur + 1 >= C_ENV_MAX or delay_i = 0 then
+               if cur_state_i.env_cur + C_ATTACK_INCREMENT >= C_ENV_MAX or delay_i = 0 then
                   new_state_o.env_state <= DECAY_ST;
                   new_state_o.env_cur   <= C_ENV_MAX;
                   new_state_o.env_cnt   <= (others => '0');

@@ -44,6 +44,9 @@ package ym2151_package is
    -- which is 17.3*2/8.3E6*2^29 = 2230.
    constant C_PHASEINC_DATA_WIDTH : integer := 12; 
 
+   -- How much to increment the envelope in each update during the attack phase.
+   constant C_ATTACK_INCREMENT : integer := 2048;
+
    type channel_t is record
       key_code     : std_logic_vector(6 downto 0);
       key_fraction : std_logic_vector(5 downto 0);
