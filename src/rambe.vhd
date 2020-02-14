@@ -31,7 +31,7 @@ architecture synthesis of rambe is
 
    type mem_t is array (0 to 2**G_ADDR_WIDTH-1) of std_logic_vector(9*G_DATA_BYTES-1 downto 0);
 
-   signal mem_r : mem_t := (others => (others => '0'));
+   signal mem_r : mem_t;
 
 begin
 

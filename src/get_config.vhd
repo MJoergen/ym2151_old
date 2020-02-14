@@ -90,6 +90,16 @@ architecture synthesis of get_config is
 
 
    ----------------------------------------------------
+   -- Reset logic
+   ----------------------------------------------------
+
+   signal rst_done_r          : std_logic;
+   signal rst_addr_r          : std_logic_vector(7 downto 0);
+   signal wr_addr_s           : std_logic_vector(7 downto 0);
+   signal wr_data_s           : std_logic_vector(7 downto 0);
+
+
+   ----------------------------------------------------
    -- Channel configuration
    ----------------------------------------------------
 
@@ -130,9 +140,9 @@ architecture synthesis of get_config is
    constant C_DEBUG_MODE             : boolean := false; -- TRUE OR FALSE
 
    attribute mark_debug              : boolean;
-   attribute mark_debug of wr_addr_r : signal is C_DEBUG_MODE;
-   attribute mark_debug of wr_data_i : signal is C_DEBUG_MODE;
    attribute mark_debug of wr_en_s   : signal is C_DEBUG_MODE;
+   attribute mark_debug of wr_addr_s : signal is C_DEBUG_MODE;
+   attribute mark_debug of wr_data_s : signal is C_DEBUG_MODE;
 
 begin
 
@@ -146,10 +156,41 @@ begin
          if wr_en_i = '1'  and addr_i = 0 then
             wr_addr_r <= wr_data_i;
          end if;
+         if rst_i = '1' then
+            wr_addr_r <= (others => '0');
+         end if;
       end if;
    end process p_wr_addr;
 
-   wr_en_s <= wr_en_i when addr_i = 1 else '0';
+
+   ----------------------------------------------------
+   -- Reset logic
+   ----------------------------------------------------
+
+   p_reset : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if rst_addr_r = X"FF" then
+            rst_done_r <= '1';
+         else
+            rst_addr_r <= rst_addr_r + 1;
+         end if;
+
+         if rst_i = '1' then
+            rst_done_r <= '0';
+            rst_addr_r <= X"00";
+         end if;
+      end if;
+   end process p_reset;
+
+   wr_en_s <= '1'     when rst_done_r = '0' else
+              wr_en_i when addr_i = 1 else '0';
+
+   wr_addr_s <= rst_addr_r when rst_done_r = '0' else
+                wr_addr_r;
+
+   wr_data_s <= X"00" when rst_done_r = '0' else
+                wr_data_i;
 
 
    ----------------------------------------------------
@@ -159,8 +200,8 @@ begin
    p_key_onoff : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if wr_en_s = '1' and wr_addr_r = X"08" then
-            key_onoff_r(to_integer(wr_data_i(2 downto 0))) <= "0000" & wr_data_i(6 downto 3);
+         if wr_en_s = '1' and wr_addr_s = X"08" then
+            key_onoff_r(to_integer(wr_data_s(2 downto 0))) <= "0000" & wr_data_s(6 downto 3);
          end if;
       end if;
    end process p_key_onoff;
@@ -168,8 +209,8 @@ begin
    p_key_code : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if wr_en_s = '1' and wr_addr_r(7 downto 3) = "00101" then
-            key_code_r(to_integer(wr_addr_r(2 downto 0))) <= "0" & wr_data_i(6 downto 0);
+         if wr_en_s = '1' and wr_addr_s(7 downto 3) = "00101" then
+            key_code_r(to_integer(wr_addr_s(2 downto 0))) <= "0" & wr_data_s(6 downto 0);
          end if;
       end if;
    end process p_key_code;
@@ -177,8 +218,8 @@ begin
    p_key_fraction : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if wr_en_s = '1' and wr_addr_r(7 downto 3) = "00110" then
-            key_fraction_r(to_integer(wr_addr_r(2 downto 0))) <= "00" & wr_data_i(7 downto 2);
+         if wr_en_s = '1' and wr_addr_s(7 downto 3) = "00110" then
+            key_fraction_r(to_integer(wr_addr_s(2 downto 0))) <= "00" & wr_data_s(7 downto 2);
          end if;
       end if;
    end process p_key_fraction;
@@ -188,14 +229,14 @@ begin
    -- Device configuration
    ----------------------------------------------------
 
-   rambe_a_addr_s <= wr_addr_r(4 downto 0);
-   rambe_a_data_s <= "0" & wr_data_i;
+   rambe_a_addr_s <= wr_addr_s(4 downto 0);
+   rambe_a_data_s <= "0" & wr_data_s;
    rambe_a_wren_s <= wr_en_s;
 
-   process (wr_addr_r)
+   process (wr_addr_s)
    begin
       rambe_a_be_s   <= (others => '0');
-      rambe_a_be_s(to_integer(wr_addr_r(7 downto 5))) <= '1';
+      rambe_a_be_s(to_integer(wr_addr_s(7 downto 5))) <= '1';
    end process;
 
    i_rambe : entity work.rambe
