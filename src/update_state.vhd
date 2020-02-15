@@ -61,7 +61,7 @@ begin
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if cur_state_i.env_cur + C_ATTACK_INCREMENT >= C_ENV_MAX or delay_i = 0 then
+               if cur_state_i.env_cur >= C_ENV_MAX - C_ATTACK_INCREMENT or delay_i = 0 then
                   new_state_o.env_state <= DECAY_ST;
                   new_state_o.env_cur   <= C_ENV_MAX;
                   new_state_o.env_cnt   <= (others => '0');
@@ -81,8 +81,9 @@ begin
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if cur_state_i.env_cur - envelope_sub_s <= "0" & device_i.decay_level & X"000" & "0" then
+               if cur_state_i.env_cur <= ("0" & (not device_i.decay_level) & X"000" & "0") + envelope_sub_s then
                   new_state_o.env_state <= SUSTAIN_ST;
+                  new_state_o.env_cur   <= "0" & (not device_i.decay_level) & X"000" & "0";
                   new_state_o.env_cnt   <= (others => '0');
                end if;
 
