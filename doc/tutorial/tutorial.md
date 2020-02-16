@@ -11,6 +11,9 @@ of the following:
 * A waveform generator. This selects the timbre of the note.
 * An envelope generator. This selects the amplitude modulation of the note.
 
+All three of the above must be configured, in order to get sound out of the
+YM2151 chip.
+
 Each of the eight sound channels can individually be directed to either or both
 of the left and right outputs.
 
@@ -43,9 +46,9 @@ The semitone selector is encoded as follows:
 
 Each of the eight sound channels has a register containing the key note
 selector. These are located in addresses $28 to $2F, where bits 3-0 are the
-semitone selectir, and bits 6-4 are the octave selector.
+semitone selector, and bits 6-4 are the octave selector.
 
-The tone A4 (frequency of 440 Hz) is achieved by using the values 4 for the
+The tone A4 (frequency of 440 Hz) is thus achieved by using the values 4 for the
 octave selector and 10 for the semitone selector.  This corresponds to writing
 the value $4A to the register $28.
 
@@ -61,9 +64,9 @@ They can be combined in series (composition of functions) or in parallel
 loop.
 
 Each of the eight sound channels has a register containing the connection
-function.  These are located in address $20 to $27, where bits 2-0 are the
+function.  These are located in addresses $20 to $27, where bits 2-0 are the
 connection function. In the same register, bit 7 enables the right output and
-bit 6 enables the left output. Bits 6-4 control the feedback on Modulator 1.
+bit 6 enables the left output. Bits 5-3 control the feedback on Modulator 1.
 
 The connection function has the following interpretation:
 
@@ -92,28 +95,28 @@ The waveform is parametrized by the following five numbers:
 * Release rate (RR)
 
 The first four values control the envelope after a "key-on" event, while the
-last value controles the evelope after a "key-off" event.
+last value controls the envelope after a "key-off" event.
 
 To get a square envelope (i.e. maximum volume right after "key-on", and no
 output right after "key-off"), the following values suffice: Writing the value
-$1F to register $98 (Maximum Attack Rate), and the value $FF to the register
-$F8 (Maximum Release Rate, and Maximum Decay Attentuation).
+$1F to register $80 (Maximum Attack Rate), and the value $FF to the register
+$E0 (Maximum Release Rate, and Maximum Decay Attentuation).
 
 To get a sound that more closely resembles a string instrument, where the
 volume of the note slowly decays, one can add a first decay rate of $0A to the
-settings. This corresponds to writing the value $0A to register $B8.
+settings. This corresponds to writing the value $0A to register $A0.
 
-The "key-on" event is triggered by writing the value $40 to the register $08.
+The "key-on" event is triggered by writing the value $08 to the register $08.
 The "key-off" event is triggered by writing the value $00 to the register $08.
 
 ## Summary
 To play a single A4 note the following writes can be used:
-* Write $1F to $98. Maximum Attack Rate for "Carrier2" on channel 0.
-* Write $0A to $B8. First Decay Rate for "Carrier2" on channel 0.
-* Write $FF to $F8. Maximum Release Rate for "Carrier2" on channel 0.
+* Write $1F to $80. Maximum Attack Rate for "Modulator1" on channel 0.
+* Write $0A to $A0. First Decay Rate for "Modulator1" on channel 0.
+* Write $FF to $E0. Maximum Release Rate for "Modulator1" on channel 0.
 * Write $C7 to $20. Select connection mode 7 on channel 0.
 * Write $4A to $28. Select key A4 on channel 0.
-* Write $40 to $08. Trigger "key-on" on channel 0.
+* Write $08 to $08. Trigger "key-on" on channel 0.
 
 ## The register interface:
 | Address |  Bits  | Function | Description       | Abbreviation |
