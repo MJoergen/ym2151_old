@@ -93,8 +93,10 @@ architecture synthesis of get_config is
    -- Reset logic
    ----------------------------------------------------
 
-   signal rst_done_r          : std_logic;
    signal rst_addr_r          : std_logic_vector(7 downto 0);
+   signal rst_data_r          : std_logic_vector(7 downto 0);
+   type RESET_STATE_t is (IDLE_ST, CLEAR_ST, KEYOFF_ST);
+   signal rst_state_r         : RESET_STATE_t;
    signal wr_addr_s           : std_logic_vector(7 downto 0);
    signal wr_data_s           : std_logic_vector(7 downto 0);
 
@@ -170,26 +172,44 @@ begin
    p_reset : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if rst_addr_r = X"FF" then
-            rst_done_r <= '1';
-         else
-            rst_addr_r <= rst_addr_r + 1;
-         end if;
+         case rst_state_r is
+            when IDLE_ST =>
+               null;
+
+            when CLEAR_ST =>
+               if rst_addr_r = X"FF" then
+                  rst_addr_r  <= X"08";
+                  rst_data_r  <= X"00";
+                  rst_state_r <= KEYOFF_ST;
+               else
+                  rst_addr_r <= rst_addr_r + 1;
+               end if;
+
+            when KEYOFF_ST =>
+               if rst_data_r = X"07" then
+                  rst_state_r <= IDLE_ST;
+               else
+                  rst_data_r <= rst_data_r + 1;
+               end if;
+
+         end case;
 
          if rst_i = '1' then
-            rst_done_r <= '0';
-            rst_addr_r <= X"00";
+            rst_addr_r  <= X"00";
+            rst_data_r  <= X"00";
+            rst_state_r <= CLEAR_ST;
          end if;
       end if;
    end process p_reset;
 
-   wr_en_s <= '1'     when rst_done_r = '0' else
-              wr_en_i when addr_i = 1 else '0';
+   wr_en_s   <= '1'        when rst_state_r /= IDLE_ST else
+                wr_en_i    when addr_i = 1             else
+                '0';
 
-   wr_addr_s <= rst_addr_r when rst_done_r = '0' else
+   wr_addr_s <= rst_addr_r when rst_state_r /= IDLE_ST else
                 wr_addr_r;
 
-   wr_data_s <= X"00" when rst_done_r = '0' else
+   wr_data_s <= rst_data_r when rst_state_r /= IDLE_ST else
                 wr_data_i;
 
 
