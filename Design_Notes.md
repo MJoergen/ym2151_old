@@ -8,13 +8,10 @@ representation and signal widths and resolution.
 
 So let's start with the Nexys 4 DDR board. The audio output is a single bit
 from the FPGA, which is passed through a 4th-order low pass filter at 15 kHz.
-So to synthesize an audio signal, Pulse Density Modulation can be used. In this
-approach the output bit rapidly switches on and off, and the low pass filter
-will then smooth out this digital signal, essentially removing all the high
-frequency components.
-
-The switching rate of the PDM signal should be as high as possible, and for
-convenience I have chosen to use the FPGA input clock of 100 MHz.
+So to synthesize an audio signal, Pulse Width Modulation can be used. In this
+approach the output bit is a single full-height digital pulse, but with a width
+proportional to the analog value. The low-pass filter will then smooth out this
+digital signal, essentially removing all the high frequency components.
 
 ## Pulse Width Modulation
 
