@@ -44,9 +44,6 @@ architecture synthesis of rom_delay is
 
    type mem_t is array (0 to 3) of std_logic_vector(C_DELAY_SIZE-1 downto 0);
 
-   constant C_ATTACK_TIME_4 : real := 7973.36;                                   -- milliseconds full range.
-   constant C_ATTACK_TIME_0 : real := 2.0*C_ATTACK_TIME_4;                       -- milliseconds full range.
-
    -- Calculate the decay constants at compile time.
    constant C_DECAY_TIME_4  : real := 110209.71/96.0;                            -- milliseconds per dB.
    constant C_DECAY_TIME_0  : real := 2.0*C_DECAY_TIME_4;                        -- milliseconds per dB.
@@ -66,7 +63,7 @@ architecture synthesis of rom_delay is
 
 begin
 
-   delay_s  <= C_RATES(to_integer(rate_i(1 downto 0)));
+   delay_s <= C_RATES(to_integer(rate_i(1 downto 0)));
    shift_s <= rate_i(5 downto 2);
 
    process (clk_i)

@@ -264,3 +264,7 @@ active, there would be severe distortion due to clipping.
 ## TODO
 Rewrite src/get\_config.vhd to make use of BRAM with byte-wide write enables.
 
+## Attack rate
+Measuring using the emulator gives an attack time (from -96 dB to 0 dB) of
+approx 390 ms, when using an attack rate of 7 and a key note of $6A.
+

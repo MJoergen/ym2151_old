@@ -1,68 +1,105 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Thu Feb 13 13:11:22 2020
+[*] Fri Feb 14 10:26:28 2020
 [*]
 [dumpfile] "/home/mfj/git/MJoergen/x16-nexys4ddr/sub/ym2151/build/ym2151_tb.ghw"
-[dumpfile_mtime] "Thu Feb 13 13:06:03 2020"
-[dumpfile_size] 53872193
+[dumpfile_mtime] "Fri Feb 14 10:25:05 2020"
+[dumpfile_size] 41817059
 [savefile] "/home/mfj/git/MJoergen/x16-nexys4ddr/sub/ym2151/sim/ym2151_tb.gtkw"
-[timestart] 5001787000000
-[size] 1853 1145
-[pos] 0 51
-*-29.489141 5004360000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 34700000000
+[size] 1448 896
+[pos] -1 -1
+*-31.931108 46800000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.ym2151_tb.
 [treeopen] top.ym2151_tb.i_ym2151.
+[treeopen] top.ym2151_tb.i_ym2151.i_get_config.
+[treeopen] top.ym2151_tb.i_ym2151.i_get_config.channel_o.
 [treeopen] top.ym2151_tb.i_ym2151.stages.
-[treeopen] top.ym2151_tb.i_ym2151.stages.[0].
-[treeopen] top.ym2151_tb.i_ym2151.stages.[0].state.
-[sst_width] 269
-[signals_width] 248
+[treeopen] top.ym2151_tb.i_ym2151.stages.[5].
+[treeopen] top.ym2151_tb.i_ym2151.stages.[5].state.
+[sst_width] 258
+[signals_width] 350
 [sst_expanded] 1
-[sst_vpaned_height] 559
+[sst_vpaned_height] 413
 @28
 top.ym2151_tb.i_ym2151.wr_en_i
 top.ym2151_tb.i_ym2151.addr_i[0]
 @22
 #{top.ym2151_tb.i_ym2151.wr_data_i[7:0]} top.ym2151_tb.i_ym2151.wr_data_i[7] top.ym2151_tb.i_ym2151.wr_data_i[6] top.ym2151_tb.i_ym2151.wr_data_i[5] top.ym2151_tb.i_ym2151.wr_data_i[4] top.ym2151_tb.i_ym2151.wr_data_i[3] top.ym2151_tb.i_ym2151.wr_data_i[2] top.ym2151_tb.i_ym2151.wr_data_i[1] top.ym2151_tb.i_ym2151.wr_data_i[0]
-@23
-#{top.ym2151_tb.i_ym2151.sum_r[11:0]} top.ym2151_tb.i_ym2151.sum_r[11] top.ym2151_tb.i_ym2151.sum_r[10] top.ym2151_tb.i_ym2151.sum_r[9] top.ym2151_tb.i_ym2151.sum_r[8] top.ym2151_tb.i_ym2151.sum_r[7] top.ym2151_tb.i_ym2151.sum_r[6] top.ym2151_tb.i_ym2151.sum_r[5] top.ym2151_tb.i_ym2151.sum_r[4] top.ym2151_tb.i_ym2151.sum_r[3] top.ym2151_tb.i_ym2151.sum_r[2] top.ym2151_tb.i_ym2151.sum_r[1] top.ym2151_tb.i_ym2151.sum_r[0]
 @8022
 #{top.ym2151_tb.i_ym2151.val_o[11:0]} top.ym2151_tb.i_ym2151.val_o[11] top.ym2151_tb.i_ym2151.val_o[10] top.ym2151_tb.i_ym2151.val_o[9] top.ym2151_tb.i_ym2151.val_o[8] top.ym2151_tb.i_ym2151.val_o[7] top.ym2151_tb.i_ym2151.val_o[6] top.ym2151_tb.i_ym2151.val_o[5] top.ym2151_tb.i_ym2151.val_o[4] top.ym2151_tb.i_ym2151.val_o[3] top.ym2151_tb.i_ym2151.val_o[2] top.ym2151_tb.i_ym2151.val_o[1] top.ym2151_tb.i_ym2151.val_o[0]
 @800200
--stage0
-@22
-#{top.ym2151_tb.i_ym2151.stages[0].idx[4:0]} top.ym2151_tb.i_ym2151.stages[0].idx[4] top.ym2151_tb.i_ym2151.stages[0].idx[3] top.ym2151_tb.i_ym2151.stages[0].idx[2] top.ym2151_tb.i_ym2151.stages[0].idx[1] top.ym2151_tb.i_ym2151.stages[0].idx[0]
-@420
-top.ym2151_tb.i_ym2151.stages[0].state.env_state
-@8022
-#{top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[23:0]} top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[23] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[22] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[21] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[20] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[19] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[18] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[17] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[16] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[15] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[14] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[13] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[12] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[11] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[10] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[9] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[8] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[7] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[6] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[5] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[4] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[3] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[2] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[1] top.ym2151_tb.i_ym2151.stages[0].state.phase_cur[0]
-@800022
-#{top.ym2151_tb.i_ym2151.stages[0].state.env_cur[17:0]} top.ym2151_tb.i_ym2151.stages[0].state.env_cur[17] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[16] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[15] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[14] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[13] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[12] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[11] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[10] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[9] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[8] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[7] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[6] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[5] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[4] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[3] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[2] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[1] top.ym2151_tb.i_ym2151.stages[0].state.env_cur[0]
+-get_config
 @28
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[17]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[16]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[15]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[14]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[13]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[12]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[11]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[10]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[9]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[8]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[7]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[6]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[5]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[4]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[3]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[2]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[1]
-top.ym2151_tb.i_ym2151.stages[0].state.env_cur[0]
+top.ym2151_tb.i_ym2151.i_get_config.clk_i
+top.ym2151_tb.i_ym2151.i_get_config.rst_i
+top.ym2151_tb.i_ym2151.i_get_config.wr_en_s
+@22
+#{top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[7:0]} top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[7] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[6] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[5] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[4] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[3] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[2] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[1] top.ym2151_tb.i_ym2151.i_get_config.wr_addr_s[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[7:0]} top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[7] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[6] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[5] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[4] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[3] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[2] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[1] top.ym2151_tb.i_ym2151.i_get_config.wr_data_s[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[4:0]} top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[4] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[3] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[2] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[1] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_addr_s[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[71:0]} top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[71] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[70] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[69] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[68] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[67] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[66] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[65] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[64] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[63] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[62] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[61] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[60] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[59] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[58] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[57] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[56] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[55] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[54] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[53] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[52] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[51] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[50] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[49] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[48] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[47] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[46] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[45] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[44] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[43] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[42] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[41] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[40] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[39] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[38] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[37] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[36] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[35] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[34] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[33] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[32] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[31] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[30] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[29] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[28] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[27] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[26] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[25] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[24] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[23] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[22] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[21] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[20] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[19] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[18] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[17] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[16] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[15] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[14] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[13] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[12] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[11] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[10] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[9] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[8] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[7] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[6] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[5] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[4] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[3] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[2] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[1] top.ym2151_tb.i_ym2151.i_get_config.rambe_b_data_s[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.idx_o[4:0]} top.ym2151_tb.i_ym2151.i_get_config.idx_o[4] top.ym2151_tb.i_ym2151.i_get_config.idx_o[3] top.ym2151_tb.i_ym2151.i_get_config.idx_o[2] top.ym2151_tb.i_ym2151.i_get_config.idx_o[1] top.ym2151_tb.i_ym2151.i_get_config.idx_o[0]
+@c00200
+-channel_o
+@22
+#{top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[6:0]} top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[6] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[5] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[4] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[3] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[2] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[1] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_code[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[5:0]} top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[5] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[4] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[3] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[2] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[1] top.ym2151_tb.i_ym2151.i_get_config.channel_o.key_fraction[0]
+@1401200
+-channel_o
+@c00200
+-device_o
+@28
+top.ym2151_tb.i_ym2151.i_get_config.device_o.key_onoff
+@22
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[6:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[6] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[5] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[4] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.total_level[0]
+@28
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.key_scaling[1:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.key_scaling[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.key_scaling[0]
+@22
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[4:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[4] top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.attack_rate[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[4:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[4] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_rate[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_level[3:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_level[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_level[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_level[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.decay_level[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[4:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[4] top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.sustain_rate[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.device_o.release_rate[3:0]} top.ym2151_tb.i_ym2151.i_get_config.device_o.release_rate[3] top.ym2151_tb.i_ym2151.i_get_config.device_o.release_rate[2] top.ym2151_tb.i_ym2151.i_get_config.device_o.release_rate[1] top.ym2151_tb.i_ym2151.i_get_config.device_o.release_rate[0]
+@1401200
+-device_o
+@1000200
+-get_config
+@800200
+-stage5
+@22
+#{top.ym2151_tb.i_ym2151.stages[5].idx[4:0]} top.ym2151_tb.i_ym2151.stages[5].idx[4] top.ym2151_tb.i_ym2151.stages[5].idx[3] top.ym2151_tb.i_ym2151.stages[5].idx[2] top.ym2151_tb.i_ym2151.stages[5].idx[1] top.ym2151_tb.i_ym2151.stages[5].idx[0]
+@421
+top.ym2151_tb.i_ym2151.stages[5].state.env_state
+@22
+#{top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[23:0]} top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[23] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[22] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[21] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[20] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[19] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[18] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[17] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[16] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[15] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[14] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[13] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[12] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[11] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[10] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[9] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[8] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[7] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[6] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[5] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[4] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[3] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[2] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[1] top.ym2151_tb.i_ym2151.stages[5].state.phase_cur[0]
+@800022
+#{top.ym2151_tb.i_ym2151.stages[5].state.env_cur[17:0]} top.ym2151_tb.i_ym2151.stages[5].state.env_cur[17] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[16] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[15] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[14] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[13] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[12] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[11] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[10] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[9] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[8] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[7] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[6] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[5] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[4] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[3] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[2] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[1] top.ym2151_tb.i_ym2151.stages[5].state.env_cur[0]
+@28
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[17]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[16]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[15]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[14]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[13]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[12]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[11]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[10]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[9]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[8]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[7]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[6]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[5]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[4]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[3]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[2]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[1]
+top.ym2151_tb.i_ym2151.stages[5].state.env_cur[0]
 @1001200
 -group_end
 @22
-#{top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[21:0]} top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[21] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[20] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[19] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[18] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[17] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[16] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[15] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[14] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[13] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[12] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[11] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[10] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[9] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[8] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[7] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[6] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[5] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[4] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[3] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[2] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[1] top.ym2151_tb.i_ym2151.stages[0].state.env_cnt[0]
+#{top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[21:0]} top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[21] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[20] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[19] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[18] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[17] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[16] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[15] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[14] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[13] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[12] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[11] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[10] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[9] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[8] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[7] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[6] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[5] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[4] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[3] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[2] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[1] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[0]
 @1000200
--stage0
+-stage5
 [pattern_trace] 1
 [pattern_trace] 0

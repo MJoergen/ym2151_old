@@ -1,5 +1,5 @@
 SRC    = src/ym2151_package.vhd
-SRC   += src/ym2151_config.vhd
+SRC   += src/rambe.vhd
 SRC   += src/get_config.vhd
 SRC   += src/rom_phase_inc.vhd
 SRC   += src/rom_delay.vhd

@@ -14,6 +14,7 @@ entity update_state is
    port (
       clk_i       : in  std_logic;
       rst_i       : in  std_logic;
+      channel_i   : in  channel_t;
       device_i    : in  device_t;
       phase_inc_i : in  std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       delay_i     : in  std_logic_vector(C_DELAY_SIZE-1 downto 0);
@@ -55,12 +56,12 @@ begin
                -- In this state the envelope should increase linearly to maximum.
                if cur_state_i.env_cnt = 0 then
                   new_state_o.env_cnt <= delay_i;  -- Reset counter
-                  new_state_o.env_cur <= cur_state_i.env_cur + 1; -- TBD
+                  new_state_o.env_cur <= cur_state_i.env_cur + C_ATTACK_INCREMENT;
                elsif cur_state_i.env_cnt /= C_DELAY_MAX then
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if cur_state_i.env_cur + 1 >= C_ENV_MAX or delay_i = 0 then
+               if cur_state_i.env_cur >= C_ENV_MAX - C_ATTACK_INCREMENT or delay_i = 0 then
                   new_state_o.env_state <= DECAY_ST;
                   new_state_o.env_cur   <= C_ENV_MAX;
                   new_state_o.env_cnt   <= (others => '0');
@@ -80,8 +81,9 @@ begin
                   new_state_o.env_cnt <= cur_state_i.env_cnt - 1;
                end if;
 
-               if cur_state_i.env_cur - envelope_sub_s <= "0" & device_i.decay_level & X"000" & "0" then
+               if cur_state_i.env_cur <= ("0" & (not device_i.decay_level) & X"000" & "0") + envelope_sub_s then
                   new_state_o.env_state <= SUSTAIN_ST;
+                  new_state_o.env_cur   <= "0" & (not device_i.decay_level) & X"000" & "0";
                   new_state_o.env_cnt   <= (others => '0');
                end if;
 

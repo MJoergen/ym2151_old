@@ -16,7 +16,7 @@ architecture structural of ym2151_tb is
    signal clk_s               : std_logic;  -- 8.33 MHz
    signal rst_s               : std_logic;
    signal addr_s              : std_logic_vector(0 downto 0);
-   signal wr_en_s             : std_logic := '0';
+   signal wr_en_s             : std_logic;
    signal wr_data_s           : std_logic_vector(7 downto 0);
 
    signal ym2151_val_s        : std_logic_vector(C_PDM_WIDTH-1 downto 0);
@@ -50,6 +50,7 @@ begin
       rst_s <= '1', '0' after 5000 ns;
       wait;
    end process proc_rst;
+
 
    -------------------
    -- Instantiate DUT
@@ -115,18 +116,23 @@ begin
 
    begin
 
+      addr_s    <= (others => '0');
+      wr_en_s   <= '0';
+      wr_data_s <= (others => '0');
+
       -- Wait for reset
       wait until rst_s = '0';
+      wait for 35 us;
       wait until clk_s = '1';
 
       write(X"28", X"4A");    -- Key code
-      write(X"80", X"1F");    -- Attack rate
+      write(X"80", X"0B");    -- Attack rate (96 dB pr 249 ms)
       write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
       write(X"08", X"08");    -- Key ON
 
-      write(X"29", X"7A");    -- Key code
-      write(X"81", X"1F");    -- Attack rate
-      write(X"09", X"08");    -- Key ON
+--      write(X"29", X"7A");    -- Key code
+--      write(X"81", X"1F");    -- Attack rate
+--      write(X"08", X"09");    -- Key ON
 
 --      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
 --
