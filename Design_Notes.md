@@ -48,17 +48,17 @@ makes it easier to handle the CPU writes to the YM2151 registers. However,
 the input to the PWM module must be synchronous to the onboard clock. So
 there must be a CDC between the YM2151 module and the PWM module.
 
-## Two's complement
+## Signed values and two's complement
 Since the sin function generates values in the interval -1 to 1, we will be
 dealing with signed values. These signed values will be scaled to signed
 integers and represented using two's complement. So there must be a conversion
-from signed value (from the sin function) to an unsigned value (to the PDM
+from signed value (from the sin function) to an unsigned value (to the PWM
 module).  Fortunately, this is easily done by inverting the MSB of the
 corresponding integer.
 
 So we have the following correspondence:
 
-| 2's comp | pdm |
+| 2's comp | pwm |
 | -------- | ------ |
 | 0x800    | 0x000 |
 | 0xFFF    | 0x7FF |
@@ -81,7 +81,7 @@ the function sin(2\*pi\*phase).  The phase will therefore be a value between 0
 and 1, and the output will be between -1 and 1. So what should the accuracy
 (resolution) of the input and output values be?
 
-Well the output of this module feeds directly into the PDM module (ignoring for
+Well the output of this module feeds directly into the PWM module (ignoring for
 the moment the Envelope Generator), so the output should have 12 bits as well.
 This is the constant C\_SINE\_DATA\_WIDTH.
 
