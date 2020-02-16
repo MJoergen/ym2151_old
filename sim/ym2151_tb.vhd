@@ -19,7 +19,7 @@ architecture structural of ym2151_tb is
    signal wr_en_s             : std_logic;
    signal wr_data_s           : std_logic_vector(7 downto 0);
 
-   signal ym2151_val_s        : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+   signal ym2151_val_s        : std_logic_vector(C_PWM_WIDTH-1 downto 0);
 
    -- Control the execution of the test.
    signal sim_test_running_s  : std_logic := '1';

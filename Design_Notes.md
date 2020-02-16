@@ -16,21 +16,23 @@ frequency components.
 The switching rate of the PDM signal should be as high as possible, and for
 convenience I have chosen to use the FPGA input clock of 100 MHz.
 
-## Pulse Density Modulation
+## Pulse Width Modulation
 
-The PDM module will take as input a density, represented as a fraction between
-0 and 1 that is encoded as an unsigned integer.  The PDM module works in
-combination with the low-pass filter to give an approximate Digital-To-Analog
-effect. In other words, the density value is roughly translated into a
-proportional analog voltage on the audio output.
+The PWM module will take as input an analog value, represented as a fraction
+between 0 and 1 that is encoded as an unsigned integer.  The PWM module works
+in combination with the low-pass filter to give an approximate
+Digital-To-Analog effect. In other words, the fractional analog value is
+converted into a full-height digital pulse, but with a width proportional to
+the analog value. The low-pass filter then converts this to a proportional
+analog voltage on the audio output.
 
 Note that there is a tradeoff between resolution in the time domain (i.e.
 frequency response) and resolution in the voltage domain (i.e. signal-to-noise
-ratio). With a PDM sampling rate of 100 MHz and an audio cutoff frequency of 15
-kHz, the signal-to-noise ratio on the output of the PDM is 100000/15 ~= 6600.
+ratio). With a PWM sampling rate of 100 MHz and an audio cutoff frequency of 15
+kHz, the signal-to-noise ratio on the output of the PWM is 100000/15 ~= 6600.
 I've therefore decided to use a density resolution of 12 bits, which gives a
 signal-to-noise ratio of 4192.  With 6 dB for each bit, this corresponds to 72
-dB. This is the constant C\_PDM\_WIDTH.
+dB. This is the constant C\_PWM\_WIDTH.
 
 So we have the following correspondence:
 

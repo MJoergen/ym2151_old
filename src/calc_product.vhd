@@ -22,7 +22,7 @@ entity calc_product is
       rst_i      : in  std_logic;
       state_i    : in  state_t;
       waveform_i : in  std_logic_vector(17 downto 0);
-      product_o  : out std_logic_vector(C_PDM_WIDTH-1 downto 0)
+      product_o  : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
    );
 end entity calc_product;
 
@@ -49,11 +49,11 @@ begin
       ); -- i_mult
       
    -- The output from the multiplier is a signed 36-bit integer.
-   assert (or(product_s(35 downto 17+C_PDM_WIDTH)) = '0') or
-          (and(product_s(35 downto 17+C_PDM_WIDTH)) = '1') or
+   assert (or(product_s(35 downto 17+C_PWM_WIDTH)) = '0') or
+          (and(product_s(35 downto 17+C_PWM_WIDTH)) = '1') or
           rst_i /= '0';
 
-   product_o <= product_s(17+C_PDM_WIDTH-1 downto 17);
+   product_o <= product_s(17+C_PWM_WIDTH-1 downto 17);
 
 end architecture synthesis;
 

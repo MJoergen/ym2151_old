@@ -28,14 +28,14 @@ entity ym2151 is
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
       -- Waveform output
-      val_o     : out std_logic_vector(C_PDM_WIDTH-1 downto 0)
+      val_o     : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
    );
 end entity ym2151;
 
 architecture synthesis of ym2151 is
 
-   constant C_NEGATIVE_ONE : std_logic_vector(C_PDM_WIDTH-1 downto 0) :=
-      (C_PDM_WIDTH-1 => '1', others => '0');
+   constant C_NEGATIVE_ONE : std_logic_vector(C_PWM_WIDTH-1 downto 0) :=
+      (C_PWM_WIDTH-1 => '1', others => '0');
 
    -- This record contains temporary values calcuted in the pipeline,
    -- but which do not need to be stored later.
@@ -44,7 +44,7 @@ architecture synthesis of ym2151 is
       waveform  : std_logic_vector(17 downto 0);
       rate      : std_logic_vector( 5 downto 0);
       delay     : std_logic_vector(C_DELAY_SIZE-1 downto 0);
-      product   : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+      product   : std_logic_vector(C_PWM_WIDTH-1 downto 0);
    end record temp_t;
 
    -- This record contains the entire information available at every stage
@@ -60,7 +60,7 @@ architecture synthesis of ym2151 is
    type stages_t is array (0 to 33) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t;
 
-   signal sum_r : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+   signal sum_r : std_logic_vector(C_PWM_WIDTH-1 downto 0);
 
 begin
 
@@ -211,7 +211,7 @@ begin
    end generate gen_stages;
 
    p_sum_outputs : process (clk_i)
-      variable sum_v : std_logic_vector(C_PDM_WIDTH-1 downto 0);
+      variable sum_v : std_logic_vector(C_PWM_WIDTH-1 downto 0);
    begin
       if rising_edge(clk_i) then
          if stages(5).idx = 0 then
@@ -220,10 +220,10 @@ begin
          if stages(5).idx > 0 then
             sum_v := sum_r + stages(5).temp.product;
             -- Check for overflow
-            if sum_r(C_PDM_WIDTH-1) = stages(5).temp.product(C_PDM_WIDTH-1) and 
-               sum_r(C_PDM_WIDTH-1) /= sum_v(C_PDM_WIDTH-1) then
-               sum_v                := (others => not sum_r(C_PDM_WIDTH-1));
-               sum_v(C_PDM_WIDTH-1) := sum_r(C_PDM_WIDTH-1);
+            if sum_r(C_PWM_WIDTH-1) = stages(5).temp.product(C_PWM_WIDTH-1) and 
+               sum_r(C_PWM_WIDTH-1) /= sum_v(C_PWM_WIDTH-1) then
+               sum_v                := (others => not sum_r(C_PWM_WIDTH-1));
+               sum_v(C_PWM_WIDTH-1) := sum_r(C_PWM_WIDTH-1);
             end if;
             sum_r <= sum_v;
          end if;

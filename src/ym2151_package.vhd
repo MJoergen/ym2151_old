@@ -21,14 +21,14 @@ package ym2151_package is
    -- Number of update cycles between updating the envelope.
    constant C_DELAY_SIZE          : integer := 22;
 
-   -- This constant is determined by the switching rate of the PDM signal (100 MHz)
+   -- This constant is determined by the switching rate of the PWM signal (100 MHz)
    -- and the cutoff frequency of the low-pass filter on the board (15 kHz).
    -- The ratio between the two is 6666, and we therefore go for 12 bits (i.e. 4096).
-   constant C_PDM_WIDTH           : integer := 12;
+   constant C_PWM_WIDTH           : integer := 12;
 
    -- The dimensions of the Sine ROM are determined by the output resolution.
-   constant C_SINE_DATA_WIDTH     : integer := C_PDM_WIDTH;
-   constant C_SINE_ADDR_WIDTH     : integer := C_PDM_WIDTH+1;
+   constant C_SINE_DATA_WIDTH     : integer := C_PWM_WIDTH;
+   constant C_SINE_ADDR_WIDTH     : integer := C_PWM_WIDTH+1;
 
    -- This constant is determined by the desired granularity of the key
    -- (64*12 fractions within an octave)
