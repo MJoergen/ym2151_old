@@ -58,21 +58,41 @@ corresponding integer.
 
 So we have the following correspondence:
 
-| 2's comp | pwm |
-| -------- | ------ |
-| 0x800    | 0x000 |
-| 0xFFF    | 0x7FF |
-| 0x000    | 0x800 |
-| 0x7FF    | 0xFFF |
+| signed | 2's comp |  pwm  |
+| ------ | -------- | ----- |
+|   -1   |  0x800   | 0x000 |
+|   ~0   |  0xFFF   | 0x7FF |
+|    0   |  0x000   | 0x800 |
+|    1   |  0x7FF   | 0xFFF |
 
-## Multiplication
+## Overflow and clipping
+Since the YM2151 has eight channels that can generate sound simultaneously, the
+resulting output waveform is the addition of each component. This addition
+operation may overflow, and to resolve that we must apply clipping, i.e. if a
+value increases beyond the maximum value, then we must cap of the waveform at
+the maximum value.
+
+However, this leads to severe distortion even when using only two sounds
+channels.  To mitigate this, the YM2151 reduces the amplitude of each channel
+by a factor of 4.  In practice, this works very well, and only in a few special
+cases will it be necessary to do any clipping.
+
+Checking the YM2151 emulator shows that a single sine-wave at no attenuation
+has an output range of +/- 8191, which is a factor of 4 less than the maximum.
+This is confirmed by analyzing in audacity, which shows an output power
+amplitude of -12 dB.
+This kind of makes sense, because otherwise, as soon as two channels becomes
+active, there would be severe distortion due to clipping.
+
+## Amplitude Modulation
 
 The two main components of the YM2151 are the Sine Wave Generator and the
-Envelope Generator. The audio output is obtained by multiplying the values
-from these two components. In the original chip this is achieved by using
-lookup tables with logarithms and exponentials. But on the Nexys4DDR we will
-make use of the built-in DSPs. They fortunately are built for handling signed
-numbers.
+Envelope Generator.  The Envelop Generator acks to modulate the amplitude of
+the signal from the Sine Wave Generator.  The audio output can be obtained by
+multiplying the values from these two components. In the original chip this is
+achieved by using lookup tables with logarithms and exponentials. But on the
+Nexys4DDR we will make use of the built-in DSPs. They fortunately are built for
+handling signed numbers.
 
 ## Sine Wave Generation
 
@@ -88,14 +108,16 @@ This is the constant C\_SINE\_DATA\_WIDTH.
 The output is interpreted as a signed integer in twos complement, so we have
 the following correspondences:
 
-| phase |   sine |  output |
-| ----- |  ----- |  ------ |
-| 0.000 |  0.000 |  0x000  |
-| 0.250 |  1.000 |  0x7FF  |
-| 0.750 | -1.000 |  0x801  |
+| phase |   sine | 2's comp |
+| ----- |  ----- | -------- |
+| 0.000 |  0.000 |  0x000   |
+| 0.250 |  1.000 |  0x1FF   |
+| 0.750 | -1.000 |  0xE01   |
 
-The output value is therefore scaled by 0x7FF, i.e. by
-2^(C\_SINE\_DATA\_WIDTH-1) - 1.  Note that the output 0x800 never occurs.
+The output value is therefore scaled by 0x1FF, i.e. by
+2^(C\_SINE\_DATA\_WIDTH-3) - 1. Note that in the above table, the output value
+has been scaled down by a factor of 4, to avoid overflow when combining
+multiple channels.
 
 The sine wave generator is implemented as a big lookup table (ROM).
 The data width of this ROM should be 12 bits as mentioned above.
@@ -140,40 +162,13 @@ Each octave doubles the frequency, and this calculation can be readily
 done by shifts. So only the notes within a single octave need be stored
 in the ROM.
 
-The above conversion is implementer in ROM, except that the Octave is not part
+The above conversion is implemented in ROM, except that the Octave is not part
 of the input. This is because the Octave corresponds to multiples of 2, and
 this can be calculated using simple shifts.
 
-## Key Codes
-
-The YM2151 stores the key code in three different parts:
-
-* Octave (3 bits)
-* Semitone (4 bits)
-* Key Fraction (6 bits)
-
-The particularly confusing part is the semitone, because the values
-are not evenly distributed. There are 12 semitones in an octave, and
-each semitone consists of 64 fractions (called "cents"). This gives
-a total of 768 values. To convert the 
-
-So a total of 13 bits to determine the frequency. This frequency is then
-converted to a fractional phase increment by scaling with the clock frequency
-of the module.
-
-The conversion from key value to fractional phase increment is based on a
-lookup table implemented in ROM. The input to this lookup table is the number
-of fractions above C#, disregarding the octave.  This is because the Octave
-corresponds to multiples of 2, and this can be calculated using simple shifts.
-
-There are 768 fractions within an octave, so the address to this
-phase\_increment ROM should have 10 bits. The output of this ROM contains the
-fractional phase increment scaled up to an integer. It turns out that scaling
-with 2^29 yields distinct integers in the range 1116 to 2230. From this we get
-that the ROM should have 12 bits of output to accommodate values in this range.
-
-The total size of the ROM becomes 12\*2^10 = 12 kbits, which fits within half a
-BRAM.
+It turns out that scaling with 2^24 yields distinct integers in the range 1116
+to 2230. From this we get that the ROM should have 12 bits of output to
+accommodate values in this range.
 
 ## Envelope Generator
 
@@ -184,15 +179,15 @@ understanding of the documentation for the YM2151 I have made some experiments
 with the emulator.
 
 ### Experiments with the emulator
-Choosing a decay rate of $0B and a key code of $4A, the output volume decreases
-by a rate of 96 dB pr 1795 ms. However, the voltage only decreases at half the
-rate, i.e. at roughly 96 dB pr 3600 ms. This is approximately in agreement with
-the documentation, which gives the value 3444 ms for the corresponding rate
-constant of 6:0, i.e. 11\*2+2 = 24.
+Choosing a decay rate of $0B and a key code of $4A, the output volume is
+measured to decrease at a rate of 96 dB pr 1795 ms.  This is a factor of two
+different from the documentation, which gives the value 3444 ms for the
+corresponding rate constant of 6:0, i.e. 11\*2+2 = 24. I suspect this is a bug
+in the emulator.
 
-Repeating the experiment with a decay rate of $0C gives a power decay rate of
-96 dB / 1100 ms, which is in agreement with a voltage decay rate of 96 dB /
-2200 ms, corresponding to the rate constant of 6:2, i.e. 12\*2+2 = 26.
+Repeating the experiment with a decay rate of $0C gives a decay rate of 96 dB /
+1100 ms, which corresponds to the decay rate of 96 dB / 2200 ms in the
+documentation, where the rate constant is 6:2, i.e. 12\*2+2 = 26.
 
 ### Attenuation
 Attenuation can be achieved by using a DSP to multiply the sine output by a
@@ -208,7 +203,7 @@ output resolution (12 bits) and the shift (6 bits), so a total of 18 bits.
 This fits nicely with the capabilities of a single DSP.
 
 ### Rate constant
-The chips uses a total of 64 different rate constants, where the rate constant
+The YM2151 chip uses a total of 64 different rate constants, where the rate constant
 is defined as time (in ms) for output voltage attenuation of 96 dB. Some
 selected values are:
 
@@ -233,7 +228,7 @@ increase of 4 in rate constant.
 In our implementation we will convert the rate constants into number of clock
 cycles between each attenuation (i.e. 0.136 dB).  For the rate constant 4 this
 is 110209.71 ms/(96 dB) * 0.136 dB/iter * 8333.333 cycles/ms = 1301087
-cycles/iter. In hex, this is 0x13DA5F, i.e. a 21 bit constant.
+cycles/iter, which fits with 21 bits.
 
 So the attenuation cycle (shift 6 and subtract) will be applied once every this
 many clock cycles, and that will lead to an attenuation rate corresponding to
@@ -243,27 +238,14 @@ half that number of clock cycles.
 A rate constant of just one higher is achieved by dividing the required clock
 cycle delay by 2^0.25. This will be implemented by having a total of four
 different delay constants, corresponding to each of the four possible factors
-of 2^0.25. The four constants are:
-
-| rate mod 4 | constant |
-| ---------- | -------- |
-|      0     | 0x13DA5F |
-|      1     | 0x10B1BF |
-|      2     | 0x0E09C7 |
-|      3     | 0x0BCDFF |
-
-### Output volume
-Checking the YM2151 emulator shows that a single sine-wave at no attenuation
-has an output range of +/- 8191, which is a factor of 4 less than the maximum.
-This is confirmed by analyzing in audacity, which shows an output power
-amplitude of -12 dB.
-This kind of makes sense, because otherwise, as soon as two channels becomes
-active, there would be severe distortion due to clipping.
-
-## TODO
-Rewrite src/get\_config.vhd to make use of BRAM with byte-wide write enables.
+of 2^0.25.
 
 ## Attack rate
 Measuring using the emulator gives an attack time (from -96 dB to 0 dB) of
 approx 390 ms, when using an attack rate of 7 and a key note of $6A.
+
+## TODO
+* Do some more work on the tutorial.
+* Add key scaling to the rate calculations.
+* Add combining within a singla channel (the connection register).
 
