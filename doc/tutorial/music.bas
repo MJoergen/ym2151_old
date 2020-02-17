@@ -50,10 +50,9 @@
 1580 GOTO 1510
 
 1600 REM THIS PLAYS THE NOTE IN N$ ON CHANNEL C.
-1605 PRINT "C=";C,"N=";N$
 1610 K=ASC(N$)-ASC("A")
 1611 O=ASC(MID$(N$,2))-ASC("0")
-1615 PRINT "K=";K,"O=";O
+1612 IF K=2 THEN O=O-1
 1620 POKE $9FE0, $08: POKE $9FE1, C             : REM KEY OFF
 1630 POKE $9FE0, $28+C: POKE $9FE1, O*16+N(K)   : REM SET KEY CODE
 1640 POKE $9FE0, $08: POKE $9FE1, C+8           : REM KEY ON
@@ -67,63 +66,63 @@
 2100 REM TWINKLE, 
 
 2100 REM TWINKLE, TWINKLE LITTLE STAR. (C C F C)
-2110 DATA "C4", "C3", "",   ""
-2120 DATA "C4", "",   "E4", "G4"
-2130 DATA "G5", "C3", "",   ""
-2140 DATA "G5", "",   "E4", "G4"
-2150 DATA "A5", "F4", "",   ""
-2160 DATA "A5", "",   "A4", "C4"
-2170 DATA "G5", "C3", "",   ""
-2180 DATA "",   "",   "E4", "G4"
+2110 DATA "C5", "C4", "E4", "G4"
+2120 DATA "C5", "",   "",   ""
+2130 DATA "G5", "C4", "E4", "G4"
+2140 DATA "G5", "",   "",   ""
+2150 DATA "A5", "F4", "A4", "C5"
+2160 DATA "A5", "",   "",   ""
+2170 DATA "G5", "C4", "E4", "G4"
+2180 DATA "",   "",   "",   ""
 
 2200 REM HOW I WONDER WHAT YOU ARE. (F C G C)
-2210 DATA "F5", "F4", "",   ""
-2220 DATA "F5", "",   "A4", "C4"
-2230 DATA "E5", "C3", "",   ""
-2240 DATA "E5", "",   "E4", "G4"
-2250 DATA "D5", "G4", "",   ""
-2260 DATA "D5", "",   "B4", "D4"
-2270 DATA "C4", "C3", "",   ""
-2280 DATA "",   "",   "E4", "G4"
+2210 DATA "F5", "F4", "A4", "C5"
+2220 DATA "F5", "",   "",   ""
+2230 DATA "E5", "C4", "E4", "G4"
+2240 DATA "E5", "",   "",   ""
+2250 DATA "D5", "G4", "B4", "D5"
+2260 DATA "D5", "",   "",   ""
+2270 DATA "C5", "C4", "E4", "G4"
+2280 DATA "",   "",   "",   ""
 
 2300 REM UP ABOVE THE WORLD SO HIGH, (C F C G)
-2310 DATA "G5", "C3", "",   ""
-2320 DATA "G5", "",   "E4", "G4"
-2330 DATA "F5", "F4", "",   ""
-2340 DATA "F5", "",   "A4", "C4"
-2350 DATA "E5", "C3", "",   ""
-2360 DATA "E5", "",   "E4", "G4"
-2370 DATA "D5", "G4", "",   ""
-2380 DATA "",   "",   "B4", "D4"
+2310 DATA "G5", "C4", "E4", "G4"
+2320 DATA "G5", "",   "",   ""
+2330 DATA "F5", "F4", "A4", "C5"
+2340 DATA "F5", "",   "",   ""
+2350 DATA "E5", "C4", "E4", "G4"
+2360 DATA "E5", "",   "",   ""
+2370 DATA "D5", "G4", "B4", "D5"
+2380 DATA "",   "",   "",   ""
 
 2400 REM LIKE A DIAMOND IN THE SKY. (C F C G)
-2410 DATA "G5", "C3", "",   ""
-2420 DATA "G5", "",   "E4", "G4"
-2430 DATA "F5", "F4", "",   ""
-2440 DATA "F5", "",   "A4", "C4"
-2450 DATA "E5", "C3", "",   ""
-2460 DATA "E5", "",   "E4", "G4"
-2470 DATA "D5", "G4", "",   ""
-2480 DATA "",   "",   "B4", "D4"
+2410 DATA "G5", "C4", "E4", "G4"
+2420 DATA "G5", "",   "",   ""
+2430 DATA "F5", "F4", "A4", "C5"
+2440 DATA "F5", "",   "",   ""
+2450 DATA "E5", "C4", "E4", "G4"
+2460 DATA "E5", "",   "",   ""
+2470 DATA "D5", "G4", "B4", "D5"
+2480 DATA "",   "",   "",   ""
 
 2500 REM TWINKLE, TWINKLE LITTLE STAR. (C C F C)
-2510 DATA "C4", "C3", "",   ""
-2520 DATA "C4", "",   "E4", "G4"
-2530 DATA "G5", "C3", "",   ""
-2540 DATA "G5", "",   "E4", "G4"
-2550 DATA "A5", "F4", "",   ""
-2560 DATA "A5", "",   "A4", "C4"
-2570 DATA "G5", "C3", "",   ""
-2580 DATA "",   "",   "E4", "G4"
+2510 DATA "C5", "C4", "E4", "G4"
+2520 DATA "C5", "",   "",   ""
+2530 DATA "G5", "C4", "E4", "G4"
+2540 DATA "G5", "",   "",   ""
+2550 DATA "A5", "F4", "A4", "C5"
+2560 DATA "A5", "",   "",   ""
+2570 DATA "G5", "C4", "E4", "G4"
+2580 DATA "",   "",   "",   ""
 
 2600 REM HOW I WONDER WHAT YOU ARE. (F C G C)
-2610 DATA "F5", "F4", "",   ""
-2620 DATA "F5", "",   "A4", "C4"
-2630 DATA "E5", "C3", "",   ""
-2640 DATA "E5", "",   "E4", "G4"
-2650 DATA "D5", "G4", "",   ""
-2660 DATA "D5", "",   "B4", "D4"
-2670 DATA "C4", "C3", "",   ""
-2680 DATA "",   "",   "E4", "G4"
+2610 DATA "F5", "F4", "A4", "C5"
+2620 DATA "F5", "",   "",   ""
+2630 DATA "E5", "C4", "E4", "G4"
+2640 DATA "E5", "",   "",   ""
+2650 DATA "D5", "G4", "B4", "D5"
+2660 DATA "D5", "",   "",   ""
+2670 DATA "C5", "C4", "E4", "G4"
+2680 DATA "",   "",   "",   ""
 
 2700 DATA "X": REM INDICATE END OF MUSIC
