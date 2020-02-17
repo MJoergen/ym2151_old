@@ -19,9 +19,9 @@ generator.
 
 In the following each of these parts will be described briefly.
 
-* [Episode 1](Episode 1)
-* [Episode 2](Episode 2)
-* [Episode 3](Episode 3)
+* [Episode 1](Episode_1)
+* [Episode 2](Episode_2)
+* [Episode 3](Episode_3)
 
 
 =====================================================================
