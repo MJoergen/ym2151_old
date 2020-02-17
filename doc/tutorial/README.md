@@ -22,22 +22,21 @@ In the following each of these parts will be described briefly.
 ## Episode 1 - making a single constant sine wave
 
 In this first episode we will learn how to select different notes to play.
-This will be the "Hello World" for the YM2151.
+This will be the "Hello World" for the YM2151!
 
-### Communicating with the YM2151.
-The YM2151 uses two I/O ports for communication, $9FE0 and $9FE1. The YM2151
-internally has a 256-byte virtual memory map. To write a value to the YM2151,
-first the register address must be written to $9FE0, and then the register value
-must be written to $9FE1.
+### Communicating with the YM2151 on the Commander X16.
+The Commander X16 assigns two I/O ports for communicating with the YM2151:
+$9FE0 and $9FE1. The YM2151 internally has a 256-byte virtual memory map. To
+write a value to the YM2151, first the register address must be written to
+$9FE0, and then the register value must be written to $9FE1.
 
 For instance, the following sequence
 ```
 POKE $9FE0, $28: POKE $9FE1, $4A
 ```
-writes the register value $4A to the register address $28. This particular
-command instructs the YM2151 to play the A4 note, which corresponds to 440 Hz.
+writes the value $4A to the virtual register address $28.
 
-### Configuring the YM2151.
+### Configuring channel 0 to play a simple sine save.
 As noted in the introduction the waveform generator and envelope generator must
 be configured before the YM2151 will output any sounds. The bare minimum is
 the following sequence of commands, which configures channel 0 to generate
@@ -73,32 +72,39 @@ The semitone selector is encoded as follows:
 |   B   |   13   |
 |   C   |   14   |
 
-The tone A4 (frequency of 440 Hz) is thus achieved by using the values 4 for the
-octave selector and 10 for the semitone selector.  This corresponds to writing
-the value $4A to the register $28, which is achieved by the following command:
+The tone A4 (frequency of 440 Hz) is achieved by using the value 4 for the
+octave selector and the value 10 for the semitone selector.  This corresponds
+to writing the value $4A to the register $28, which is achieved by the
+following command:
 ```
 POKE $9FE0, $28: POKE $9FE1, $4A
 ```
 
-To play the slightly higer pitched E5 note, use the command:
+To play the slightly higher pitched E5 note, use the command:
 ```
 POKE $9FE0, $28: POKE $9FE1, $54
 ```
 
-## Episode 2 - Configuring the ADSR envelope.
+All this is shown in the BASIC source file [tutorial1.bas](tutorial1.bas)
+
+Now you can play individual notes on the YM2151!
+
+## Episode 2 - Amplitude modulation
 Each channel has an associated envelope generator that controls the amplitude
 modulation of the output.
 
-The waveform is characterized by the following five parameters.
-* Attack rate (AR)
-* Decay rate (D1R)
-* Sustain level (D1L)
-* Sustain rate (D2R)
-* Release rate (RR)
-as well as the events "Key On" and "Key Off".
+The waveform (also called "ADSR envelope") is characterized by the following
+five parameters:
+* Attack rate (bits 4-0 of register address $80)
+* Decay rate (bits 4-0 of register address $A0)
+* Sustain attenuation (bits 7-4 of register address $E0)
+* Sustain rate (bits 4-0 of register address $C0)
+* Release rate (bits 3-0 of register address $E0)
 
-The first four parameters control the envelope after a "Key On" event, while the
-last parameter controls the envelope after a "Key Off" event.
+as well as the events "Key On" and "Key Off" (bit 3 of register address $08).
+
+The first four parameters control the envelope after a "Key On" event, while
+the last parameter controls the envelope after a "Key Off" event.
 
 ### ADSR envelope
 When a "Key On" event is issued the envelope generated consists of the
@@ -106,24 +112,75 @@ following three phases:
 1. "Attack phase" : The amplitude increases linearly up to the maximum at a
 rate given by the "Attack Rate" parameter.
 2. "Decay phase" :  The amplitude decreases exponentially at a rate given by
-"Decay Rate" down to the level given by "Sustain Level".
+"Decay Rate" until the attenuation reaches the level given by "Sustain
+attenuation".
 3. "Sustain phase" : The amplitude decreases further at a rate given by
-"Sustain Rate".  When a "Key Off" event is issued the envelope enters the last
-phase:
+"Sustain Rate".
+
+When a "Key Off" event is issued the envelope enters the last phase:
 4. "Release phase" : The amplitude decreases at a rate given by "Release Rate".
 
 To get a square envelope (i.e. maximum volume right after "Key On", and no
 output right after "Key Off"), the following values suffice: Writing the value
-$1F to register $80 (Maximum Attack Rate), and the value $FF to the register
-$E0 (Maximum Release Rate, and Maximum Decay Attentuation).
+$1F to register $80 (maximum Attack Rate), and the value $FF to the register
+$E0 (maximum Release Rate, and maximum Sustain Attentuation).
+```
+POKE $9FE0, $80: POKE $9FE1, $1F
+POKE $9FE0, $E0: POKE $9FE1, $FF
+```
+Those were exactly the values used in Episode 1 of the tutorial.
+
+To send the "Key On" event write the value $08 to address $08:
+```
+POKE $9FE0, $08: POKE $9FE1, $08
+```
+
+To send the "Key Off" event write the value $00 to address $08:
+```
+POKE $9FE0, $08: POKE $9FE1, $00
+```
 
 To get a sound that more closely resembles a string instrument, where the
-volume of the note slowly decays, one can add a first decay rate of $0A to the
+volume of the note slowly decays, one can add a Decay Rate of $0A to the
 settings. This corresponds to writing the value $0A to register $A0.
+```
+POKE $9FE0, $A0: POKE $9FE1, $0A
+```
 
-The "Key On" event is triggered by writing the value $08 to the register $08.
-The "Key Off" event is triggered by writing the value $00 to the register $08.
+All this is shown in the BASIC source file [tutorial2.bas](tutorial2.bas)
 
+
+## Episode 3 - Controlling multiple channels
+The YM2151 has eight independent channels (numbered 0 - 7), but the addressing
+of these channels is somewhat convoluted. For most registers the lowest three
+address bits determine the channel number. So for instance, the Key Code selector
+for the eight channels are located in addresses $28 to $2F.
+
+The one major difference is the Key On/Off register, where it is bits 2-0 of
+the *value* that determines the channel. The register address is always the
+same, i.e. $08.  So to send a Key On event to channel 1 you must write the
+value $09 to register $08.
+
+In this episode I will show a little program that can play a simple tune on the
+YM2151.  The idea with this program is that it should be ease to modify for
+your own needs.
+
+The program consists of two parts: Initialization and Musical Score. We'll
+discuss each of these in the following:
+
+### Initialization.
+So far we have considered the following registers for initializing a channel:
+* $2x : Waveform configuration. Set to $C7 for now.
+* $8x : Attack Rate.
+* $Ax : Decay Rate.
+* $Cx : Sustain Rate.
+* $Ex : Sustain Level and Release Rate.
+
+where the x is the channel number 0-7.
+
+
+
+Furthermore, the overall volume of the channel is controlled by the "Total level".
 
 ### The waveform generator
 The timbre of the tone is controlled by four sine wave generators that can be
