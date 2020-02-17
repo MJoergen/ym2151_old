@@ -1,4 +1,4 @@
-# Episode 1 - making a single constant sine wave
+# Episode 1 - Hello World!
 
 In this first episode we will learn how to select different notes to play.
 This will be the "Hello World" for the YM2151!
@@ -13,7 +13,7 @@ For instance, the following sequence
 ```
 POKE $9FE0, $28: POKE $9FE1, $4A
 ```
-writes the value $4A to the virtual register address $28.
+writes the value $4A to the virtual register address $28 within the YM2151..
 
 ## Configuring channel 0 to play a simple sine save.
 As noted in the introduction the waveform generator and envelope generator must
@@ -32,7 +32,7 @@ tutorial.  In this episode, we will focus on selecting which note to play.
 ## The note selector.
 The key (base frequency) is made up of an octave selector (bits 6-4 of register
 $28) and a semitone selector (bits 3-0 of register $28).  The chip supports 8
-octaves, with 12 semitones within each octave.
+octaves with 12 semitones within each octave.
 
 The semitone selector is encoded as follows:
 

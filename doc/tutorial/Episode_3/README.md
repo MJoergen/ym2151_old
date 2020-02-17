@@ -1,4 +1,5 @@
-# Episode 3 - Controlling multiple channels
+# Episode 3 - Playing music!
+In this episode we will be controlling multiple channels simultaneously.
 The YM2151 has eight independent channels (numbered 0 - 7), but the addressing
 of these channels is somewhat convoluted. For most registers the lowest three
 address bits determine the channel number. So for instance, the Key Code selector
@@ -9,10 +10,10 @@ the *value* that determines the channel. The register address is always the
 same, i.e. $08.  So to send a Key On event to channel 1 you must write the
 value $09 to register $08.
 
-In this episode I will show a little [program](music.bas) that can play a
+In this episode I will show a little [program](tutorial3.bas) that can play a
 simple tune on the YM2151 using four channels.  One channel is for the melody
 and the other three channels are for the accompaning chord. The idea with this
-program is that it should be ease to modify for your own needs.
+program is that it should be easy to modify for your own needs.
 
 The program consists of two parts: Initialization and Musical Score. We'll
 discuss each of these in the following:
@@ -40,9 +41,8 @@ The musical score is written in DATA statements in lines 2000-2700. To make it
 easy to read and modify the music, I've chosen the following representation:
 * Each line consists of the notes to play for each of the four channels.
 * Eight lines represent one bar of the music.
-* A note is represented in
-  [https://en.wikipedia.org/wiki/Scientific_pitch_notation](scientific pitch
-  notation).
+* A note is represented in [scientific pitch
+  notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation)
 * An empty string means the note continues from the previous line.
 
 The above representation requires some processing to convert it into equivalent
