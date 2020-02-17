@@ -2,24 +2,13 @@
 20 REM IT DEMONSTRATES HOW TO PLAY A SIMPLE TUNE WITH MULTIPLE
 30 REM SIMULTANEOUS CHANNELS.
 
-90 NT=TI+2
-100 WHILE TI<>NT THEN GOTO 100
-110 FOR C=0 TO 3
-120 READ N$
-130 IF N$="X" THEN END
-140 IF N$<>"" THEN GOSUB 400
-150 NEXT C
-160 NT=NT+10
-170 GOTO 100
-
-400 REM THIS PLAYS THE NOTE IN N$ ON CHANNEL C.
-410 K=VAL(N$(0)):O=VAL(N$(1))
-490 RETURN
+40 GOSUB 800  : REM INITIALIZE CHANNELS
+50 GOSUB 1400 : REM INITIALIZE SEMITONE TABLE
+60 GOSUB 1500 : REM PLAY MUSIC
+70 END
 
 
-
-
-800 REM INITIALIZE THE CHANNELS
+800 REM INITIALIZE ALL THE CHANNELS
 810 FOR C=0 TO 3
 820 GOSUB 900
 830 NEXT C
@@ -42,6 +31,34 @@
 1300 REM INITIALIZE CHANNEL 3
 1310 DATA $C7, $1F, $0A, $00, $FF
 
+1400 REM INITIALIZE SEMITONE TABLE
+1410 DATA 10, 13, 14, 1, 4, 5, 8
+1420 DIM N(7)
+1430 FOR I=0 TO 6
+1440 READ N(I)
+1450 NEXT I
+1460 RETURN
+
+1500 NT=TI+2
+1510 IF TI<>NT THEN GOTO 1510
+1520 FOR C=0 TO 3
+1530 READ N$
+1540 IF N$="X" THEN RETURN
+1550 IF N$<>"" THEN GOSUB 1600
+1560 NEXT C
+1570 NT=NT+30
+1580 GOTO 1510
+
+1600 REM THIS PLAYS THE NOTE IN N$ ON CHANNEL C.
+1605 PRINT "C=";C,"N=";N$
+1610 K=ASC(N$)-ASC("A")
+1611 O=ASC(MID$(N$,2))-ASC("0")
+1615 PRINT "K=";K,"O=";O
+1620 POKE $9FE0, $08: POKE $9FE1, C             : REM KEY OFF
+1630 POKE $9FE0, $28+C: POKE $9FE1, O*16+N(K)   : REM SET KEY CODE
+1640 POKE $9FE0, $08: POKE $9FE1, C+8           : REM KEY ON
+1690 RETURN
+
 2000 REM THE MUSICAL SCORE STARTS HERE.
 2010 REM FOUR VALUES IN EACH LINE, ONE FOR EACH CHANNEL.
 2020 REM EACH LINE CORRESPONDS TO 1/8 OF A BAR.
@@ -50,63 +67,63 @@
 2100 REM TWINKLE, 
 
 2100 REM TWINKLE, TWINKLE LITTLE STAR. (C C F C)
-2110 DATA "C5", "C4", "",   ""
-2120 DATA "",   "",   "E4", "G4"
-2130 DATA "G5", "C4", "",   ""
-2140 DATA "",   "",   "E4", "G4"
+2110 DATA "C4", "C3", "",   ""
+2120 DATA "C4", "",   "E4", "G4"
+2130 DATA "G5", "C3", "",   ""
+2140 DATA "G5", "",   "E4", "G4"
 2150 DATA "A5", "F4", "",   ""
-2160 DATA "",   "",   "A4", "C4"
-2170 DATA "G5", "C4", "",   ""
+2160 DATA "A5", "",   "A4", "C4"
+2170 DATA "G5", "C3", "",   ""
 2180 DATA "",   "",   "E4", "G4"
 
 2200 REM HOW I WONDER WHAT YOU ARE. (F C G C)
 2210 DATA "F5", "F4", "",   ""
-2220 DATA "",   "",   "A4", "C4"
-2230 DATA "E5", "C4", "",   ""
-2240 DATA "",   "",   "E4", "G4"
+2220 DATA "F5", "",   "A4", "C4"
+2230 DATA "E5", "C3", "",   ""
+2240 DATA "E5", "",   "E4", "G4"
 2250 DATA "D5", "G4", "",   ""
-2260 DATA "",   "",   "B4", "D4"
-2270 DATA "C5", "C4", "",   ""
+2260 DATA "D5", "",   "B4", "D4"
+2270 DATA "C4", "C3", "",   ""
 2280 DATA "",   "",   "E4", "G4"
 
 2300 REM UP ABOVE THE WORLD SO HIGH, (C F C G)
-2310 DATA "G5", "C4", "",   ""
-2320 DATA "",   "",   "E4", "G4"
+2310 DATA "G5", "C3", "",   ""
+2320 DATA "G5", "",   "E4", "G4"
 2330 DATA "F5", "F4", "",   ""
-2340 DATA "",   "",   "A4", "C4"
-2350 DATA "E5", "C4", "",   ""
-2360 DATA "",   "",   "E4", "G4"
+2340 DATA "F5", "",   "A4", "C4"
+2350 DATA "E5", "C3", "",   ""
+2360 DATA "E5", "",   "E4", "G4"
 2370 DATA "D5", "G4", "",   ""
 2380 DATA "",   "",   "B4", "D4"
 
 2400 REM LIKE A DIAMOND IN THE SKY. (C F C G)
-2410 DATA "G5", "C4", "",   ""
-2420 DATA "",   "",   "E4", "G4"
+2410 DATA "G5", "C3", "",   ""
+2420 DATA "G5", "",   "E4", "G4"
 2430 DATA "F5", "F4", "",   ""
-2440 DATA "",   "",   "A4", "C4"
-2450 DATA "E5", "C4", "",   ""
-2460 DATA "",   "",   "E4", "G4"
+2440 DATA "F5", "",   "A4", "C4"
+2450 DATA "E5", "C3", "",   ""
+2460 DATA "E5", "",   "E4", "G4"
 2470 DATA "D5", "G4", "",   ""
 2480 DATA "",   "",   "B4", "D4"
 
 2500 REM TWINKLE, TWINKLE LITTLE STAR. (C C F C)
-2510 DATA "C5", "C4", "",   ""
-2520 DATA "",   "",   "E4", "G4"
-2530 DATA "G5", "C4", "",   ""
-2540 DATA "",   "",   "E4", "G4"
+2510 DATA "C4", "C3", "",   ""
+2520 DATA "C4", "",   "E4", "G4"
+2530 DATA "G5", "C3", "",   ""
+2540 DATA "G5", "",   "E4", "G4"
 2550 DATA "A5", "F4", "",   ""
-2560 DATA "",   "",   "A4", "C4"
-2570 DATA "G5", "C4", "",   ""
+2560 DATA "A5", "",   "A4", "C4"
+2570 DATA "G5", "C3", "",   ""
 2580 DATA "",   "",   "E4", "G4"
 
 2600 REM HOW I WONDER WHAT YOU ARE. (F C G C)
 2610 DATA "F5", "F4", "",   ""
-2620 DATA "",   "",   "A4", "C4"
-2630 DATA "E5", "C4", "",   ""
-2640 DATA "",   "",   "E4", "G4"
+2620 DATA "F5", "",   "A4", "C4"
+2630 DATA "E5", "C3", "",   ""
+2640 DATA "E5", "",   "E4", "G4"
 2650 DATA "D5", "G4", "",   ""
-2660 DATA "",   "",   "B4", "D4"
-2670 DATA "C5", "C4", "",   ""
+2660 DATA "D5", "",   "B4", "D4"
+2670 DATA "C4", "C3", "",   ""
 2680 DATA "",   "",   "E4", "G4"
 
 2700 DATA "X": REM INDICATE END OF MUSIC
