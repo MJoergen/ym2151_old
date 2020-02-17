@@ -248,4 +248,7 @@ approx 390 ms, when using an attack rate of 7 and a key note of $6A.
 * Do some more work on the tutorial.
 * Add key scaling to the rate calculations.
 * Add combining within a singla channel (the connection register).
+* Check Sustain Level, and implement Total Level.
+* Implement Feedback.
+
 
