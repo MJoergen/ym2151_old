@@ -125,30 +125,32 @@ begin
       wait for 35 us;
       wait until clk_s = '1';
 
-      write(X"28", X"4A");    -- Key code
-      write(X"80", X"0B");    -- Attack rate (96 dB pr 249 ms)
-      write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
-      write(X"08", X"08");    -- Key ON
+--      write(X"28", X"4A");    -- Key code
+--      write(X"80", X"0B");    -- Attack rate (96 dB pr 249 ms)
+--      write(X"A0", X"0B");    -- Decay rate (96 dB pr 3444 ms)
+--      write(X"08", X"08");    -- Key ON
 
 --      write(X"29", X"7A");    -- Key code
 --      write(X"81", X"1F");    -- Attack rate
 --      write(X"08", X"09");    -- Key ON
 
---      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
---
---      cpu_loop : while not endfile(input_file) loop
---
---         addr_v := read_8_bits(input_file); 
---         data_v := read_8_bits(input_file); 
---
---         if addr_v = X"02" then
---            wait for to_integer(data_v) * 1 us;
---         else
---            write(addr_v, data_v);
---         end if;
---      end loop cpu_loop;
+--      wait for 5000 us;
 
-      wait for 5000 us;
+      file_open(input_file, C_INPUT_FILENAME, READ_MODE);
+
+      cpu_loop : while not endfile(input_file) loop
+
+         addr_v := read_8_bits(input_file);
+         data_v := read_8_bits(input_file);
+
+         if addr_v = X"00" then
+            report "Waiting for " & to_string(to_integer(data_v)*100) & " us";
+            wait for to_integer(data_v) * 100 us;
+         else
+            write(addr_v, data_v);
+         end if;
+      end loop cpu_loop;
+
 
 
       -----------------------------------------------

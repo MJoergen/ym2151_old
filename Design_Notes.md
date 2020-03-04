@@ -13,6 +13,9 @@ approach the output bit is a single full-height digital pulse, but with a width
 proportional to the analog value. The low-pass filter will then smooth out this
 digital signal, essentially removing all the high frequency components.
 
+The YM2151 chip itself works entirely differently. It has a serial output, with
+a sampling frequency of 3.579545 MHz / 2 / 32 = 55.930 kHz.
+
 ## Pulse Width Modulation
 
 The PWM module will take as input an analog value, represented as a fraction
