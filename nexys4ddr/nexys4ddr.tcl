@@ -20,6 +20,7 @@ read_vhdl -vhdl2008 { \
    nexys4ddr/pwm.vhd }
 read_xdc nexys4ddr/nexys4ddr.xdc
 synth_design -top nexys4ddr -part xc7a100tcsg324-1 -flatten_hierarchy none
+source nexys4ddr/debug.tcl
 opt_design
 place_design
 route_design
