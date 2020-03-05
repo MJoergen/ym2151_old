@@ -18,23 +18,24 @@ architecture synthesis of ctrl is
    signal rom_addr_d : std_logic_vector(11 downto 0);
    signal rom_data_s : std_logic_vector(7 downto 0);
 
-   signal cnt_r : std_logic_vector(15 downto 0);
+   signal cnt_r      : std_logic_vector(15 downto 0);
 
-   signal addr_r    : std_logic_vector(0 downto 0);
-   signal wr_en_r   : std_logic;
-   signal wr_data_r : std_logic_vector(7 downto 0);
+   signal addr_r     : std_logic_vector(0 downto 0);
+   signal wr_en_r    : std_logic;
+   signal wr_data_r  : std_logic_vector(7 downto 0);
 
    -- Debug
-   constant DEBUG_MODE                   : boolean := true; -- TRUE OR FALSE
+   constant DEBUG_MODE                : boolean := true;
 
-   attribute mark_debug                  : boolean;
-   attribute mark_debug of rom_addr_r : signal is DEBUG_MODE;
-   attribute mark_debug of rom_addr_d : signal is DEBUG_MODE;
-   attribute mark_debug of rom_data_s : signal is DEBUG_MODE;
-   attribute mark_debug of cnt_r      : signal is DEBUG_MODE;
+   attribute mark_debug               : boolean;
    attribute mark_debug of addr_r     : signal is DEBUG_MODE;
-   attribute mark_debug of wr_en_r    : signal is DEBUG_MODE;
+   attribute mark_debug of cnt_r      : signal is DEBUG_MODE;
+   attribute mark_debug of rom_addr_d : signal is DEBUG_MODE;
+   attribute mark_debug of rom_addr_r : signal is DEBUG_MODE;
+   attribute mark_debug of rom_data_s : signal is DEBUG_MODE;
+   attribute mark_debug of rst_i      : signal is DEBUG_MODE;
    attribute mark_debug of wr_data_r  : signal is DEBUG_MODE;
+   attribute mark_debug of wr_en_r    : signal is DEBUG_MODE;
 
 begin
 
