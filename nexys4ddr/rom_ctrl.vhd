@@ -9,7 +9,7 @@ entity rom_ctrl is
    );
    port (
       clk_i  : in  std_logic;
-      addr_i : out std_logic_vector(11 downto 0);
+      addr_i : in  std_logic_vector(11 downto 0);
       data_o : out std_logic_vector(7 downto 0)
    );
 end rom_ctrl;
@@ -28,7 +28,6 @@ architecture synthesis of rom_ctrl is
       for i in mem_t'range loop
          readline (RomFile, RomFileLine);
          hread (RomFileLine, ROM(i));
-         report to_hstring(ROM(i));
          if endfile(RomFile) then
             return ROM;
          end if;
