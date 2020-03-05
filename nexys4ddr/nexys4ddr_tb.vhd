@@ -8,26 +8,46 @@ use ieee.numeric_std_unsigned.all;
 entity nexys4ddr_tb is
 end nexys4ddr_tb;
 
-architecture sim of nexys4ddr_tb is
+architecture simulation of nexys4ddr_tb is
 
-   signal clk_s : std_logic;
-   signal led_s : std_logic_vector(15 downto 0);
+   signal sys_clk_s  : std_logic;
+   signal sys_rstn_s : std_logic;
+
+   signal aud_pwm_s  : std_logic;
+   signal aud_sd_s   : std_logic;
 
 begin
 
-   p_clk : process
+   -----------------------------
+   -- Generate clock and reset
+   -----------------------------
+
+   -- Generate clock @ 100 MHz
+   p_sys_clk : process
    begin
-      clk_s <= '1', '0' after 5 ns;
-      wait for 10 ns;  -- 100 MHz
-   end process p_clk;
+      sys_clk_s <= '1', '0' after 5 ns;
+      wait for 10 ns;
+   end process p_sys_clk;
+
+   -- Generate reset
+   p_sys_rstn : process
+   begin
+      sys_rstn_s <= '0', '1' after 5000 ns;
+      wait;
+   end process p_sys_rstn;
 
 
-   -- Instantiate DUT
+   ----------------------------------------------------------------
+   -- Instantiate Nexys 4 DDR
+   ----------------------------------------------------------------
+
    i_nexys4ddr : entity work.nexys4ddr
       port map (
-         clk_i => clk_s,
-         led_o => led_s
-      );
+         sys_clk_i  => sys_clk_s,
+         sys_rstn_i => sys_rstn_s,
+         aud_pwm_o  => aud_pwm_s,
+         aud_sd_o   => aud_sd_s
+      ); -- i_nexys4ddr
 
-end architecture sim;
+end architecture simulation;
 
