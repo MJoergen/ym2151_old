@@ -3,6 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
 
 entity ctrl is
+   generic (
+      G_INIT_FILE : string
+   );
    port (
       clk_i     : in  std_logic;
       rst_i     : in  std_logic;
@@ -44,7 +47,7 @@ begin
 
    i_rom_ctrl : entity work.rom_ctrl
       generic map (
-         G_INIT_FILE => "nexys4ddr/ctrl.txt"
+         G_INIT_FILE => G_INIT_FILE
       )
       port map (
          clk_i  => clk_i,

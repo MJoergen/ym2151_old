@@ -40,7 +40,7 @@ architecture synthesis of clk is
    signal clkinstopped_unused    : std_logic;
 
    signal ym2151_clk_s           : std_logic;
-   signal ym2151_cnt_r           : std_logic_vector(4 downto 0);
+   signal ym2151_cnt_r           : std_logic_vector(4 downto 0) := (others => '0');
 
 begin
 

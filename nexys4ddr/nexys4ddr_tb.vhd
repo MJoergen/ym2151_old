@@ -42,6 +42,9 @@ begin
    ----------------------------------------------------------------
 
    i_nexys4ddr : entity work.nexys4ddr
+      generic map (
+         G_INIT_FILE => "ctrl.txt"
+      )
       port map (
          sys_clk_i  => sys_clk_s,
          sys_rstn_i => sys_rstn_s,

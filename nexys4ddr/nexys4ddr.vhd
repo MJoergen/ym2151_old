@@ -6,6 +6,9 @@ use ieee.numeric_std_unsigned.all;
 -- directly to pins on the FPGA.
 
 entity nexys4ddr is
+   generic (
+      G_INIT_FILE : string := "nexys4ddr/ctrl.txt"
+   );
    port (
       sys_clk_i  : in    std_logic;    -- 100 MHz
       sys_rstn_i : in    std_logic;
@@ -66,6 +69,9 @@ begin
    ----------------------------------------------------------------
 
    i_ctrl : entity work.ctrl
+      generic map (
+         G_INIT_FILE => G_INIT_FILE
+      )
       port map (
          clk_i     => clk_s,
          rst_i     => rst_s,
