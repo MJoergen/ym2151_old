@@ -17,11 +17,14 @@ end ctrl;
 
 architecture synthesis of ctrl is
 
-   signal rom_addr_r : std_logic_vector(11 downto 0);
-   signal rom_addr_d : std_logic_vector(11 downto 0);
-   signal rom_data_s : std_logic_vector(7 downto 0);
+   signal rom_addr_r  : std_logic_vector(11 downto 0);
+   signal rom_addr_d  : std_logic_vector(11 downto 0);
+   signal rom_data_s  : std_logic_vector(7 downto 0);
+   signal rom_data_dd : std_logic_vector(7 downto 0);
 
-   signal cnt_r      : std_logic_vector(15 downto 0);
+   type STATE_t is (WAIT_ST, ADDR_ST, DATA_ST, STOP_ST);
+   signal state_r    : STATE_t;
+   signal cnt_r      : std_logic_vector(2 downto 0);
 
    signal addr_r     : std_logic_vector(0 downto 0);
    signal wr_en_r    : std_logic;
@@ -60,27 +63,52 @@ begin
    p_ctrl : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         rom_addr_d <= rom_addr_r;
-         addr_r     <= "0";
-         wr_en_r    <= '0';
-         wr_data_r  <= (others => '0');
+         rom_addr_d  <= rom_addr_r;
+         rom_data_dd <= rom_data_s;
+         addr_r      <= "0";
+         wr_en_r     <= '0';
+         wr_data_r   <= (others => '0');
 
-         if cnt_r = 0 then
-            if rom_addr_d = 0 then
-               cnt_r(15 downto 8) <= rom_data_s;
-            else
-               addr_r    <= "" & rom_addr_d(0);
-               wr_en_r   <= '1';
-               wr_data_r <= rom_data_s;
-            end if;
-            rom_addr_r <= rom_addr_r + 1;
-         else
-            cnt_r <= cnt_r - 1;
-         end if;
+         case state_r is
+            when WAIT_ST =>
+               if cnt_r = 0 then
+                  state_r    <= ADDR_ST;
+                  rom_addr_r <= rom_addr_r + 1;
+               else
+                  cnt_r <= cnt_r - 1;
+               end if;
+
+            when ADDR_ST =>
+               if rom_data_s /= 0 then
+                  addr_r     <= "0";
+                  wr_en_r    <= '1';
+                  wr_data_r  <= rom_data_s;
+               end if;
+               rom_addr_r <= rom_addr_r + 1;
+               state_r    <= DATA_ST;
+
+            when DATA_ST =>
+               if rom_data_dd /= 0 then
+                  addr_r     <= "1";
+                  wr_en_r    <= '1';
+                  wr_data_r  <= rom_data_s;
+                  rom_addr_r <= rom_addr_r + 1;
+                  state_r    <= ADDR_ST;
+               elsif rom_data_s /= 0 then
+                  cnt_r   <= rom_data_s(2 downto 0);
+                  state_r <= WAIT_ST;
+               else
+                  state_r <= STOP_ST;
+               end if;
+
+            when STOP_ST =>
+               null;
+         end case;
 
          if rst_i = '1' then
             rom_addr_r <= (others => '0');
-            cnt_r      <= (others => '0');
+            cnt_r      <= (others => '1');
+            state_r    <= WAIT_ST;
          end if;
       end if;
    end process p_ctrl;

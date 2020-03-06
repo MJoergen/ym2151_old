@@ -34,7 +34,7 @@ SAVE   = $(TB).gtkw
 sim: $(SRC) $(TB_SRC) ctrl.txt
 	ghdl -i --ieee=synopsys --std=08 --work=work $(SRC) $(TB_SRC)
 	ghdl -m --ieee=synopsys --std=08 -frelaxed-rules -P$(SIM_LIB) $(TB)
-	ghdl -r $(TB) $(GENERICS) --assert-level=error --wave=$(WAVE) --stop-time=10us
+	ghdl -r $(TB) $(GENERICS) --assert-level=error --wave=$(WAVE) --stop-time=40us
 	gtkwave $(WAVE) $(SAVE)
 
 
@@ -61,4 +61,5 @@ clean:
 	rm -rf nexys4ddr.dcp
 	rm -rf ctrl.txt
 	rm -rf nexys4ddr_tb.ghw
+	rm -rf work-obj08.cf
 

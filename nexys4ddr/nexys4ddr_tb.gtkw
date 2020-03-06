@@ -1,22 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Fri Mar  6 08:26:26 2020
+[*] Fri Mar  6 14:24:00 2020
 [*]
 [dumpfile] "/home/mfj/git/MJoergen/ym2151/nexys4ddr/nexys4ddr_tb.ghw"
-[dumpfile_mtime] "Fri Mar  6 08:25:03 2020"
-[dumpfile_size] 3155026
+[dumpfile_mtime] "Fri Mar  6 14:23:10 2020"
+[dumpfile_size] 11752532
 [savefile] "/home/mfj/git/MJoergen/ym2151/nexys4ddr/nexys4ddr_tb.gtkw"
 [timestart] 0
 [size] 1351 830
 [pos] -1 -1
-*-30.974394 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-32.583912 27431427954 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.nexys4ddr_tb.
 [treeopen] top.nexys4ddr_tb.i_nexys4ddr.
-[treeopen] top.nexys4ddr_tb.i_nexys4ddr.i_clk.
-[treeopen] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.
 [sst_width] 223
-[signals_width] 158
+[signals_width] 192
 [sst_expanded] 1
 [sst_vpaned_height] 375
 @800200
@@ -28,7 +26,7 @@ top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_en_o
 top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.addr_o[0]
 @22
 #{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[7:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[0]
-#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[15:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[15] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[14] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[13] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[12] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[11] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[10] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[9] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[8] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[0]
+#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[15:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[0]
 #{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[11:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[11] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[10] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[9] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[8] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[0]
 #{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[7:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[0]
 @1000200
