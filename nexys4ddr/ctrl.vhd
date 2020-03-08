@@ -24,7 +24,7 @@ architecture synthesis of ctrl is
 
    type STATE_t is (WAIT_ST, ADDR_ST, DATA_ST, STOP_ST);
    signal state_r    : STATE_t;
-   signal cnt_r      : std_logic_vector(2 downto 0);
+   signal cnt_r      : std_logic_vector(20 downto 0);
 
    signal addr_r     : std_logic_vector(0 downto 0);
    signal wr_en_r    : std_logic;
@@ -95,7 +95,7 @@ begin
                   rom_addr_r <= rom_addr_r + 1;
                   state_r    <= ADDR_ST;
                elsif rom_data_s /= 0 then
-                  cnt_r   <= rom_data_s(2 downto 0);
+                  cnt_r(20 downto 13) <= rom_data_s;
                   state_r <= WAIT_ST;
                else
                   state_r <= STOP_ST;
