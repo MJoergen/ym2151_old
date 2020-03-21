@@ -59,7 +59,9 @@ clean:
 	rm -rf $(TB)
 	rm -rf nexys4ddr.bit
 	rm -rf nexys4ddr.dcp
+	rm -rf nexys4ddr.ltx
 	rm -rf ctrl.txt
 	rm -rf nexys4ddr_tb.ghw
 	rm -rf work-obj08.cf
+	rm -rf usage_statistics_webtalk.*
 
