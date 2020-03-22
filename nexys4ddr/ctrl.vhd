@@ -31,7 +31,7 @@ architecture synthesis of ctrl is
    signal wr_data_r  : std_logic_vector(7 downto 0);
 
    -- Debug
-   constant DEBUG_MODE                : boolean := true;
+   constant DEBUG_MODE                : boolean := false;
 
    attribute mark_debug               : boolean;
    attribute mark_debug of addr_r     : signal is DEBUG_MODE;
