@@ -49,7 +49,7 @@ foreach c [array names clock_list] {
    ##################################################################
    # create ILA and connect its clock
    create_debug_core  $ila_inst        ila
-   set_property       C_DATA_DEPTH     2048 [get_debug_cores $ila_inst]
+   set_property       C_DATA_DEPTH     8192 [get_debug_cores $ila_inst]
    set_property       port_width 1     [get_debug_ports $ila_inst/clk]
    connect_debug_port $ila_inst/clk    $clk_net
    ##################################################################
