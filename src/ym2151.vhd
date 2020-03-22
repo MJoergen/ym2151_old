@@ -63,7 +63,7 @@ architecture synthesis of ym2151 is
    signal sum_r : std_logic_vector(C_PWM_WIDTH-1 downto 0);
 
    -- Debug
-   constant DEBUG_MODE           : boolean := true;
+   constant DEBUG_MODE           : boolean := false;
 
    attribute mark_debug          : boolean;
    attribute mark_debug of rst_i : signal is DEBUG_MODE;

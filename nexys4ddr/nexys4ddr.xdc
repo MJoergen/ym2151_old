@@ -9,7 +9,7 @@ set_property -dict { PACKAGE_PIN D12 IOSTANDARD LVCMOS33 } [get_ports { aud_sd_o
 # Clock definition
 create_clock -name sys_clk -period 10.00 [get_ports {sys_clk_i}];
 
-create_generated_clock -name ym2151_clk -source [get_pins {i_clk/i_mmcm_adv/CLKOUT0}] -divide_by 32 [get_pins {i_clk/ym2151_cnt_r_reg[4]/Q}];
+create_generated_clock -name ym2151_clk -source [get_pins {i_clk/i_mmcm_adv/CLKOUT0}] -divide_by 128 [get_pins {i_clk/pwm_cnt_r_reg[6]/Q}];
 
 # Configuration Bank Voltage Select
 set_property CFGBVS VCCO [current_design]

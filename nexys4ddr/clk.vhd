@@ -7,9 +7,9 @@ use unisim.vcomponents.all;
 
 entity clk is
    port (
-      sys_clk_i    : in  std_logic;   -- 100        MHz
-      ym2151_clk_o : out std_logic;   --   3.579545 MHz
-      pwm_clk_o    : out std_logic    -- 100        MHz
+      sys_clk_i    : in  std_logic;   -- 100     MHz
+      ym2151_clk_o : out std_logic;   --   3.578 MHz
+      pwm_clk_o    : out std_logic    -- 458     MHz
    );
 end clk;
 
@@ -18,9 +18,9 @@ architecture synthesis of clk is
    signal clkfbout_clk_wiz_0     : std_logic;
    signal clkfbout_buf_clk_wiz_0 : std_logic;
    signal clkfboutb_unused       : std_logic;
-   signal ym2151_clk_wiz_0       : std_logic;
    signal pwm_clk_wiz_0          : std_logic;
    signal clkout0b_unused        : std_logic;
+   signal clkout1_unused         : std_logic;
    signal clkout1b_unused        : std_logic;
    signal clkout2_unused         : std_logic;
    signal clkout2b_unused        : std_logic;
@@ -39,8 +39,8 @@ architecture synthesis of clk is
    signal clkfbstopped_unused    : std_logic;
    signal clkinstopped_unused    : std_logic;
 
-   signal ym2151_clk_s           : std_logic;
-   signal ym2151_cnt_r           : std_logic_vector(4 downto 0) := (others => '0');
+   signal pwm_clk_s              : std_logic;
+   signal pwm_cnt_r              : std_logic_vector(6 downto 0) := (others => '0');
 
 begin
 
@@ -57,16 +57,12 @@ begin
          COMPENSATION         => "ZHOLD",
          STARTUP_WAIT         => FALSE,
          DIVCLK_DIVIDE        => 5,
-         CLKFBOUT_MULT_F      => 55.125,
+         CLKFBOUT_MULT_F      => 57.250,
          CLKFBOUT_PHASE       => 0.000,
          CLKFBOUT_USE_FINE_PS => FALSE,
-         CLKOUT0_DIVIDE_F     => 9.625,     -- @ 114.545 MHz
+         CLKOUT0_DIVIDE_F     => 2.500,     -- @ 458 MHz
          CLKOUT0_PHASE        => 0.000,
          CLKOUT0_USE_FINE_PS  => FALSE,
-         CLKOUT1_DIVIDE       => 11,        -- @ 100 MHz
-         CLKOUT1_PHASE        => 0.000,
-         CLKOUT1_DUTY_CYCLE   => 0.500,
-         CLKOUT1_USE_FINE_PS  => FALSE,
          CLKIN1_PERIOD        => 10.0,
          REF_JITTER1          => 0.010
       )
@@ -74,9 +70,9 @@ begin
          -- Output clocks
          CLKFBOUT            => clkfbout_clk_wiz_0,
          CLKFBOUTB           => clkfboutb_unused,
-         CLKOUT0             => ym2151_clk_wiz_0,
+         CLKOUT0             => pwm_clk_wiz_0,
          CLKOUT0B            => clkout0b_unused,
-         CLKOUT1             => pwm_clk_wiz_0,
+         CLKOUT1             => clkout1_unused,
          CLKOUT1B            => clkout1b_unused,
          CLKOUT2             => clkout2_unused,
          CLKOUT2B            => clkout2b_unused,
@@ -125,28 +121,24 @@ begin
 
    clkout0_buf : BUFG
       port map (
-         I => ym2151_clk_wiz_0,
-         O => ym2151_clk_s
-      );
-
-   clkout1_buf : BUFG
-      port map (
          I => pwm_clk_wiz_0,
-         O => pwm_clk_o
+         O => pwm_clk_s
       );
 
-   p_ym2151_clk : process (ym2151_clk_s)
+   p_pwm_cnt : process (pwm_clk_s)
    begin
-      if rising_edge(ym2151_clk_s) then
-         ym2151_cnt_r <= ym2151_cnt_r + 1;
+      if rising_edge(pwm_clk_s) then
+         pwm_cnt_r <= pwm_cnt_r + 1;
       end if;
-   end process p_ym2151_clk;
+   end process p_pwm_cnt;
 
    clkout1a_buf : BUFG
       port map (
-         I => ym2151_cnt_r(4),
+         I => pwm_cnt_r(6),
          O => ym2151_clk_o
       );
+
+   pwm_clk_o <= pwm_clk_s;
 
 end synthesis;
 

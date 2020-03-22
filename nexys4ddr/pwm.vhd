@@ -18,6 +18,17 @@ end pwm;
 architecture synthesis of pwm is
 
    signal cnt_r : std_logic_vector(11 downto 0) := (others => '0');
+   signal val_r : std_logic_vector(11 downto 0) := (others => '0');
+   signal pwm_r : std_logic;
+
+   -- Debug
+   constant DEBUG_MODE           : boolean := false;
+
+   attribute mark_debug          : boolean;
+   attribute mark_debug of cnt_r : signal is DEBUG_MODE;
+   attribute mark_debug of val_i : signal is DEBUG_MODE;
+   attribute mark_debug of val_r : signal is DEBUG_MODE;
+   attribute mark_debug of pwm_r : signal is DEBUG_MODE;
 
 begin
 
@@ -30,6 +41,7 @@ begin
          -- Only count from 0x000 to 0xFFE.
          if and(cnt_v) = '1' then
             cnt_v := (others => '0');
+            val_r <= val_i;
          end if;
 
          cnt_r <= cnt_v;
@@ -39,11 +51,13 @@ begin
    p_pwm : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if val_i > cnt_r then
-            pwm_o <= '1';
+         if val_r > cnt_r then
+            pwm_r <= '1';
          else
-            pwm_o <= '0';
+            pwm_r <= '0';
          end if;
+
+         pwm_o <= pwm_r;
       end if;
    end process p_pwm;
 
