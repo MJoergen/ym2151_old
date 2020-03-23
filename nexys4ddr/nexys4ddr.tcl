@@ -1,7 +1,7 @@
 # This is a tcl command script for the Vivado tool chain
 read_vhdl -vhdl2008 { \
    nexys4ddr.vhd  \
-   clk.vhd  \
+   clk_rst.vhd  \
    ctrl.vhd  \
    rom_ctrl.vhd  \
    cdc.vhd \

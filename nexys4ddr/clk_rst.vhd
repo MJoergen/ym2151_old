@@ -5,15 +5,17 @@ use ieee.numeric_std_unsigned.all;
 library unisim;
 use unisim.vcomponents.all;
 
-entity clk is
+entity clk_rst is
    port (
       sys_clk_i    : in  std_logic;   -- 100     MHz
+      sys_rstn_i   : in  std_logic;
       ym2151_clk_o : out std_logic;   --   3.578 MHz
+      ym2151_rst_o : out std_logic;
       pwm_clk_o    : out std_logic    -- 458     MHz
    );
-end clk;
+end clk_rst;
 
-architecture synthesis of clk is
+architecture synthesis of clk_rst is
    -- Output clock buffering / unused connectors
    signal clkfbout_clk_wiz_0     : std_logic;
    signal clkfbout_buf_clk_wiz_0 : std_logic;
@@ -41,6 +43,9 @@ architecture synthesis of clk is
 
    signal pwm_clk_s              : std_logic;
    signal pwm_cnt_r              : std_logic_vector(5 downto 0) := (others => '0');
+
+   signal ym2151_clk_s           : std_logic;
+   signal ym2151_rst_r           : std_logic_vector(35 downto 0) := (others => '1'); 
 
 begin
 
@@ -135,10 +140,28 @@ begin
    clkout1a_buf : BUFG
       port map (
          I => pwm_cnt_r(5),
-         O => ym2151_clk_o
+         O => ym2151_clk_s
       );
 
-   pwm_clk_o <= pwm_clk_s;
+   pwm_clk_o    <= pwm_clk_s;
+   ym2151_clk_o <= ym2151_clk_s;
+
+
+   ----------------------------------------------------------------
+   -- Generate reset signal.
+   ----------------------------------------------------------------
+
+   p_ym2151_rst : process (ym2151_clk_s)
+   begin
+      if rising_edge(ym2151_clk_s) then
+         ym2151_rst_r <= ym2151_rst_r(34 downto 0) & "0";  -- Shift left one bit
+         if sys_rstn_i = '0' then
+            ym2151_rst_r <= (others => '1');
+         end if;
+      end if;
+   end process p_ym2151_rst;
+
+   ym2151_rst_o <= ym2151_rst_r(35);
 
 end synthesis;
 
