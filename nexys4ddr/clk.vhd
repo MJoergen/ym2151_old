@@ -40,7 +40,7 @@ architecture synthesis of clk is
    signal clkinstopped_unused    : std_logic;
 
    signal pwm_clk_s              : std_logic;
-   signal pwm_cnt_r              : std_logic_vector(6 downto 0) := (others => '0');
+   signal pwm_cnt_r              : std_logic_vector(5 downto 0) := (others => '0');
 
 begin
 
@@ -60,7 +60,7 @@ begin
          CLKFBOUT_MULT_F      => 57.250,
          CLKFBOUT_PHASE       => 0.000,
          CLKFBOUT_USE_FINE_PS => FALSE,
-         CLKOUT0_DIVIDE_F     => 2.500,     -- @ 458 MHz
+         CLKOUT0_DIVIDE_F     => 5.000,     -- @ 229 MHz
          CLKOUT0_PHASE        => 0.000,
          CLKOUT0_USE_FINE_PS  => FALSE,
          CLKIN1_PERIOD        => 10.0,
@@ -134,7 +134,7 @@ begin
 
    clkout1a_buf : BUFG
       port map (
-         I => pwm_cnt_r(6),
+         I => pwm_cnt_r(5),
          O => ym2151_clk_o
       );
 

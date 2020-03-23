@@ -64,4 +64,5 @@ clean:
 	rm -rf nexys4ddr_tb.ghw
 	rm -rf work-obj08.cf
 	rm -rf usage_statistics_webtalk.*
+	rm -rf vivado*
 

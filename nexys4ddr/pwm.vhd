@@ -36,15 +36,12 @@ begin
       variable cnt_v : std_logic_vector(11 downto 0);
    begin
       if rising_edge(clk_i) then
-         cnt_v := cnt_r + 1;
+         cnt_r <= cnt_r + 1;
 
-         -- Only count from 0x000 to 0xFFE.
-         if and(cnt_v) = '1' then
-            cnt_v := (others => '0');
+         if and(cnt_r) = '1' then
             val_r <= val_i;
          end if;
 
-         cnt_r <= cnt_v;
       end if;
    end process p_cnt;
 
