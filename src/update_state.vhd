@@ -30,6 +30,14 @@ architecture synthesis of update_state is
 
    signal envelope_sub_s : std_logic_vector(17 downto 0);
 
+   -- Debug
+   constant C_DEBUG_MODE               : boolean := false; -- TRUE OR FALSE
+
+   attribute mark_debug                : boolean;
+   attribute mark_debug of phase_inc_i : signal is C_DEBUG_MODE;
+   attribute mark_debug of cur_state_i : signal is C_DEBUG_MODE;
+   attribute mark_debug of new_state_o : signal is C_DEBUG_MODE;
+
 begin
 
    ----------------------------------------------------

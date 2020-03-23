@@ -34,14 +34,14 @@ package ym2151_package is
    -- (64*12 fractions within an octave)
    constant C_PHASEINC_ADDR_WIDTH : integer := 10;
 
-   -- This constant is determined by the ratio of the update frequency (8.33/32 MHz)
+   -- This constant is determined by the ratio of the update frequency (3.58/32 MHz)
    -- and the minimum frequency generated (C#0 at 17.3 Hz). This ratio
-   -- is approx 15 thousand, i.e. 14 bits. Furthermore, each of the 768 fractions
+   -- is approx 6 thousand, i.e. 13 bits. Furthermore, each of the 768 fractions
    -- should have a distinct phase increment.
-   constant C_PHASE_WIDTH         : integer := 14 + C_PHASEINC_ADDR_WIDTH;
+   constant C_PHASE_WIDTH         : integer := 13 + C_PHASEINC_ADDR_WIDTH;
 
    -- This constant is determined by the maximum phase increment in the ROM,
-   -- which is 17.3*2/8.3E6*2^29 = 2230.
+   -- which is 17.3*2/3.58E6*32*2^13*2^10 = 2595.
    constant C_PHASEINC_DATA_WIDTH : integer := 12; 
 
    -- How much to increment the envelope in each update during the attack phase.

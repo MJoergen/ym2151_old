@@ -1,0 +1,47 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri Mar  6 15:03:12 2020
+[*]
+[dumpfile] "/home/mfj/git/MJoergen/ym2151/nexys4ddr/nexys4ddr_tb.ghw"
+[dumpfile_mtime] "Fri Mar  6 15:02:35 2020"
+[dumpfile_size] 16050361
+[savefile] "/home/mfj/git/MJoergen/ym2151/nexys4ddr/nexys4ddr_tb.gtkw"
+[timestart] 16260000000
+[size] 1853 1145
+[pos] -29 -29
+*-31.052565 24079046954 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.nexys4ddr_tb.
+[treeopen] top.nexys4ddr_tb.i_nexys4ddr.
+[sst_width] 223
+[signals_width] 192
+[sst_expanded] 1
+[sst_vpaned_height] 553
+@800200
+-ctrl
+@28
+top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.clk_i
+top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rst_i
+top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_en_o
+top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.addr_o[0]
+@22
+#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[7:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.wr_data_o[0]
+@421
+top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.state_r
+@22
+#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[15:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.cnt_r[0]
+#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[11:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[11] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[10] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[9] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[8] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_addr_r[0]
+#{top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[7:0]} top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[7] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[6] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[5] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[4] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[3] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[2] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[1] top.nexys4ddr_tb.i_nexys4ddr.i_ctrl.rom_data_s[0]
+@1000200
+-ctrl
+@800200
+-clk
+@28
+top.nexys4ddr_tb.i_nexys4ddr.i_clk.sys_clk_i
+top.nexys4ddr_tb.i_nexys4ddr.i_clk.ym2151_clk_o
+top.nexys4ddr_tb.i_nexys4ddr.i_clk.pwm_clk_o
+top.nexys4ddr_tb.i_nexys4ddr.i_clk.ym2151_clk_s
+@1000200
+-clk
+[pattern_trace] 1
+[pattern_trace] 0

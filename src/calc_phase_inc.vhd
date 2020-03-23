@@ -41,6 +41,16 @@ architecture synthesis of calc_phase_inc is
 
    signal octave_r     : std_logic_vector(2 downto 0);
 
+   -- Debug
+   constant C_DEBUG_MODE                : boolean := false; -- TRUE OR FALSE
+
+   attribute mark_debug                 : boolean;
+   attribute mark_debug of channel_i    : signal is C_DEBUG_MODE;
+   attribute mark_debug of phase_inc_o  : signal is C_DEBUG_MODE;
+   attribute mark_debug of phinc_addr_s : signal is C_DEBUG_MODE;
+   attribute mark_debug of phinc_data_s : signal is C_DEBUG_MODE;
+   attribute mark_debug of octave_r     : signal is C_DEBUG_MODE;
+
 begin
 
    ----------------------------------------------------
