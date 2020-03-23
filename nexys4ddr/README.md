@@ -3,14 +3,19 @@
 This directory contains an Example Design for the YM2151 running on the Digilent
 Nexys4DDR board.
 
-The Example Design consists of the following components
+This file contains an overview of the Example Design, as well as instructions
+for customizing.
+
+## Overview
+
+The Example Design consists of the following components:
 * Clock and Reset generation.
 * Controller ROM with predefined commands.
-* YM2151 block.
+* YM2151 module.
 * Clock Domain Crossing.
 * Pulse Width Modulator.
 
-## Clock and Reset generation
+### Clock and Reset generation
 The example design makes use of two clocks:
 * The YM2151 block needs a clock of 3.579 MHz.
 * The Pulse Width Modulator needs a clock of 229 MHz.
@@ -24,11 +29,37 @@ The reset generation is controlled by the input pin CPU\_RESETN on the board.
 The internal reset is held high for 36 clock cycles to ensure that the YM2151
 is completely reset.
 
-## Controller ROM with predefined commands.
+### Controller ROM with predefined commands.
 The build script takes as input a binary file rom.bin, which consists of a
-sequence of two-byte commands: First byte is the YM2151 register address and
-the second byte is the YM2151 register value.
+sequence of two-byte commands:
+* First byte is the YM2151 register address.
+* Second byte is the YM2151 register value.
 
 The address 0x00 is treated as a special value and denotes a pause. The length
-of the pause is the second byte, and the units are 2^15 clock cycles, i.e.
-approximately nine milli seconds.
+of the pause is determined by the second byte, and the units are 2^15 clock
+cycles, i.e.  approximately nine milli seconds. The pair 0x00 0xFF generates a
+pause of 2.3 seconds.
+
+The pair 0x00 0x00 stops any further input to the YM2151, and denotes the end
+of the music. To play the music again, the user must assert reset by pressing
+the CPU\_RESETN button on the board.
+
+### Clock Domain Crossing
+Since the two clocks (YM2151 and PWM) are completely synchronuous to one
+another, a CDC module is not strictly necessary. It is however included here as
+good design practice.
+
+### Pulse Width Modulator
+The PWM module runs on a clock frequency of 229 MHz and has a granularity of 12
+bits. This means the update frequency is 56 kHz. The output from the YM2151
+is updated at twice this rate, i.e. 112 kHz.
+
+However, on the Nexys4DDR board the output of the PWM is passed through a
+fourth order low pass filter at 15 kHz.
+
+## Customizing
+To play a different tune, simply replace the binary file rom.bin.
+
+I've supplied a small python script vgm2rom.py, which converts a VGM file into
+a binary file rom.bin suitable for this example design.
+

@@ -1,3 +1,10 @@
+-- Author:  Michael Jørgensen
+-- License: Public domain; do with it what you like :-)
+-- Project: YM2151 Example Design
+--
+-- Description: This module contains the controller ROM with the predefined
+-- commands for the YM2151.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;

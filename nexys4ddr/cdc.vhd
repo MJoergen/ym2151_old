@@ -32,7 +32,7 @@ architecture structural of cdc is
 
 begin
 
-   gen_cdc : if true generate
+   gen_cdc : if true generate             -- This generate statement makes it easy to wildcard in the XDC file all the CDC's.
       p_sync_src : process (src_clk_i)
       begin
          if rising_edge(src_clk_i) then
