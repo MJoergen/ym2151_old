@@ -24,7 +24,7 @@ architecture structural of ym2151_tb is
    -- Control the execution of the test.
    signal sim_test_running_s  : std_logic := '1';
 
-   constant C_INPUT_FILENAME  : string := "sim/test1.bin";
+   constant C_INPUT_FILENAME  : string := "test/test1.bin";
    constant C_OUTPUT_FILENAME : string := "music.wav";
 
 begin

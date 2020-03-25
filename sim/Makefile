@@ -1,19 +1,22 @@
-SRC    = src/ym2151_package.vhd
-SRC   += src/rambe.vhd
-SRC   += src/get_config.vhd
-SRC   += src/rom_phase_inc.vhd
-SRC   += src/rom_delay.vhd
-SRC   += src/calc_phase_inc.vhd
-SRC   += src/calc_product.vhd
-SRC   += src/calc_waveform.vhd
-SRC   += src/calc_delay.vhd
-SRC   += src/calc_output.vhd
-SRC   += src/update_state.vhd
-SRC   += src/ym2151.vhd
+SRC_DIR    = ../src
+
+SRC    = $(SRC_DIR)/ym2151_package.vhd
+SRC   += $(SRC_DIR)/rambe.vhd
+SRC   += $(SRC_DIR)/get_config.vhd
+SRC   += $(SRC_DIR)/rom_phase_inc.vhd
+SRC   += $(SRC_DIR)/rom_delay.vhd
+SRC   += $(SRC_DIR)/calc_phase_inc.vhd
+SRC   += $(SRC_DIR)/calc_product.vhd
+SRC   += $(SRC_DIR)/calc_waveform.vhd
+SRC   += $(SRC_DIR)/calc_delay.vhd
+SRC   += $(SRC_DIR)/calc_output.vhd
+SRC   += $(SRC_DIR)/update_state.vhd
+SRC   += $(SRC_DIR)/ym2151.vhd
+
 TB     = ym2151_tb
-TB_SRC = sim/$(TB).vhd
+TB_SRC = $(TB).vhd
 WAVE   = build/$(TB).ghw
-SAVE   = sim/$(TB).gtkw
+SAVE   = $(TB).gtkw
 SIM_LIB = /opt/ghdl/lib/ghdl/vendors/xilinx-vivado/
 
 
