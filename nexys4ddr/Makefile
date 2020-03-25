@@ -12,6 +12,7 @@ SRC   += $(SRC_DIR)/calc_phase_inc.vhd
 SRC   += $(SRC_DIR)/calc_product.vhd
 SRC   += $(SRC_DIR)/calc_waveform.vhd
 SRC   += $(SRC_DIR)/calc_delay.vhd
+SRC   += $(SRC_DIR)/calc_output.vhd
 SRC   += $(SRC_DIR)/update_state.vhd
 SRC   += $(SRC_DIR)/ym2151.vhd
 SRC   += nexys4ddr.vhd

@@ -137,7 +137,6 @@ begin
       ); -- i_update_state
 
 
-
    ----------------------------------------------------
    -- Stage 3 : Calculate waveform
    ----------------------------------------------------
@@ -184,7 +183,7 @@ begin
       begin
          if rising_edge(clk_i) then
             stages(i).temp.phase_inc <= stages(i-1).temp.phase_inc;
-            stages(i).temp.delay <= stages(i-1).temp.delay;
+            stages(i).temp.delay     <= stages(i-1).temp.delay;
          end if;
       end process p_phase_inc;
    end generate gen_phase_inc;
@@ -197,7 +196,6 @@ begin
          end if;
       end process p_waveform;
    end generate gen_waveform;
-
 
    gen_state2 : for i in 3 to 5 generate
       p_state2 : process (clk_i)
@@ -217,34 +215,19 @@ begin
       end process p_stages;
    end generate gen_stages;
 
-   p_sum_outputs : process (clk_i)
-      variable sum_v : std_logic_vector(C_PWM_WIDTH-1 downto 0);
-   begin
-      if rising_edge(clk_i) then
-         if stages(5).idx = 0 then
-            sum_r <= stages(5).temp.product;
-         end if;
-         if stages(5).idx > 0 then
-            sum_v := sum_r + stages(5).temp.product;
-            -- Check for overflow
-            if sum_r(C_PWM_WIDTH-1) = stages(5).temp.product(C_PWM_WIDTH-1) and 
-               sum_r(C_PWM_WIDTH-1) /= sum_v(C_PWM_WIDTH-1) then
-               sum_v                := (others => not sum_r(C_PWM_WIDTH-1));
-               sum_v(C_PWM_WIDTH-1) := sum_r(C_PWM_WIDTH-1);
-            end if;
-            sum_r <= sum_v;
-         end if;
-      end if;
-   end process p_sum_outputs;
 
-   p_store_device0 : process (clk_i)
-   begin
-      if rising_edge(clk_i) then
-         if stages(5).idx = 8 then
-            val_o <= sum_r xor C_NEGATIVE_ONE;
-         end if;
-      end if;
-   end process p_store_device0;
+   ----------------------------------------------------
+   -- Generate output
+   ----------------------------------------------------
+
+   i_calc_output : entity work.calc_output
+      port map (
+         clk_i     => clk_i,
+         rst_i     => rst_i,
+         idx_i     => stages(5).idx,
+         product_i => stages(5).temp.product,
+         val_o     => val_o
+      ); -- i_calc_output
 
 end architecture synthesis;
 

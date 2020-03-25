@@ -144,6 +144,9 @@ begin
          data_v := read_8_bits(input_file);
 
          if addr_v = X"00" then
+            if data_v = X"00" then
+               exit;
+            end if;
             report "Waiting for " & to_string(to_integer(data_v)*100) & " us";
             wait for to_integer(data_v) * 100 us;
          else

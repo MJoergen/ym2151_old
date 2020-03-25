@@ -7,6 +7,7 @@ SRC   += src/calc_phase_inc.vhd
 SRC   += src/calc_product.vhd
 SRC   += src/calc_waveform.vhd
 SRC   += src/calc_delay.vhd
+SRC   += src/calc_output.vhd
 SRC   += src/update_state.vhd
 SRC   += src/ym2151.vhd
 TB     = ym2151_tb

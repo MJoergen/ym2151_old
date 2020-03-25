@@ -11,6 +11,7 @@ read_vhdl -vhdl2008 { \
    ../src/calc_phase_inc.vhd \
    ../src/calc_product.vhd \
    ../src/calc_waveform.vhd \
+   ../src/calc_output.vhd \
    ../src/get_config.vhd \
    ../src/rambe.vhd \
    ../src/rom_delay.vhd \
