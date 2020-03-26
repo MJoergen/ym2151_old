@@ -10,6 +10,14 @@ At [this document](Register_Interface.md) is the complete register interface.
 
 I've written a separate document with the [notes on the design](Design_Notes.md).
 
+## Directory structure
+
+* src : Contains source files for the YM2151 module
+* doc : Contains documentation
+* nexys4ddr : Contains board specific files to build the Example Design for the Nexys 4 DDR board from Digilent.
+* sim : Contains testbench and other files used during simulation.
+
+
 ## User guide
 
 The YM2151 has eight parallel sound channels and each sound channel consists 
