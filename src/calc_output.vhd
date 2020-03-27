@@ -22,7 +22,8 @@ entity calc_output is
       rst_i     : in  std_logic;
       idx_i     : in  std_logic_vector(4 downto 0);
       product_i : in  std_logic_vector(C_PWM_WIDTH-1 downto 0);
-      val_o     : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
+      valid_o   : out std_logic;
+      data_o    : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
    );
 end entity calc_output;
 
@@ -58,8 +59,10 @@ begin
    p_store_device0 : process (clk_i)
    begin
       if rising_edge(clk_i) then
+         valid_o <= '0';
          if idx_i = 8 then
-            val_o <= sum_r xor C_NEGATIVE_ONE;
+            valid_o <= '1';
+            data_o  <= sum_r xor C_NEGATIVE_ONE;
          end if;
       end if;
    end process p_store_device0;

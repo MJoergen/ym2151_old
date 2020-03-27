@@ -51,7 +51,9 @@ begin
    -- The output from the multiplier is a signed 36-bit integer.
    assert (or(product_s(35 downto 17+C_PWM_WIDTH)) = '0') or
           (and(product_s(35 downto 17+C_PWM_WIDTH)) = '1') or
-          rst_i /= '0';
+          rst_i /= '0'
+      report "Assertion failure"
+         severity note;
 
    product_o <= product_s(17+C_PWM_WIDTH-1 downto 17);
 

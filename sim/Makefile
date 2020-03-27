@@ -27,8 +27,8 @@ SIM_LIB = /opt/ghdl/lib/ghdl/vendors/xilinx-vivado/
 sim: $(SRC) $(TB_SRC) build
 	ghdl -i --ieee=synopsys --std=08 --workdir=build --work=work $(SRC) $(TB_SRC)
 	ghdl -m --ieee=synopsys --std=08 --workdir=build -frelaxed-rules -P$(SIM_LIB) $(TB)
-	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=1000ms
-	gtkwave $(WAVE) $(SAVE)
+	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=6000us
+	#gtkwave $(WAVE) $(SAVE)
 
 build:
 	mkdir -p build

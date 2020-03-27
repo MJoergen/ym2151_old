@@ -28,7 +28,8 @@ entity ym2151 is
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
       -- Waveform output
-      val_o     : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
+      valid_o   : out std_logic;
+      data_o    : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
    );
 end entity ym2151;
 
@@ -63,11 +64,12 @@ architecture synthesis of ym2151 is
    signal sum_r : std_logic_vector(C_PWM_WIDTH-1 downto 0);
 
    -- Debug
-   constant DEBUG_MODE           : boolean := false;
+   constant DEBUG_MODE             : boolean := false;
 
-   attribute mark_debug          : boolean;
-   attribute mark_debug of rst_i : signal is DEBUG_MODE;
-   attribute mark_debug of val_o : signal is DEBUG_MODE;
+   attribute mark_debug            : boolean;
+   attribute mark_debug of rst_i   : signal is DEBUG_MODE;
+   attribute mark_debug of valid_o : signal is DEBUG_MODE;
+   attribute mark_debug of data_o  : signal is DEBUG_MODE;
 
 begin
 
@@ -226,7 +228,8 @@ begin
          rst_i     => rst_i,
          idx_i     => stages(5).idx,
          product_i => stages(5).temp.product,
-         val_o     => val_o
+         valid_o   => valid_o,
+         data_o    => data_o
       ); -- i_calc_output
 
 end architecture synthesis;
