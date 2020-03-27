@@ -97,7 +97,7 @@ begin
                   state_r    <= DATA_ST;
                elsif rom_data_s /= 0 then
                   if C_SIM_MODEL then
-                     cnt_r(12 downto 5) <= rom_data_s(7 downto 0);
+                     cnt_r(20 downto 13) <= rom_data_s(7 downto 0);
                   else
                      cnt_r(22 downto 15) <= rom_data_s(7 downto 0);
                   end if;
@@ -121,7 +121,7 @@ begin
             busy_r     <= '0';
             rom_addr_r <= (others => '0');
             if C_SIM_MODEL then
-               cnt_r(12 downto 5) <= (others => '1');
+               cnt_r(20 downto 13) <= (others => '1');
             else
                cnt_r <= (others => '1');
             end if;

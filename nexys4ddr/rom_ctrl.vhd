@@ -24,10 +24,8 @@ architecture synthesis of rom_ctrl is
       variable RomFileLine : line;
       variable ROM : mem_t := (others => (others => '0'));
    begin
-      report RomFileName;
       file_open(RomFile, RomFileName, read_mode);
       for i in mem_t'range loop
-         report to_string(i);
          readline (RomFile, RomFileLine);
          hread (RomFileLine, ROM(i));
          if endfile(RomFile) then

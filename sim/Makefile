@@ -31,7 +31,7 @@ SIM_LIB = /opt/ghdl/lib/ghdl/vendors/xilinx-vivado/
 sim: $(SRC) $(TB_SRC) build rom.txt
 	ghdl -i --ieee=synopsys --std=08 --workdir=build --work=work $(SRC) $(TB_SRC)
 	ghdl -m --ieee=synopsys --std=08 --workdir=build -frelaxed-rules -P$(SIM_LIB) $(TB)
-	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=1000ms
+	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=1ms
 	#gtkwave $(WAVE) $(SAVE)
 
 rom.txt: test/Ievan_Polkka.bin
@@ -50,3 +50,5 @@ clean:
 	rm -rf *.o
 	rm -rf $(TB)
 	rm -rf rom.txt
+	rm -rf music.wav
+
