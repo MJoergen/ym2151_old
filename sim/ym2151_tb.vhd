@@ -211,8 +211,8 @@ begin
             if data_v = X"00" then
                exit;
             end if;
-            report "Waiting for " & to_string(to_integer(data_v)*100) & " us";
-            wait for to_integer(data_v) * 100 us;
+            report "Waiting for " & to_string(to_integer(data_v)*1500) & " us";
+            wait for to_integer(data_v) * 1500 us;
          else
             write(addr_v, data_v);
          end if;
