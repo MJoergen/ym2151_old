@@ -46,8 +46,8 @@ sim: $(SRC) $(TB_SRC) rom.txt
 nexys4ddr.bit: nexys4ddr.tcl $(SRC) nexys4ddr.xdc rom.txt
 	bash -c "source $(XILINX_DIR)/settings64.sh ; vivado -mode tcl -source $<"
 
-rom.txt: rom.bin
-	./bin2hex.py $< $@
+rom.txt: ../sim/test/Ievan_Polkka.bin
+	../sim/bin2hex.py $< $@
 
 
 #####################################

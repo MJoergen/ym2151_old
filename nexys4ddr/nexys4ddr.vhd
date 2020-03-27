@@ -24,10 +24,11 @@ architecture synthesis of nexys4ddr is
    signal ym2151_addr_s    : std_logic_vector(0 downto 0);
    signal ym2151_wr_en_s   : std_logic;
    signal ym2151_wr_data_s : std_logic_vector(7 downto 0);
-   signal ym2151_val_s     : std_logic_vector(11 downto 0);
+   signal ym2151_valid_s   : std_logic;
+   signal ym2151_data_s    : std_logic_vector(11 downto 0);
 
    signal pwm_clk_s        : std_logic;
-   signal pwm_val_s        : std_logic_vector(11 downto 0);
+   signal pwm_data_s       : std_logic_vector(11 downto 0);
    signal pwm_aud_s        : std_logic;
 
 begin
@@ -77,7 +78,8 @@ begin
          addr_i    => ym2151_addr_s,
          wr_en_i   => ym2151_wr_en_s,
          wr_data_i => ym2151_wr_data_s,
-         val_o     => ym2151_val_s
+         valid_o   => ym2151_valid_s,
+         data_o    => ym2151_data_s
       ); -- i_ym2151
 
 
@@ -91,9 +93,9 @@ begin
       )
       port map (
          src_clk_i => ym2151_clk_s,
-         src_dat_i => ym2151_val_s,
+         src_dat_i => ym2151_data_s,
          dst_clk_i => pwm_clk_s,
-         dst_dat_o => pwm_val_s
+         dst_dat_o => pwm_data_s
       ); -- i_cdc
 
 
@@ -104,7 +106,7 @@ begin
    i_pwm : entity work.pwm
       port map (
          clk_i => pwm_clk_s,
-         val_i => pwm_val_s,
+         val_i => pwm_data_s,
          pwm_o => pwm_aud_s
       ); -- i_pwm
 

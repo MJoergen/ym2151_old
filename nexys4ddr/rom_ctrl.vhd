@@ -10,13 +10,13 @@ entity rom_ctrl is
    port (
       clk_i  : in  std_logic;
       addr_i : in  std_logic_vector(11 downto 0);
-      data_o : out std_logic_vector(7 downto 0)
+      data_o : out std_logic_vector(15 downto 0)
    );
 end rom_ctrl;
 
 architecture synthesis of rom_ctrl is
 
-   type mem_t is array (0 to 2**12-1) of std_logic_vector(7 downto 0);
+   type mem_t is array (0 to 2**12-1) of std_logic_vector(15 downto 0);
 
    -- This reads the ROM contents from a text file
    impure function InitRomFromFile(RomFileName : in string) return mem_t is
@@ -24,8 +24,10 @@ architecture synthesis of rom_ctrl is
       variable RomFileLine : line;
       variable ROM : mem_t := (others => (others => '0'));
    begin
+      report RomFileName;
       file_open(RomFile, RomFileName, read_mode);
       for i in mem_t'range loop
+         report to_string(i);
          readline (RomFile, RomFileLine);
          hread (RomFileLine, ROM(i));
          if endfile(RomFile) then
