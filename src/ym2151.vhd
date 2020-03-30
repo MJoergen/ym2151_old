@@ -36,9 +36,6 @@ end entity ym2151;
 
 architecture synthesis of ym2151 is
 
-   constant C_NEGATIVE_ONE : std_logic_vector(C_PWM_WIDTH-1 downto 0) :=
-      (C_PWM_WIDTH-1 => '1', others => '0');
-
    -- This record contains temporary values calcuted in the pipeline,
    -- but which do not need to be stored later.
    type temp_t is record
@@ -61,8 +58,6 @@ architecture synthesis of ym2151 is
 
    type stages_t is array (0 to 33) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t;
-
-   signal sum_r : std_logic_vector(C_PWM_WIDTH-1 downto 0);
 
    -- Debug
    constant DEBUG_MODE             : boolean := false;
@@ -94,7 +89,6 @@ begin
 
    -- Copy state from previous iteration of this device.
    stages(0).state <= stages(32).state;
-   stages(1).state <= stages(33).state;
 
 
    ----------------------------------------------------
@@ -123,6 +117,9 @@ begin
          state_i   => stages(0).state,
          delay_o   => stages(1).temp.delay
       ); -- i_calc_delay
+
+   -- Copy state from previous iteration of this device.
+   stages(1).state <= stages(33).state;
 
 
    ----------------------------------------------------
