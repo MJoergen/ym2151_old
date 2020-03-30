@@ -170,7 +170,8 @@ begin
          end if;
 
          if rst_i = '1' then
-            wr_addr_r <= (others => '0');
+            wr_addr_r  <= (others => '0');
+            busy_cnt_r <= (others => '0');
          end if;
       end if;
    end process p_wr_addr;

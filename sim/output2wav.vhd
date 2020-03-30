@@ -2,7 +2,7 @@
 -- License: Public domain; do with it what you like :-)
 -- Project: YM2151 implementation
 --
--- Description: This module is a test bench for the YM2151 module.
+-- Description: This module write the generated output to a WAV file.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -48,7 +48,7 @@ begin
       -- Copy output to file
       file_open(output_file, G_FILE_NAME, WRITE_MODE);
 
-      -- Write WAVE header
+      -- Write WAV header
       write_16_bits(output_file, X"4952");
       write_16_bits(output_file, X"4646");
       write_16_bits(output_file, X"0024");
@@ -79,6 +79,7 @@ begin
          if valid_i = '1' then
             report "Writing";
             write_16_bits(output_file, (data_i xor X"800") & "0000");
+            flush(output_file);
          end if;
       end loop out_loop;
       file_close(output_file);

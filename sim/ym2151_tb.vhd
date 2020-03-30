@@ -7,7 +7,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std_unsigned.all;
-use std.textio.all;
 
 entity ym2151_tb is
 end entity ym2151_tb;
@@ -26,6 +25,7 @@ architecture simulation of ym2151_tb is
    signal valid_s             : std_logic;
    signal data_s              : std_logic_vector(11 downto 0);
    signal busy_s              : std_logic;
+   signal playing_s           : std_logic;
    signal test_running_s      : std_logic := '1';
 
    constant C_INPUT_FILENAME  : string := "rom.txt";
@@ -58,8 +58,8 @@ begin
 
    p_test_running : process
    begin
-      wait until busy_s = '1';
-      wait until busy_s = '0';
+      wait until playing_s = '1';
+      wait until playing_s = '0';
       test_running_s <= '0';
       wait;
    end process p_test_running;
@@ -76,7 +76,8 @@ begin
       port map (
          clk_i     => clk_s,
          rst_i     => rst_s,
-         busy_o    => busy_s,
+         busy_i    => busy_s,
+         playing_o => playing_s,
          addr_o    => addr_s,
          wr_en_o   => wr_en_s,
          wr_data_o => wr_data_s
@@ -94,6 +95,7 @@ begin
       port map (
          clk_i     => clk_s,
          rst_i     => rst_s,
+         busy_o    => busy_s,
          addr_i    => addr_s,
          wr_en_i   => wr_en_s,
          wr_data_i => wr_data_s,
