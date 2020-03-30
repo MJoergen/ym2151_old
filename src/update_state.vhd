@@ -2,7 +2,8 @@
 -- License: Public domain; do with it what you like :-)
 -- Project: YM2151 implementation
 --
--- Description: This module is the top level for the YM2151.
+-- Description: This module updates the state information associated with each
+-- device.
 
 library ieee;
 use ieee.std_logic_1164.all;
