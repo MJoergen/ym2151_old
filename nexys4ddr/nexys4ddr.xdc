@@ -11,7 +11,7 @@ create_clock -name sys_clk -period 10.00 [get_ports {sys_clk_i}];
 create_generated_clock -name ym2151_clk -source [get_pins {i_clk_rst/i_mmcm_adv/CLKOUT0}] -divide_by 64 [get_pins {i_clk_rst/pwm_cnt_r_reg[5]/Q}];
 
 # CDC
-set_false_path -from [get_clocks -of_objects [get_pins i_clk_rst/i_mmcm_adv/CLKOUT0]] -to [get_pins -hierarchical {*gen_cdc.dst_dat_r_reg[*]/D}]
+set_false_path -from [get_clocks ym2151_clk] -to [get_pins -hierarchical {*gen_cdc.dst_dat_r_reg[*]/D}]
 
 # Configuration Bank Voltage Select
 set_property CFGBVS VCCO [current_design]
