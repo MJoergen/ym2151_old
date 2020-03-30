@@ -16,7 +16,8 @@ entity ctrl is
    port (
       clk_i     : in  std_logic;
       rst_i     : in  std_logic;
-      busy_o    : out std_logic;
+      busy_i    : in  std_logic;
+      playing_o : out std_logic;
       addr_o    : out std_logic_vector(0 downto 0);
       wr_en_o   : out std_logic;
       wr_data_o : out std_logic_vector(7 downto 0)
@@ -36,9 +37,9 @@ architecture synthesis of ctrl is
 
    type STATE_t is (WAIT_ST, ADDR_ST, DATA_ST, STOP_ST);
    signal state_r    : STATE_t;
-   signal cnt_r      : std_logic_vector(22 downto 0) := (others => '0');
+   signal cnt_r      : std_logic_vector(20 downto 0) := (others => '0');
 
-   signal busy_r     : std_logic;
+   signal playing_r  : std_logic;
    signal addr_r     : std_logic_vector(0 downto 0);
    signal wr_en_r    : std_logic;
    signal wr_data_r  : std_logic_vector(7 downto 0);
@@ -48,6 +49,7 @@ architecture synthesis of ctrl is
 
    attribute mark_debug               : boolean;
    attribute mark_debug of addr_r     : signal is DEBUG_MODE;
+   attribute mark_debug of playing_r  : signal is DEBUG_MODE;
    attribute mark_debug of cnt_r      : signal is DEBUG_MODE;
    attribute mark_debug of rom_addr_r : signal is DEBUG_MODE;
    attribute mark_debug of rom_data_s : signal is DEBUG_MODE;
@@ -82,13 +84,15 @@ begin
          case state_r is
             when WAIT_ST =>
                if cnt_r = 0 then
-                  state_r    <= ADDR_ST;
+                  if busy_i = '0' then
+                     state_r <= ADDR_ST;
+                  end if;
                else
                   cnt_r <= cnt_r - 1;
                end if;
 
             when ADDR_ST =>
-               busy_r <= '1';
+               playing_r <= '1';
                rom_addr_r <= rom_addr_r + 1;
                if rom_data_s(15 downto 8) /= 0 then
                   addr_r     <= "0";
@@ -96,11 +100,7 @@ begin
                   wr_data_r  <= rom_data_s(15 downto 8);
                   state_r    <= DATA_ST;
                elsif rom_data_s /= 0 then
-                  if C_SIM_MODEL then
-                     cnt_r(20 downto 13) <= rom_data_s(7 downto 0);
-                  else
-                     cnt_r(22 downto 15) <= rom_data_s(7 downto 0);
-                  end if;
+                  cnt_r(20 downto 13) <= rom_data_s(7 downto 0);
                   state_r <= WAIT_ST;
                else
                   state_r <= STOP_ST;
@@ -113,24 +113,20 @@ begin
                state_r   <= WAIT_ST;
 
             when STOP_ST =>
-               busy_r <= '0';
+               playing_r <= '0';
                null;
          end case;
 
          if rst_i = '1' then
-            busy_r     <= '0';
+            playing_r     <= '0';
             rom_addr_r <= (others => '0');
-            if C_SIM_MODEL then
-               cnt_r(20 downto 13) <= (others => '1');
-            else
-               cnt_r <= (others => '1');
-            end if;
+            cnt_r <= (others => '1');
             state_r    <= WAIT_ST;
          end if;
       end if;
    end process p_ctrl;
 
-   busy_o    <= busy_r;
+   playing_o    <= playing_r;
    addr_o    <= addr_r;
    wr_en_o   <= wr_en_r;
    wr_data_o <= wr_data_r;

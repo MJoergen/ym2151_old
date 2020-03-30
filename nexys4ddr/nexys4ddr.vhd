@@ -21,6 +21,7 @@ architecture synthesis of nexys4ddr is
 
    signal ym2151_clk_s     : std_logic;
    signal ym2151_rst_s     : std_logic; 
+   signal ym2151_busy_s    : std_logic;
    signal ym2151_addr_s    : std_logic_vector(0 downto 0);
    signal ym2151_wr_en_s   : std_logic;
    signal ym2151_wr_data_s : std_logic_vector(7 downto 0);
@@ -58,6 +59,7 @@ begin
       port map (
          clk_i     => ym2151_clk_s,
          rst_i     => ym2151_rst_s,
+         busy_i    => ym2151_busy_s,
          addr_o    => ym2151_addr_s,
          wr_en_o   => ym2151_wr_en_s,
          wr_data_o => ym2151_wr_data_s
@@ -75,6 +77,7 @@ begin
       port map (
          clk_i     => ym2151_clk_s,
          rst_i     => ym2151_rst_s,
+         busy_o    => ym2151_busy_s,
          addr_i    => ym2151_addr_s,
          wr_en_i   => ym2151_wr_en_s,
          wr_data_i => ym2151_wr_data_s,

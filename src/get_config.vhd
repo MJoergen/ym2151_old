@@ -69,6 +69,7 @@ entity get_config is
       clk_i     : in  std_logic;
       rst_i     : in  std_logic;
       -- CPU interface
+      busy_o    : out std_logic;
       addr_i    : in  std_logic_vector(0 downto 0);
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
@@ -87,6 +88,7 @@ architecture synthesis of get_config is
 
    signal wr_addr_r           : std_logic_vector(7 downto 0);
    signal wr_en_s             : std_logic;
+   signal busy_cnt_r          : std_logic_vector(4 downto 0);  -- 5 bits correspond to 32 clock cycles.
 
 
    ----------------------------------------------------
@@ -155,9 +157,18 @@ begin
    p_wr_addr : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         if wr_en_i = '1'  and addr_i = 0 then
-            wr_addr_r <= wr_data_i;
+         if busy_cnt_r /= 0 then
+            busy_cnt_r <= busy_cnt_r - 1;
          end if;
+
+         if wr_en_i = '1' and addr_i = "1" then
+            busy_cnt_r <= (others => '1');
+         end if;
+
+         if wr_en_i = '1' and addr_i = "0" then
+            wr_addr_r  <= wr_data_i;
+         end if;
+
          if rst_i = '1' then
             wr_addr_r <= (others => '0');
          end if;
@@ -211,6 +222,9 @@ begin
 
    wr_data_s <= rst_data_r when rst_state_r /= IDLE_ST else
                 wr_data_i;
+
+   busy_o <= '0' when rst_state_r = IDLE_ST and busy_cnt_r = 0 else
+             '1';
 
 
    ----------------------------------------------------
