@@ -35,7 +35,7 @@ begin
    i_mult : mult_macro
       generic map (
          DEVICE  => "7SERIES",
-         LATENCY => 2,
+         LATENCY => 3,
          WIDTH_A => 18,
          WIDTH_B => 18
       )

@@ -153,7 +153,7 @@ begin
 
 
    ----------------------------------------------------
-   -- Stages 4-5 : Calculate product
+   -- Stages 4-6 : Calculate product
    ----------------------------------------------------
 
    i_calc_product : entity work.calc_product
@@ -162,7 +162,7 @@ begin
          rst_i      => rst_i,
          state_i    => stages(3).state,
          waveform_i => stages(3).temp.waveform,
-         product_o  => stages(5).temp.product
+         product_o  => stages(6).temp.product
       ); -- i_calc_product
       
 
@@ -170,7 +170,7 @@ begin
    -- Generate pipeline
    ----------------------------------------------------
 
-   gen_device : for i in 1 to 5 generate
+   gen_device : for i in 1 to 6 generate
       p_device : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -181,7 +181,7 @@ begin
       end process p_device;
    end generate gen_device;
 
-   gen_phase_inc : for i in 2 to 5 generate
+   gen_phase_inc : for i in 2 to 6 generate
       p_phase_inc : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -191,7 +191,7 @@ begin
       end process p_phase_inc;
    end generate gen_phase_inc;
 
-   gen_waveform : for i in 4 to 5 generate
+   gen_waveform : for i in 4 to 6 generate
       p_waveform : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -200,7 +200,7 @@ begin
       end process p_waveform;
    end generate gen_waveform;
 
-   gen_state2 : for i in 3 to 5 generate
+   gen_state2 : for i in 3 to 6 generate
       p_state2 : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -209,7 +209,7 @@ begin
       end process p_state2;
    end generate gen_state2;
 
-   gen_stages : for i in 6 to 33 generate
+   gen_stages : for i in 7 to 33 generate
       p_stages : process (clk_i)
       begin
          if rising_edge(clk_i) then
@@ -227,8 +227,8 @@ begin
       port map (
          clk_i     => clk_i,
          rst_i     => rst_i,
-         idx_i     => stages(5).idx,
-         product_i => stages(5).temp.product,
+         idx_i     => stages(6).idx,
+         product_i => stages(6).temp.product,
          valid_o   => aud_valid_o,
          data_o    => aud_data_o
       ); -- i_calc_output
