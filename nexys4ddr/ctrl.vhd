@@ -14,48 +14,43 @@ entity ctrl is
       G_INIT_FILE : string
    );
    port (
-      clk_i     : in  std_logic;
-      rst_i     : in  std_logic;
-      busy_i    : in  std_logic;
-      playing_o : out std_logic;
-      addr_o    : out std_logic_vector(0 downto 0);
-      wr_en_o   : out std_logic;
-      wr_data_o : out std_logic_vector(7 downto 0)
+      clk_i       : in  std_logic;
+      rst_i       : in  std_logic;
+      playing_o   : out std_logic;
+      cfg_valid_o : out std_logic;
+      cfg_ready_i : in  std_logic;
+      cfg_addr_o  : out std_logic_vector(7 downto 0);
+      cfg_data_o  : out std_logic_vector(7 downto 0)
    );
 end ctrl;
 
 architecture synthesis of ctrl is
 
-   constant C_SIM_MODEL : boolean :=
-   -- pragma synthesis_off
-   true or
-   -- pragma synthesis_on
-   false;
-
    signal rom_addr_r  : std_logic_vector(11 downto 0);
    signal rom_data_s  : std_logic_vector(15 downto 0);
 
    type STATE_t is (WAIT_ST, ADDR_ST, DATA_ST, STOP_ST);
-   signal state_r    : STATE_t;
-   signal cnt_r      : std_logic_vector(20 downto 0);
+   signal state_r     : STATE_t;
+   signal cnt_r       : std_logic_vector(20 downto 0);
 
-   signal playing_r  : std_logic;
-   signal addr_r     : std_logic_vector(0 downto 0);
-   signal wr_en_r    : std_logic;
-   signal wr_data_r  : std_logic_vector(7 downto 0);
+   signal playing_r   : std_logic;
+   signal cfg_valid_r : std_logic;
+   signal cfg_addr_r  : std_logic_vector(7 downto 0);
+   signal cfg_data_r  : std_logic_vector(7 downto 0);
 
    -- Debug
-   constant DEBUG_MODE                : boolean := false;
+   constant DEBUG_MODE                 : boolean := false;
 
-   attribute mark_debug               : boolean;
-   attribute mark_debug of addr_r     : signal is DEBUG_MODE;
-   attribute mark_debug of playing_r  : signal is DEBUG_MODE;
-   attribute mark_debug of cnt_r      : signal is DEBUG_MODE;
-   attribute mark_debug of rom_addr_r : signal is DEBUG_MODE;
-   attribute mark_debug of rom_data_s : signal is DEBUG_MODE;
-   attribute mark_debug of rst_i      : signal is DEBUG_MODE;
-   attribute mark_debug of wr_data_r  : signal is DEBUG_MODE;
-   attribute mark_debug of wr_en_r    : signal is DEBUG_MODE;
+   attribute mark_debug                : boolean;
+   attribute mark_debug of cfg_addr_r  : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_data_r  : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_ready_i : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_valid_r : signal is DEBUG_MODE;
+   attribute mark_debug of cnt_r       : signal is DEBUG_MODE;
+   attribute mark_debug of playing_r   : signal is DEBUG_MODE;
+   attribute mark_debug of rom_addr_r  : signal is DEBUG_MODE;
+   attribute mark_debug of rom_data_s  : signal is DEBUG_MODE;
+   attribute mark_debug of rst_i       : signal is DEBUG_MODE;
 
 begin
 
@@ -77,16 +72,10 @@ begin
    p_ctrl : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         addr_r      <= "0";
-         wr_en_r     <= '0';
-         wr_data_r   <= (others => '0');
-
          case state_r is
             when WAIT_ST =>
                if cnt_r = 0 then
-                  if busy_i = '0' then
-                     state_r <= ADDR_ST;
-                  end if;
+                  state_r <= ADDR_ST;
                else
                   cnt_r <= cnt_r - 1;
                end if;
@@ -95,9 +84,9 @@ begin
                playing_r <= '1';
                rom_addr_r <= rom_addr_r + 1;
                if rom_data_s(15 downto 8) /= 0 then
-                  addr_r     <= "0";
-                  wr_en_r    <= '1';
-                  wr_data_r  <= rom_data_s(15 downto 8);
+                  cfg_addr_r  <= rom_data_s(15 downto 8);
+                  cfg_data_r  <= rom_data_s( 7 downto 0);
+                  cfg_valid_r <= '1';
                   state_r    <= DATA_ST;
                elsif rom_data_s /= 0 then
                   cnt_r(20 downto 13) <= rom_data_s(7 downto 0);
@@ -107,10 +96,10 @@ begin
                end if;
 
             when DATA_ST =>
-               addr_r    <= "1";
-               wr_en_r   <= '1';
-               wr_data_r <= rom_data_s(7 downto 0);
-               state_r   <= WAIT_ST;
+               if cfg_valid_r = '1' and cfg_ready_i = '1' then
+                  cfg_valid_r <= '0';
+                  state_r     <= WAIT_ST;
+               end if;
 
             when STOP_ST =>
                playing_r <= '0';
@@ -118,18 +107,21 @@ begin
          end case;
 
          if rst_i = '1' then
-            playing_r  <= '0';
-            rom_addr_r <= (others => '0');
-            cnt_r      <= (others => '0');
-            state_r    <= WAIT_ST;
+            playing_r   <= '0';
+            cfg_valid_r <= '0';
+            cfg_addr_r  <= (others => '0');
+            cfg_data_r  <= (others => '0');
+            rom_addr_r  <= (others => '0');
+            cnt_r       <= (others => '0');
+            state_r     <= WAIT_ST;
          end if;
       end if;
    end process p_ctrl;
 
-   playing_o <= playing_r;
-   addr_o    <= addr_r;
-   wr_en_o   <= wr_en_r;
-   wr_data_o <= wr_data_r;
+   playing_o   <= playing_r;
+   cfg_valid_o <= cfg_valid_r;
+   cfg_addr_o  <= cfg_addr_r;
+   cfg_data_o  <= cfg_data_r;
 
 end synthesis;
 

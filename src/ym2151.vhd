@@ -21,16 +21,16 @@ entity ym2151 is
       G_CLOCK_HZ : integer               -- Input clock frequency
    );
    port (
-      clk_i     : in  std_logic;
-      rst_i     : in  std_logic;
+      clk_i       : in  std_logic;
+      rst_i       : in  std_logic;
       -- CPU interface
-      ready_o   : out std_logic;
-      addr_i    : in  std_logic_vector(0 downto 0);
-      wr_en_i   : in  std_logic;
-      wr_data_i : in  std_logic_vector(7 downto 0);
+      cfg_valid_i : in  std_logic;
+      cfg_ready_o : out std_logic;
+      cfg_addr_i  : in  std_logic_vector(7 downto 0);
+      cfg_data_i  : in  std_logic_vector(7 downto 0);
       -- Waveform output
-      valid_o   : out std_logic;
-      data_o    : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
+      aud_valid_o : out std_logic;
+      aud_data_o  : out std_logic_vector(C_PWM_WIDTH-1 downto 0)
    );
 end entity ym2151;
 
@@ -60,13 +60,14 @@ architecture synthesis of ym2151 is
    signal stages : stages_t;
 
    -- Debug
-   constant DEBUG_MODE             : boolean := false;
+   constant DEBUG_MODE                 : boolean := false;
 
-   attribute mark_debug            : boolean;
-   attribute mark_debug of rst_i   : signal is DEBUG_MODE;
-   attribute mark_debug of ready_o : signal is DEBUG_MODE;
-   attribute mark_debug of valid_o : signal is DEBUG_MODE;
-   attribute mark_debug of data_o  : signal is DEBUG_MODE;
+   attribute mark_debug                : boolean;
+   attribute mark_debug of rst_i       : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_valid_i : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_ready_o : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_addr_i  : signal is DEBUG_MODE;
+   attribute mark_debug of cfg_data_i  : signal is DEBUG_MODE;
 
 begin
 
@@ -76,15 +77,15 @@ begin
 
    i_get_config : entity work.get_config
       port map (
-         clk_i     => clk_i,
-         rst_i     => rst_i,
-         ready_o   => ready_o,
-         addr_i    => addr_i,
-         wr_en_i   => wr_en_i,
-         wr_data_i => wr_data_i,
-         idx_o     => stages(0).idx,      -- Device index (0-31)
-         channel_o => stages(0).channel,  -- Configuration
-         device_o  => stages(0).device    -- Configuration
+         clk_i       => clk_i,
+         rst_i       => rst_i,
+         cfg_valid_i => cfg_valid_i,
+         cfg_ready_o => cfg_ready_o,
+         cfg_addr_i  => cfg_addr_i,
+         cfg_data_i  => cfg_data_i,
+         idx_o       => stages(0).idx,      -- Device index (0-31)
+         channel_o   => stages(0).channel,  -- Configuration
+         device_o    => stages(0).device    -- Configuration
       ); -- i_get_config
 
    -- Copy state from previous iteration of this device.
@@ -228,8 +229,8 @@ begin
          rst_i     => rst_i,
          idx_i     => stages(5).idx,
          product_i => stages(5).temp.product,
-         valid_o   => valid_o,
-         data_o    => data_o
+         valid_o   => aud_valid_o,
+         data_o    => aud_data_o
       ); -- i_calc_output
 
 end architecture synthesis;

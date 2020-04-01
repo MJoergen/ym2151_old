@@ -19,14 +19,14 @@ end nexys4ddr;
 
 architecture synthesis of nexys4ddr is
 
-   signal ym2151_clk_s     : std_logic;
-   signal ym2151_rst_s     : std_logic; 
-   signal ym2151_busy_s    : std_logic;
-   signal ym2151_addr_s    : std_logic_vector(0 downto 0);
-   signal ym2151_wr_en_s   : std_logic;
-   signal ym2151_wr_data_s : std_logic_vector(7 downto 0);
-   signal ym2151_valid_s   : std_logic;
-   signal ym2151_data_s    : std_logic_vector(11 downto 0);
+   signal ym2151_clk_s       : std_logic;
+   signal ym2151_rst_s       : std_logic; 
+   signal ym2151_cfg_valid_s : std_logic;
+   signal ym2151_cfg_ready_s : std_logic;
+   signal ym2151_cfg_addr_s  : std_logic_vector(7 downto 0);
+   signal ym2151_cfg_data_s  : std_logic_vector(7 downto 0);
+   signal ym2151_aud_valid_s : std_logic;
+   signal ym2151_aud_data_s  : std_logic_vector(11 downto 0);
 
    signal pwm_clk_s        : std_logic;
    signal pwm_data_s       : std_logic_vector(11 downto 0);
@@ -57,12 +57,12 @@ begin
          G_INIT_FILE => G_INIT_FILE
       )
       port map (
-         clk_i     => ym2151_clk_s,
-         rst_i     => ym2151_rst_s,
-         busy_i    => ym2151_busy_s,
-         addr_o    => ym2151_addr_s,
-         wr_en_o   => ym2151_wr_en_s,
-         wr_data_o => ym2151_wr_data_s
+         clk_i       => ym2151_clk_s,
+         rst_i       => ym2151_rst_s,
+         cfg_valid_o => ym2151_cfg_valid_s,
+         cfg_ready_i => ym2151_cfg_ready_s,
+         cfg_addr_o  => ym2151_cfg_addr_s,
+         cfg_data_o  => ym2151_cfg_data_s
       ); -- i_ctrl
 
 
@@ -75,14 +75,14 @@ begin
          G_CLOCK_HZ => 3579545
       )
       port map (
-         clk_i     => ym2151_clk_s,
-         rst_i     => ym2151_rst_s,
-         busy_o    => ym2151_busy_s,
-         addr_i    => ym2151_addr_s,
-         wr_en_i   => ym2151_wr_en_s,
-         wr_data_i => ym2151_wr_data_s,
-         valid_o   => ym2151_valid_s,
-         data_o    => ym2151_data_s
+         clk_i       => ym2151_clk_s,
+         rst_i       => ym2151_rst_s,
+         cfg_valid_i => ym2151_cfg_valid_s,
+         cfg_ready_o => ym2151_cfg_ready_s,
+         cfg_addr_i  => ym2151_cfg_addr_s,
+         cfg_data_i  => ym2151_cfg_data_s,
+         aud_valid_o => ym2151_aud_valid_s,
+         aud_data_o  => ym2151_aud_data_s
       ); -- i_ym2151
 
 
@@ -96,7 +96,7 @@ begin
       )
       port map (
          src_clk_i => ym2151_clk_s,
-         src_dat_i => ym2151_data_s,
+         src_dat_i => ym2151_aud_data_s,
          dst_clk_i => pwm_clk_s,
          dst_dat_o => pwm_data_s
       ); -- i_cdc

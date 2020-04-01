@@ -66,30 +66,21 @@ use work.ym2151_package.all;
 
 entity get_config is
    port (
-      clk_i     : in  std_logic;
-      rst_i     : in  std_logic;
+      clk_i       : in  std_logic;
+      rst_i       : in  std_logic;
       -- CPU interface
-      ready_o   : out std_logic;
-      addr_i    : in  std_logic_vector(0 downto 0);
-      wr_en_i   : in  std_logic;
-      wr_data_i : in  std_logic_vector(7 downto 0);
+      cfg_valid_i : in  std_logic;
+      cfg_ready_o : out std_logic;
+      cfg_addr_i  : in  std_logic_vector(7 downto 0);
+      cfg_data_i  : in  std_logic_vector(7 downto 0);
       -- Configuration output
-      idx_o     : out std_logic_vector(4 downto 0);
-      channel_o : out channel_t;
-      device_o  : out device_t
+      idx_o       : out std_logic_vector(4 downto 0);
+      channel_o   : out channel_t;
+      device_o    : out device_t
    );
 end entity get_config;
 
 architecture synthesis of get_config is
-
-   ----------------------------------------------------
-   -- CPU interface
-   ----------------------------------------------------
-
-   signal wr_addr_r           : std_logic_vector(7 downto 0);
-   signal wr_en_s             : std_logic;
-   signal busy_cnt_r          : std_logic_vector(4 downto 0);  -- 5 bits correspond to 32 clock cycles.
-
 
    ----------------------------------------------------
    -- Reset logic
@@ -99,6 +90,14 @@ architecture synthesis of get_config is
    signal rst_data_r          : std_logic_vector(7 downto 0);
    type RESET_STATE_t is (IDLE_ST, CLEAR_ST, KEYOFF_ST);
    signal rst_state_r         : RESET_STATE_t;
+
+
+   ----------------------------------------------------
+   -- CPU interface
+   ----------------------------------------------------
+
+   signal busy_cnt_r          : std_logic_vector(4 downto 0);  -- 5 bits correspond to 32 clock cycles.
+   signal wr_en_s             : std_logic;
    signal wr_addr_s           : std_logic_vector(7 downto 0);
    signal wr_data_s           : std_logic_vector(7 downto 0);
 
@@ -161,16 +160,11 @@ begin
             busy_cnt_r <= busy_cnt_r - 1;
          end if;
 
-         if wr_en_i = '1' and addr_i = "1" then
+         if cfg_valid_i = '1' and cfg_ready_o = '1' then
             busy_cnt_r <= (others => '1');
          end if;
 
-         if wr_en_i = '1' and addr_i = "0" then
-            wr_addr_r  <= wr_data_i;
-         end if;
-
          if rst_i = '1' then
-            wr_addr_r  <= (others => '0');
             busy_cnt_r <= (others => '0');
          end if;
       end if;
@@ -214,18 +208,17 @@ begin
       end if;
    end process p_reset;
 
-   wr_en_s   <= '1'        when rst_state_r /= IDLE_ST else
-                wr_en_i    when addr_i = 1             else
-                '0';
+   wr_en_s   <= '1'         when rst_state_r /= IDLE_ST else
+                cfg_valid_i and cfg_ready_o;
 
    wr_addr_s <= rst_addr_r when rst_state_r /= IDLE_ST else
-                wr_addr_r;
+                cfg_addr_i;
 
    wr_data_s <= rst_data_r when rst_state_r /= IDLE_ST else
-                wr_data_i;
+                cfg_data_i;
 
-   ready_o <= '1' when rst_state_r = IDLE_ST and busy_cnt_r = 0 else
-              '0';
+   cfg_ready_o <= '1' when rst_state_r = IDLE_ST and busy_cnt_r = 0 else
+                  '0';
 
 
    ----------------------------------------------------

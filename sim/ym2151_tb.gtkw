@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Mon Mar 30 13:13:29 2020
+[*] Wed Apr  1 06:04:38 2020
 [*]
 [dumpfile] "/home/mike/git/MJoergen/ym2151/sim/build/ym2151_tb.ghw"
-[dumpfile_mtime] "Mon Mar 30 13:11:23 2020"
-[dumpfile_size] 1547061
+[dumpfile_mtime] "Wed Apr  1 06:04:08 2020"
+[dumpfile_size] 2007176
 [savefile] "/home/mike/git/MJoergen/ym2151/sim/ym2151_tb.gtkw"
-[timestart] 0
+[timestart] 2170000000
 [size] 1448 896
 [pos] -1 -1
-*-37.138699 46800000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-32.138699 11598000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.ym2151_tb.
 [treeopen] top.ym2151_tb.i_ym2151.
@@ -26,7 +26,6 @@
 @c00200
 -ctrl
 @28
-top.ym2151_tb.i_ctrl.busy_i
 top.ym2151_tb.i_ctrl.playing_o
 @22
 #{top.ym2151_tb.i_ctrl.cnt_r[22:0]} top.ym2151_tb.i_ctrl.cnt_r[20] top.ym2151_tb.i_ctrl.cnt_r[19] top.ym2151_tb.i_ctrl.cnt_r[18] top.ym2151_tb.i_ctrl.cnt_r[17] top.ym2151_tb.i_ctrl.cnt_r[16] top.ym2151_tb.i_ctrl.cnt_r[15] top.ym2151_tb.i_ctrl.cnt_r[14] top.ym2151_tb.i_ctrl.cnt_r[13] top.ym2151_tb.i_ctrl.cnt_r[12] top.ym2151_tb.i_ctrl.cnt_r[11] top.ym2151_tb.i_ctrl.cnt_r[10] top.ym2151_tb.i_ctrl.cnt_r[9] top.ym2151_tb.i_ctrl.cnt_r[8] top.ym2151_tb.i_ctrl.cnt_r[7] top.ym2151_tb.i_ctrl.cnt_r[6] top.ym2151_tb.i_ctrl.cnt_r[5] top.ym2151_tb.i_ctrl.cnt_r[4] top.ym2151_tb.i_ctrl.cnt_r[3] top.ym2151_tb.i_ctrl.cnt_r[2] top.ym2151_tb.i_ctrl.cnt_r[1] top.ym2151_tb.i_ctrl.cnt_r[0]
@@ -37,18 +36,19 @@ top.ym2151_tb.i_ctrl.state_r
 #{top.ym2151_tb.i_ctrl.rom_data_s[15:0]} top.ym2151_tb.i_ctrl.rom_data_s[15] top.ym2151_tb.i_ctrl.rom_data_s[14] top.ym2151_tb.i_ctrl.rom_data_s[13] top.ym2151_tb.i_ctrl.rom_data_s[12] top.ym2151_tb.i_ctrl.rom_data_s[11] top.ym2151_tb.i_ctrl.rom_data_s[10] top.ym2151_tb.i_ctrl.rom_data_s[9] top.ym2151_tb.i_ctrl.rom_data_s[8] top.ym2151_tb.i_ctrl.rom_data_s[7] top.ym2151_tb.i_ctrl.rom_data_s[6] top.ym2151_tb.i_ctrl.rom_data_s[5] top.ym2151_tb.i_ctrl.rom_data_s[4] top.ym2151_tb.i_ctrl.rom_data_s[3] top.ym2151_tb.i_ctrl.rom_data_s[2] top.ym2151_tb.i_ctrl.rom_data_s[1] top.ym2151_tb.i_ctrl.rom_data_s[0]
 @1401200
 -ctrl
-@28
-top.ym2151_tb.i_ym2151.wr_en_i
-top.ym2151_tb.i_ym2151.addr_i[0]
-@22
-#{top.ym2151_tb.i_ym2151.wr_data_i[7:0]} top.ym2151_tb.i_ym2151.wr_data_i[7] top.ym2151_tb.i_ym2151.wr_data_i[6] top.ym2151_tb.i_ym2151.wr_data_i[5] top.ym2151_tb.i_ym2151.wr_data_i[4] top.ym2151_tb.i_ym2151.wr_data_i[3] top.ym2151_tb.i_ym2151.wr_data_i[2] top.ym2151_tb.i_ym2151.wr_data_i[1] top.ym2151_tb.i_ym2151.wr_data_i[0]
 @800200
 -get_config
 @28
 top.ym2151_tb.i_ym2151.i_get_config.clk_i
 top.ym2151_tb.i_ym2151.i_get_config.rst_i
-top.ym2151_tb.i_ym2151.i_get_config.busy_o
-@23
+[color] 3
+top.ym2151_tb.i_ym2151.i_get_config.cfg_valid_i
+@29
+[color] 5
+top.ym2151_tb.i_ym2151.i_get_config.cfg_ready_o
+@22
+#{top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[7:0]} top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[7] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[6] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[5] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[4] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[3] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[2] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[1] top.ym2151_tb.i_ym2151.i_get_config.cfg_addr_i[0]
+#{top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[7:0]} top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[7] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[6] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[5] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[4] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[3] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[2] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[1] top.ym2151_tb.i_ym2151.i_get_config.cfg_data_i[0]
 #{top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[4:0]} top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[4] top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[3] top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[2] top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[1] top.ym2151_tb.i_ym2151.i_get_config.busy_cnt_r[0]
 @28
 top.ym2151_tb.i_ym2151.i_get_config.wr_en_s
@@ -83,7 +83,7 @@ top.ym2151_tb.i_ym2151.i_get_config.device_o.key_onoff
 -device_o
 @1000200
 -get_config
-@c00200
+@800200
 -stage5
 @22
 #{top.ym2151_tb.i_ym2151.stages[5].idx[4:0]} top.ym2151_tb.i_ym2151.stages[5].idx[4] top.ym2151_tb.i_ym2151.stages[5].idx[3] top.ym2151_tb.i_ym2151.stages[5].idx[2] top.ym2151_tb.i_ym2151.stages[5].idx[1] top.ym2151_tb.i_ym2151.stages[5].idx[0]
@@ -116,7 +116,7 @@ top.ym2151_tb.i_ym2151.stages[5].state.env_cur[0]
 -group_end
 @22
 #{top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[21:0]} top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[21] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[20] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[19] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[18] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[17] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[16] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[15] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[14] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[13] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[12] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[11] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[10] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[9] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[8] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[7] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[6] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[5] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[4] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[3] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[2] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[1] top.ym2151_tb.i_ym2151.stages[5].state.env_cnt[0]
-@1401200
+@1000200
 -stage5
 [pattern_trace] 1
 [pattern_trace] 0

@@ -19,12 +19,12 @@ architecture simulation of ym2151_tb is
    -- Connected to DUT
    signal clk_s               : std_logic;
    signal rst_s               : std_logic;
-   signal addr_s              : std_logic_vector(0 downto 0);
-   signal wr_en_s             : std_logic;
-   signal wr_data_s           : std_logic_vector(7 downto 0);
-   signal valid_s             : std_logic;
-   signal data_s              : std_logic_vector(11 downto 0);
-   signal busy_s              : std_logic;
+   signal cfg_valid_s         : std_logic;
+   signal cfg_ready_s         : std_logic;
+   signal cfg_addr_s          : std_logic_vector(7 downto 0);
+   signal cfg_data_s          : std_logic_vector(7 downto 0);
+   signal aud_valid_s         : std_logic;
+   signal aud_data_s          : std_logic_vector(11 downto 0);
    signal playing_s           : std_logic;
    signal test_running_s      : std_logic := '1';
 
@@ -74,13 +74,13 @@ begin
          G_INIT_FILE => C_INPUT_FILENAME
       )
       port map (
-         clk_i     => clk_s,
-         rst_i     => rst_s,
-         busy_i    => busy_s,
-         playing_o => playing_s,
-         addr_o    => addr_s,
-         wr_en_o   => wr_en_s,
-         wr_data_o => wr_data_s
+         clk_i       => clk_s,
+         rst_i       => rst_s,
+         playing_o   => playing_s,
+         cfg_valid_o => cfg_valid_s,
+         cfg_ready_i => cfg_ready_s,
+         cfg_addr_o  => cfg_addr_s,
+         cfg_data_o  => cfg_data_s
       ); -- i_ctrl
 
 
@@ -93,14 +93,14 @@ begin
          G_CLOCK_HZ => C_CLOCK_HZ
       )
       port map (
-         clk_i     => clk_s,
-         rst_i     => rst_s,
-         busy_o    => busy_s,
-         addr_i    => addr_s,
-         wr_en_i   => wr_en_s,
-         wr_data_i => wr_data_s,
-         valid_o   => valid_s,
-         data_o    => data_s
+         clk_i       => clk_s,
+         rst_i       => rst_s,
+         cfg_valid_i => cfg_valid_s,
+         cfg_ready_o => cfg_ready_s,
+         cfg_addr_i  => cfg_addr_s,
+         cfg_data_i  => cfg_data_s,
+         aud_valid_o => aud_valid_s,
+         aud_data_o  => aud_data_s
       ); -- i_ym2151
    
 
@@ -116,8 +116,8 @@ begin
          clk_i    => clk_s,
          rst_i    => rst_s,
          active_i => test_running_s,
-         valid_i  => valid_s,
-         data_i   => data_s
+         valid_i  => aud_valid_s,
+         data_i   => aud_data_s
       ); -- i_output2wav
 
 end simulation;
