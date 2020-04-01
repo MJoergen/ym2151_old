@@ -24,7 +24,7 @@ entity ym2151 is
       clk_i     : in  std_logic;
       rst_i     : in  std_logic;
       -- CPU interface
-      busy_o    : out std_logic;
+      ready_o   : out std_logic;
       addr_i    : in  std_logic_vector(0 downto 0);
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
@@ -64,7 +64,7 @@ architecture synthesis of ym2151 is
 
    attribute mark_debug            : boolean;
    attribute mark_debug of rst_i   : signal is DEBUG_MODE;
-   attribute mark_debug of busy_o  : signal is DEBUG_MODE;
+   attribute mark_debug of ready_o : signal is DEBUG_MODE;
    attribute mark_debug of valid_o : signal is DEBUG_MODE;
    attribute mark_debug of data_o  : signal is DEBUG_MODE;
 
@@ -78,7 +78,7 @@ begin
       port map (
          clk_i     => clk_i,
          rst_i     => rst_i,
-         busy_o    => busy_o,
+         ready_o   => ready_o,
          addr_i    => addr_i,
          wr_en_i   => wr_en_i,
          wr_data_i => wr_data_i,

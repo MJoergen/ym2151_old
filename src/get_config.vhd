@@ -69,7 +69,7 @@ entity get_config is
       clk_i     : in  std_logic;
       rst_i     : in  std_logic;
       -- CPU interface
-      busy_o    : out std_logic;
+      ready_o   : out std_logic;
       addr_i    : in  std_logic_vector(0 downto 0);
       wr_en_i   : in  std_logic;
       wr_data_i : in  std_logic_vector(7 downto 0);
@@ -224,8 +224,8 @@ begin
    wr_data_s <= rst_data_r when rst_state_r /= IDLE_ST else
                 wr_data_i;
 
-   busy_o <= '0' when rst_state_r = IDLE_ST and busy_cnt_r = 0 else
-             '1';
+   ready_o <= '1' when rst_state_r = IDLE_ST and busy_cnt_r = 0 else
+              '0';
 
 
    ----------------------------------------------------
