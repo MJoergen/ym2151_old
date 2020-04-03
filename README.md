@@ -17,17 +17,3 @@ I've written a separate document with the [notes on the design](Design_Notes.md)
 * nexys4ddr : Contains board specific files to build the Example Design for the Nexys 4 DDR board from Digilent.
 * sim : Contains testbench and other files used during simulation.
 
-
-## User guide
-
-The YM2151 has eight parallel sound channels and each sound channel consists 
-of the following
-* A key note selector. This selects the base frequency (pitch) to be played.
-* A waveform generator. This selects the timbre of the note.
-* An envelope generator. This selects the amplitude modulation of the note.
-
-Outside this, the YM2151 has a dedicated noise generator as well as a vibraro
-generator.
-
-## The key note selector.
-
