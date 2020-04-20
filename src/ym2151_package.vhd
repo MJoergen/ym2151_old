@@ -48,6 +48,7 @@ package ym2151_package is
    constant C_ATTACK_INCREMENT : integer := 2048;
 
    type channel_t is record
+      feedback     : std_logic_vector(2 downto 0);
       key_code     : std_logic_vector(6 downto 0);
       key_fraction : std_logic_vector(5 downto 0);
    end record channel_t;
@@ -71,6 +72,7 @@ package ym2151_package is
       env_cur   : std_logic_vector(17 downto 0);
       env_state : STATE_ADSR_t;
       env_cnt   : std_logic_vector(C_DELAY_SIZE-1 downto 0);
+      output    : std_logic_vector(C_PWM_WIDTH-1 downto 0);
    end record state_t;
 
 end package ym2151_package;

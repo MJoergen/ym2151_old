@@ -107,6 +107,7 @@ architecture synthesis of get_config is
    ----------------------------------------------------
 
    type byte_vector_t is array (0 to 7) of std_logic_vector(7 downto 0);
+   signal control_r           : byte_vector_t := (others => (others => '0'));
    signal key_onoff_r         : byte_vector_t := (others => (others => '0'));
    signal key_code_r          : byte_vector_t := (others => (others => '0'));
    signal key_fraction_r      : byte_vector_t := (others => (others => '0'));
@@ -135,6 +136,7 @@ architecture synthesis of get_config is
 
    signal rambe_b_addr_s      : std_logic_vector(4 downto 0);
    signal rambe_b_data_s      : std_logic_vector(71 downto 0);
+   signal control_read_r      : std_logic_vector(7 downto 0);
    signal key_onoff_read_r    : std_logic_vector(7 downto 0);
    signal key_code_read_r     : std_logic_vector(7 downto 0);
    signal key_fraction_read_r : std_logic_vector(7 downto 0);
@@ -234,6 +236,15 @@ begin
       end if;
    end process p_key_onoff;
 
+   p_control : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         if wr_en_s = '1' and wr_addr_s(7 downto 3) = "00100" then
+            control_r(to_integer(wr_addr_s(2 downto 0))) <= "00" & wr_data_s(5 downto 0);
+         end if;
+      end if;
+   end process p_control;
+
    p_key_code : process (clk_i)
    begin
       if rising_edge(clk_i) then
@@ -305,6 +316,7 @@ begin
    begin
       if rising_edge(clk_i) then
          idx_o               <= device_cnt_r;
+         control_read_r      <= control_r(to_integer(device_cnt_r(2 downto 0)));
          key_onoff_read_r    <= key_onoff_r(to_integer(device_cnt_r(2 downto 0)));
          key_code_read_r     <= key_code_r(to_integer(device_cnt_r(2 downto 0)));
          key_fraction_read_r <= key_fraction_r(to_integer(device_cnt_r(2 downto 0)));
@@ -326,6 +338,7 @@ begin
    device_o.key_onoff     <= key_onoff_read_r(to_integer(device_cnt_r(4 downto 3)));
    channel_o.key_code     <= key_code_read_r(6 downto 0);
    channel_o.key_fraction <= key_fraction_read_r(5 downto 0);
+   channel_o.feedback     <= control_read_r(5 downto 3);
 
 end architecture synthesis;
 

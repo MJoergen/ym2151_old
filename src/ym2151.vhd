@@ -148,6 +148,7 @@ begin
       port map (
          clk_i      => clk_i,
          state_i    => stages(2).state,
+         channel_i  => stages(2).channel,
          waveform_o => stages(3).temp.waveform
       ); -- i_calc_waveform
 
@@ -214,6 +215,10 @@ begin
       begin
          if rising_edge(clk_i) then
             stages(i) <= stages(i-1);
+
+            if i = 7 then
+               stages(i).state.output <= stages(i-1).temp.product;
+            end if;
          end if;
       end process p_stages;
    end generate gen_stages;

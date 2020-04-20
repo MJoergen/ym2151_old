@@ -24,6 +24,7 @@ entity calc_waveform is
    port (
       clk_i      : in  std_logic;
       state_i    : in  state_t;
+      channel_i  : in  channel_t;
       waveform_o : out std_logic_vector(17 downto 0)
    );
 end entity calc_waveform;
@@ -57,15 +58,47 @@ architecture synthesis of calc_waveform is
       return ROM_v;
    end function;
 
-   signal mem_r : mem_t := InitRom;
+   signal phasemod_s : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+   signal phase_s    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
 
-   signal addr_s : std_logic_vector(C_SINE_ADDR_WIDTH-1 downto 0);
-   signal data_r : std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
+   signal addr_s     : std_logic_vector(C_SINE_ADDR_WIDTH-1 downto 0);
+
+   signal mem_r      : mem_t := InitRom;
+
+   signal data_r     : std_logic_vector(C_SINE_DATA_WIDTH-1 downto 0);
+
+   -- Debug
+   constant DEBUG_MODE                : boolean := false;
+
+   attribute mark_debug               : boolean;
+   attribute mark_debug of state_i    : signal is DEBUG_MODE;
+   attribute mark_debug of channel_i  : signal is DEBUG_MODE;
+   attribute mark_debug of phasemod_s : signal is DEBUG_MODE;
+   attribute mark_debug of phase_s    : signal is DEBUG_MODE;
+   attribute mark_debug of addr_s     : signal is DEBUG_MODE;
+   attribute mark_debug of data_r     : signal is DEBUG_MODE;
 
 begin
 
    -- Truncate current phase.
-   addr_s <= state_i.phase_cur(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_SINE_ADDR_WIDTH);
+   p_phasemod : process (state_i, channel_i)
+   begin
+      phasemod_s <= (others => state_i.output(C_PWM_WIDTH-1));
+      case to_integer(channel_i.feedback) is
+         when 0 => phasemod_s <= (others => '0');
+         when 1 => phasemod_s(C_PHASE_WIDTH-3 downto C_PHASE_WIDTH-C_PWM_WIDTH-2) <= state_i.output;
+         when 2 => phasemod_s(C_PHASE_WIDTH-2 downto C_PHASE_WIDTH-C_PWM_WIDTH-1) <= state_i.output;
+         when 3 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH)   <= state_i.output;
+         when 4 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+1) <= state_i.output(C_PWM_WIDTH-2 downto 0);
+         when 5 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+2) <= state_i.output(C_PWM_WIDTH-3 downto 0);
+         when 6 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+3) <= state_i.output(C_PWM_WIDTH-4 downto 0);
+         when 7 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+4) <= state_i.output(C_PWM_WIDTH-5 downto 0);
+      end case;
+   end process p_phasemod;
+
+   phase_s <= state_i.phase_cur + phasemod_s;
+
+   addr_s <= phase_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_SINE_ADDR_WIDTH);
 
    p_read : process (clk_i)
    begin
