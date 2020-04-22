@@ -22,10 +22,11 @@ use work.ym2151_package.all;
 
 entity calc_waveform is
    port (
-      clk_i      : in  std_logic;
-      state_i    : in  state_t;
-      channel_i  : in  channel_t;
-      waveform_o : out std_logic_vector(17 downto 0)
+      clk_i       : in  std_logic;
+      state_i     : in  state_t;
+      prevstate_i : in  state_t;
+      channel_i   : in  channel_t;
+      waveform_o  : out std_logic_vector(17 downto 0)
    );
 end entity calc_waveform;
 
@@ -58,6 +59,8 @@ architecture synthesis of calc_waveform is
       return ROM_v;
    end function;
 
+   signal sum_s      : std_logic_vector(C_PWM_WIDTH downto 0);
+
    signal phasemod_s : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
    signal phase_s    : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
 
@@ -80,19 +83,24 @@ architecture synthesis of calc_waveform is
 
 begin
 
+   -- Calculate sum of the two previous values, while sign extending them.
+   sum_s <= (state_i.output(C_PWM_WIDTH-1 downto C_PWM_WIDTH-1) & state_i.output)
+          + (prevstate_i.output(C_PWM_WIDTH-1 downto C_PWM_WIDTH-1) & prevstate_i.output);
+
    -- Truncate current phase.
-   p_phasemod : process (state_i, channel_i)
+   p_phasemod : process (sum_s, channel_i)
    begin
-      phasemod_s <= (others => state_i.output(C_PWM_WIDTH-1));
+      phasemod_s <= (others => sum_s(C_PWM_WIDTH));
       case to_integer(channel_i.feedback) is
          when 0 => phasemod_s <= (others => '0');
-         when 1 => phasemod_s(C_PHASE_WIDTH-3 downto C_PHASE_WIDTH-C_PWM_WIDTH-2) <= state_i.output;
-         when 2 => phasemod_s(C_PHASE_WIDTH-2 downto C_PHASE_WIDTH-C_PWM_WIDTH-1) <= state_i.output;
-         when 3 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH)   <= state_i.output;
-         when 4 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+1) <= state_i.output(C_PWM_WIDTH-2 downto 0);
-         when 5 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+2) <= state_i.output(C_PWM_WIDTH-3 downto 0);
-         when 6 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+3) <= state_i.output(C_PWM_WIDTH-4 downto 0);
-         when 7 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+4) <= state_i.output(C_PWM_WIDTH-5 downto 0);
+         when 1 => phasemod_s(C_PHASE_WIDTH-3 downto C_PHASE_WIDTH-C_PWM_WIDTH-3) <= sum_s;
+         when 2 => phasemod_s(C_PHASE_WIDTH-2 downto C_PHASE_WIDTH-C_PWM_WIDTH-2) <= sum_s;
+         when 3 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH-1) <= sum_s;
+         when 4 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH)   <= sum_s(C_PWM_WIDTH-1 downto 0);
+         when 5 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+1) <= sum_s(C_PWM_WIDTH-2 downto 0);
+         when 6 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+2) <= sum_s(C_PWM_WIDTH-3 downto 0);
+         when 7 => phasemod_s(C_PHASE_WIDTH-1 downto C_PHASE_WIDTH-C_PWM_WIDTH+3) <= sum_s(C_PWM_WIDTH-4 downto 0);
+         when others => null;
       end case;
    end process p_phasemod;
 

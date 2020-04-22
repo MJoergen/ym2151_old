@@ -56,7 +56,7 @@ architecture synthesis of ym2151 is
       temp    : temp_t;                       -- Temporary storage.
    end record stage_t;
 
-   type stages_t is array (0 to 33) of stage_t; -- Stage 32 is the same device as stage 0.
+   type stages_t is array (0 to 66) of stage_t; -- Stage 32 is the same device as stage 0.
    signal stages : stages_t;
 
    -- Debug
@@ -146,10 +146,11 @@ begin
 
    i_calc_waveform : entity work.calc_waveform
       port map (
-         clk_i      => clk_i,
-         state_i    => stages(2).state,
-         channel_i  => stages(2).channel,
-         waveform_o => stages(3).temp.waveform
+         clk_i       => clk_i,
+         state_i     => stages(2+32).state,
+         prevstate_i => stages(2+64).state,
+         channel_i   => stages(2).channel,
+         waveform_o  => stages(3).temp.waveform
       ); -- i_calc_waveform
 
 
@@ -210,7 +211,7 @@ begin
       end process p_state2;
    end generate gen_state2;
 
-   gen_stages : for i in 7 to 33 generate
+   gen_stages : for i in 7 to 66 generate
       p_stages : process (clk_i)
       begin
          if rising_edge(clk_i) then
