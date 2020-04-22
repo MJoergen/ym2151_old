@@ -65,4 +65,5 @@ clean:
 	rm -rf work-obj08.cf
 	rm -rf usage_statistics_webtalk.*
 	rm -rf vivado*
+	rm -rf .Xil
 

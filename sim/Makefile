@@ -28,13 +28,16 @@ SIM_LIB = /opt/ghdl/lib/ghdl/vendors/xilinx-vivado/
 # Speed is roughly 6 minutes for each 10 ms.
 #####################################
 
-sim: $(SRC) $(TB_SRC) build rom.txt
+show: $(WAVE) $(SAVE)
+	gtkwave $(WAVE) $(SAVE)
+
+$(WAVE): $(SRC) $(TB_SRC) build rom.txt
 	ghdl -i --ieee=synopsys --std=08 --workdir=build --work=work $(SRC) $(TB_SRC)
 	ghdl -m --ieee=synopsys --std=08 --workdir=build -frelaxed-rules -P$(SIM_LIB) $(TB)
-	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=10ms
-	#gtkwave $(WAVE) $(SAVE)
+	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=8000us
 
-rom.txt: test/Ievan_Polkka.bin
+#rom.txt: test/Ievan_Polkka.bin
+rom.txt: test/fb.bin
 	./bin2hex.py $< $@
 	# Possibly use xxd instead of bin2hex.py?
 
