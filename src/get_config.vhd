@@ -335,10 +335,11 @@ begin
    device_o.sustain_rate  <= rambe_b_data_s(9*6+4 downto 9*6+0);   -- 0xC0 - 0xDF
    device_o.decay_level   <= rambe_b_data_s(9*7+7 downto 9*7+4);   -- 0xE0 - 0xFF
    device_o.release_rate  <= rambe_b_data_s(9*7+3 downto 9*7+0);   -- 0xE0 - 0xFF
-   device_o.key_onoff     <= key_onoff_read_r(to_integer(device_cnt_r(4 downto 3)));
+   device_o.key_onoff     <= key_onoff_read_r(to_integer("" & device_cnt_r(3) & device_cnt_r(4)));
    channel_o.key_code     <= key_code_read_r(6 downto 0);
    channel_o.key_fraction <= key_fraction_read_r(5 downto 0);
    channel_o.feedback     <= control_read_r(5 downto 3);
+   channel_o.connection   <= control_read_r(2 downto 0);
 
 end architecture synthesis;
 

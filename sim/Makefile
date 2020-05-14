@@ -7,6 +7,7 @@ SRC    += $(SRC_DIR)/rom_phase_inc.vhd
 SRC    += $(SRC_DIR)/rom_delay.vhd
 SRC    += $(SRC_DIR)/calc_phase_inc.vhd
 SRC    += $(SRC_DIR)/calc_product.vhd
+SRC    += $(SRC_DIR)/calc_phase.vhd
 SRC    += $(SRC_DIR)/calc_waveform.vhd
 SRC    += $(SRC_DIR)/calc_delay.vhd
 SRC    += $(SRC_DIR)/calc_output.vhd
@@ -37,7 +38,7 @@ $(WAVE): $(SRC) $(TB_SRC) build rom.txt
 	ghdl -r $(TB) --assert-level=error --wave=$(WAVE) --stop-time=8000us
 
 #rom.txt: test/Ievan_Polkka.bin
-rom.txt: test/fb.bin
+rom.txt: test/mode6.bin
 	./bin2hex.py $< $@
 	# Possibly use xxd instead of bin2hex.py?
 

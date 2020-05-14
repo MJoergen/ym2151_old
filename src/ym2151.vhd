@@ -40,6 +40,7 @@ architecture synthesis of ym2151 is
    -- but which do not need to be stored later.
    type temp_t is record
       phase_inc : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
+      phase     : std_logic_vector(C_PHASE_WIDTH-1 downto 0);
       waveform  : std_logic_vector(17 downto 0);
       rate      : std_logic_vector( 5 downto 0);
       delay     : std_logic_vector(C_DELAY_SIZE-1 downto 0);
@@ -141,15 +142,30 @@ begin
 
 
    ----------------------------------------------------
+   -- Stage 3 : Calculate phase
+   ----------------------------------------------------
+
+   i_calc_phase : entity work.calc_phase
+      port map (
+         clk_i       => clk_i,
+         device_i    => stages(2).device,
+         state_i     => stages(2+32).state,
+         state_d1_i  => stages(2+32+8).state,
+         state_d2_i  => stages(2+32+16).state,
+         prevstate_i => stages(2+64).state,
+         channel_i   => stages(2).channel,
+         phase_o     => stages(3).temp.phase
+      ); -- i_calc_phase
+
+
+   ----------------------------------------------------
    -- Stage 3 : Calculate waveform
    ----------------------------------------------------
 
    i_calc_waveform : entity work.calc_waveform
       port map (
          clk_i       => clk_i,
-         state_i     => stages(2+32).state,
-         prevstate_i => stages(2+64).state,
-         channel_i   => stages(2).channel,
+         phase_i     => stages(3).temp.phase,
          waveform_o  => stages(3).temp.waveform
       ); -- i_calc_waveform
 

@@ -49,6 +49,7 @@ package ym2151_package is
 
    type channel_t is record
       feedback     : std_logic_vector(2 downto 0);
+      connection   : std_logic_vector(2 downto 0);
       key_code     : std_logic_vector(6 downto 0);
       key_fraction : std_logic_vector(5 downto 0);
    end record channel_t;
