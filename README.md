@@ -6,9 +6,9 @@ This file contains a user guide on how to use the YM2151 module.  This is based
 on the [original documentation](doc/yamaha_ym2151_synthesis.pdf), as well as
 the [MAME emulation](https://github.com/mamedev/mame/).
 
-At [this document](Register_Interface.md) is the complete register interface.
+At [this document](doc/Register_Interface.md) is the complete register interface.
 
-I've written a separate document with the [notes on the design](Design_Notes.md).
+I've written a separate document with the [notes on the design](doc/Design_Notes.md).
 
 ## Directory structure
 
